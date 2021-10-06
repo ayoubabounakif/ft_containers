@@ -11,33 +11,31 @@ As a reminder, we are coding in C++98, so any new feature of the containers MUST
 be implemented, but every old feature (even deprecated) is expected.
   
 ## Mandatory part
-• Implement the following containers and turn in the necessary files <container>.hpp
+• Implement the following containers and turn in the necessary files <container>.hpp </br>
 • You must also provide a main.cpp which tests everything for your evaluations. (you
-need to go further than the example!)
+need to go further than the example!)</br>
 • You must produce one binary with only your containers and one with the same
-testing with STL containers.
-• Compare outputs and timing (you can be up to 20 times slower).
-• member functions, Non-member and overloads are expected.
-• respect the naming, take care to details.
-• You must use std::allocator.
+testing with STL containers.</br>
+• Compare outputs and timing (you can be up to 20 times slower).</br>
+• member functions, Non-member and overloads are expected.</br>
+• respect the naming, take care to details.</br>
+• You must use std::allocator.</br>
 • You must justify your inner data structure for each container (using a simple array
-for a map is not ok).
-• If the container has an iterator system, you must implement it.
-• iterators_traits, reverse_iterator, enable_if, is_integral, equal/lexicographical compare, std::pair, std::make_pair, must be reimplemented.
+for a map is not ok).</br>
+• If the container has an iterator system, you must implement it.</br>
+• iterators_traits, reverse_iterator, enable_if, is_integral, equal/lexicographical compare, std::pair, std::make_pair, must be reimplemented.</br>
 • You can use https://www.cplusplus.com/ and https://cppreference.com/ as
-references.
+references.</br>
 • You cannot implement more public functions than the ones offered in the standard
 containers. Everything else must be private or protected. Each public function/-
-variable must be justified.
+variable must be justified.</br>
 • For non-member overloads, the keyword friend is allowed. Each use of friend
-must be justified and will be checked during evaluation.
-You must turn in the following containers and their associated functions:
-• Vector
-• Map
-5
-ft_containers C++ containers, easy mode
-• Stack
-Your stack will use your vector class as default underlaying container, it must still be
-compatible with others containers like the STL one.
-STL containers are forbidden.
-You are allowed to use the STD library.
+must be justified and will be checked during evaluation.</br>
+You must turn in the following containers and their associated functions:</br>
+• Vector</br>
+• Map</br>
+• Stack</br>
+Your stack will use your vector class as default underlaying container, it must still be</br>
+compatible with others containers like the STL one.</br>
+STL containers are forbidden.</br>
+You are allowed to use the STD library.</br>
