@@ -35,7 +35,7 @@ You must turn in the following containers and their associated functions:</br>
 • Vector</br>
 • Map</br>
 • Stack</br>
-Your stack will use your vector class as default underlaying container, it must still be</br>
+Your stack will use your vector class as default underlaying container, it must still be
 compatible with others containers like the STL one.</br>
 STL containers are forbidden.</br>
-You are allowed to use the STD library.</br>
+You are allowed to use the STD library.
