@@ -1,5 +1,8 @@
 # 42cursus-ft_containers
 
+## Description
+The multiple available containers in C++ all have a very different usage. To make sure you understand them all, let's re-implement them!
+
 ## Objectives
 In this project, you will implement the various container types of the C++ standard
 template library.
