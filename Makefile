@@ -1,6 +1,6 @@
-NAME = mstack
+NAME = stack
 CC = clang++
-CFLAGS = -Wall -Werror -Wextra -Wconversion
+CFLAGS = -Wall -Werror -Wextra -Wconversion -std=c++11
 SRC = main.cpp
 
 all: $(NAME)

@@ -6,11 +6,26 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/06 12:30:09 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/08 13:20:06 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "Stack.hpp"
+# include "stack.hpp"
+
+int	main( void )
+{
+	ft::stack<int>	mystack;
+	ft::stack<int>	mystack2;
+
+	mystack.push(5);
+	mystack.push(5);
+
+	if (mystack == mystack2)
+		std::cout << mystack.top() << std::endl;
+	
+	return (EXIT_SUCCESS);
+}
+
 
 /* #if 1 //CREATE A REAL STL EXAMPLE
 	#include <map>
@@ -122,5 +137,5 @@ int main( int argc, char** argv ) {
 		std::cout << *it;
 	}
 	std::cout << std::endl;
-	return (0);
+	return (EXIT_SUCCESS);
 } */

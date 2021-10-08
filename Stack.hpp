@@ -1,33 +1,64 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stack.hpp                                          :+:      :+:    :+:   */
+/*   Stack.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:07:12 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/06 12:24:52 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/08 13:25:32 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* --------------------------- Base Libraries ------------------------------- */
 # include <iostream>
 # include <stdlib.h>
 # include <string>
+/* ----------------------------- Containers --------------------------------- */
 # include <vector>
 # include <stack>
 # include <deque>
 # include <list>
+/* ------------------------------ Allocator --------------------------------- */
+# include <memory>
 
 namespace ft {
-    template <class T, class Container = deque<T>>
-    class Stack {
-        public:
-            Stack() { std::cout << "ft_::Stack Constructor called" << std::endl; };
-            ~Stack() { std::cout << "ft_::Stack Destructor called" << std::endl; };
+	template < class T, class Container = std::vector<T> >
+	class stack {
+		public:
+			typedef T			value_type;
+			typedef	size_t		size_type;
+			typedef	Container	container_type;
 
-        typedef	typename	T           value_type;
-        typedef	typename    Container   container_type;
-        typedef	typename    size_t      size_type;
-        
-    }
-}
+			explicit stack (const container_type& cntr = container_type()) { this->_cntr = cntr; };
+			virtual ~stack( void ) {};
+
+			/* -------- Member functions -------- */
+			bool empty() const { return _cntr.empty(); };
+			size_type size() const { return _cntr.size(); };
+			value_type& top() { return _cntr.back(); };
+			const value_type& top() const { return _cntr.back(); };
+			void push (const value_type& val) { return _cntr.push_back(val); };
+			void pop() { return _cntr.pop_back(); };
+
+		/* ---- Non-member function overloads prototypes ---- */
+			// friend bool operator== (const stack<T, Container>&, const stack<T, Container>&);
+
+		private:
+			container_type  _cntr;
+	};
+	
+	/* -------------------- Non-member function overloads ---------------------- */
+	template <class T, Container = std::vector<T> >
+	  bool operator== (const stack<T, Container>& lhs, const stack<T, Container>& rhs);
+/* 	template <class T, class Container>
+	  bool operator!= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr != rhs._cntr ? true : false ); };
+	template <class T, class Container>
+	  bool operator<  (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr < rhs._cntr ? true : false ); };
+	template <class T, class Container>
+	  bool operator<= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr <= rhs._cntr ? true : false ); };
+	template <class T, class Container>
+	  bool operator>  (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr > rhs._cntr ? true : false ); };
+	template <class T, class Container>
+	  bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr >= rhs._cntr ? true : false ); }; */
+;}
