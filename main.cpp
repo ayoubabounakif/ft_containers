@@ -6,22 +6,14 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/08 13:20:06 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/08 14:23:50 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "stack.hpp"
 
 int	main( void )
-{
-	ft::stack<int>	mystack;
-	ft::stack<int>	mystack2;
-
-	mystack.push(5);
-	mystack.push(5);
-
-	if (mystack == mystack2)
-		std::cout << mystack.top() << std::endl;
+{	
 	
 	return (EXIT_SUCCESS);
 }

@@ -1,6 +1,6 @@
-NAME = stack
+NAME = container
 CC = clang++
-CFLAGS = -Wall -Werror -Wextra -Wconversion -std=c++11
+CFLAGS = -Wall -Werror -Wextra -Wconversion -std=c++98
 SRC = main.cpp
 
 all: $(NAME)

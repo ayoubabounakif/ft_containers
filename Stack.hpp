@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:07:12 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/08 13:25:32 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/08 14:23:04 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,19 @@ namespace ft {
 			void push (const value_type& val) { return _cntr.push_back(val); };
 			void pop() { return _cntr.pop_back(); };
 
-		/* ---- Non-member function overloads prototypes ---- */
-			// friend bool operator== (const stack<T, Container>&, const stack<T, Container>&);
+		/* ---- Non-member function overloads ---- */
+			// bool operator== (const stack<T, Container>&, const stack<T, Container>&);
 
 		private:
 			container_type  _cntr;
 	};
 	
-	/* -------------------- Non-member function overloads ---------------------- */
-	template <class T, Container = std::vector<T> >
-	  bool operator== (const stack<T, Container>& lhs, const stack<T, Container>& rhs);
-/* 	template <class T, class Container>
+	/* -------------- Relational operators [NOT WORKING] ---------------- */
+	/* ----- TO-DO :
+				1 - Make ft::vector (With overloading); */
+	template <class T, class Container>
+	  bool operator== (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs == rhs ? true : false); };
+	template <class T, class Container>
 	  bool operator!= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr != rhs._cntr ? true : false ); };
 	template <class T, class Container>
 	  bool operator<  (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr < rhs._cntr ? true : false ); };
@@ -60,5 +62,5 @@ namespace ft {
 	template <class T, class Container>
 	  bool operator>  (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr > rhs._cntr ? true : false ); };
 	template <class T, class Container>
-	  bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr >= rhs._cntr ? true : false ); }; */
+	  bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr >= rhs._cntr ? true : false ); };
 ;}
