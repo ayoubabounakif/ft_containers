@@ -6,15 +6,16 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/08 14:23:50 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/09 10:45:57 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# include "vector.hpp"
 # include "stack.hpp"
 
 int	main( void )
-{	
-	
+{
+	std::vector<int>	myvec(10);
 	return (EXIT_SUCCESS);
 }
 

@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/06 12:07:12 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/08 14:23:04 by aabounak         ###   ########.fr       */
+/*   Created: 2021/10/08 14:26:16 by aabounak          #+#    #+#             */
+/*   Updated: 2021/10/09 10:38:06 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* --------------------------- Base Libraries ------------------------------- */
+/* --------------------------- Base Libraries  ------------------------------ */
 # include <iostream>
 # include <stdlib.h>
 # include <string>
@@ -30,8 +30,9 @@ namespace ft {
 			typedef	size_t		size_type;
 			typedef	Container	container_type;
 
+			/* ---- Constructor & Destructor respectively ---- */
 			explicit stack (const container_type& cntr = container_type()) { this->_cntr = cntr; };
-			virtual ~stack( void ) {};
+			// virtual ~stack( void ) {};
 
 			/* -------- Member functions -------- */
 			bool empty() const { return _cntr.empty(); };
