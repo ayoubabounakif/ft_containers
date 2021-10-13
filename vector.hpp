@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/13 12:13:49 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/13 17:56:28 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,17 @@
 /* ------------------------------ Allocator --------------------------------- */
 # include <memory>
 
+# include "iterators.hpp"
+
 namespace ft {
+    
+    // Making of the vector-iterator
+    template < class T>
+    class VectorIterator : public Iterator<std::random_access_iterator_tag, T> {
+        public:
+            
+    }
+
     template < class T, class Alloc = std::allocator<T> >  // Generic template
     class vector {
         public:
@@ -48,9 +58,9 @@ namespace ft {
                 for (size_t i = 0; i < _size; i++)
                     _alloc.construct(&_arr[i], val);
             }
-            template <class InputIterator>
-            vector (InputIterator first, InputIterator last,
-                    const allocator_type& alloc = allocator_type()); // Range
+            /* template <class InputIterator> */`
+            /* vector (InputIterator first, InputIterator last, */
+            /*         const allocator_type& alloc = allocator_type()); // Range */
             /* ---------------------------------------------------- */
 
             vector (const vector& x) { *this = x; }; // Copy
@@ -67,4 +77,5 @@ namespace ft {
             size_type       _size;
             size_type       _capacity;
     }
+    
 ;}
