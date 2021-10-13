@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/13 11:57:44 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/13 12:13:49 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 namespace ft {
     template < class T, class Alloc = std::allocator<T> >  // Generic template
     class vector {
-            
         public:
             typedef T           value_type;
             typedef Alloc       allocator_type;

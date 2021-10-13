@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 11:07:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/13 11:57:45 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/13 12:27:05 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@
 # include <iterator>
 
 namespace ft {
+
+    template <class Iterator> class iterator_traits;
+    template <class T> class iterator_traits<T*>;
+    template <class T> class iterator_traits<const T*>;
+    struct random_access_iterator_tag {};
+
     template <class Iterator>
     class iterator_traits {
         typedef Iterator::difference_type   diffrence_type;
