@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/09 11:19:09 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/13 10:59:48 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace ft {
             
             /* ----------------------- Later ---------------------- */
             explicit vector (size_type n, const value_type& val = value_type(),
-                 const allocator_type& alloc = allocator_type()): __alloc(alloc), _size(n), _capacity(n)
+                 const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(n), _capacity(n)
             {
                 if (n)
                     _arr = _alloc.allocate(n);
@@ -55,7 +55,7 @@ namespace ft {
             vector& operator= (const vector& x); // Assignment operator
             ~vector() {
                 for (size_t i = 0; i < _size; i++)
-                    _alloc.destroy(&_arr[i])
+                    _alloc.destroy(&_arr[i]);
                 _alloc.deallocate(_arr, _capacity);
             };
         
@@ -63,6 +63,6 @@ namespace ft {
             T   *           _arr;
             allocator_type  _alloc;
             size_type       _size;
-            size_type       _capacity
+            size_type       _capacity;
     }
 ;}
