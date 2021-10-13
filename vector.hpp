@@ -6,9 +6,11 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/13 10:59:48 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/13 11:57:44 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 /* --------------------------- Base Libraries  ------------------------------ */
 # include <iostream>
@@ -28,9 +30,11 @@ namespace ft {
             
         public:
             typedef T           value_type;
-            typedef size_t      size_type;
             typedef Alloc       allocator_type;
             typedef ptrdiff_t   difference_type;
+            typedef reference   allocator_type::reference;
+            typedef pointer     allocator_type::pointer;
+            typedef size_t      size_type;
 
             /* ---- Constructors & Destructor respectively ---- */
             // Default
@@ -44,7 +48,6 @@ namespace ft {
                     _arr = _alloc.allocate(n);
                 for (size_t i = 0; i < _size; i++)
                     _alloc.construct(&_arr[i], val);
-                
             }
             template <class InputIterator>
             vector (InputIterator first, InputIterator last,
