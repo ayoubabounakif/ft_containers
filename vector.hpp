@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/13 17:56:28 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/14 13:23:14 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,18 @@
 
 namespace ft {
     
-    // Making of the vector-iterator
+    // A very random, random access iterator implementation hh
     template < class T>
-    class VectorIterator : public Iterator<std::random_access_iterator_tag, T> {
+    class VectorIterator : public iterator_traits< Iterator<std::random_access_iterator_tag, T> > {
         public:
-            
-    }
+            VectorIterator() {};
+            VectorIterator(const VectorIterator& vI) { *this = vI; };
+            VectorIterator& operator= (const VectorIterator& vI);
+            ~VectorIterator() {};
+
+        private:
+            value_type  _value_type;
+    };
 
     template < class T, class Alloc = std::allocator<T> >  // Generic template
     class vector {
@@ -58,7 +64,7 @@ namespace ft {
                 for (size_t i = 0; i < _size; i++)
                     _alloc.construct(&_arr[i], val);
             }
-            /* template <class InputIterator> */`
+            /* template <class InputIterator> */
             /* vector (InputIterator first, InputIterator last, */
             /*         const allocator_type& alloc = allocator_type()); // Range */
             /* ---------------------------------------------------- */
