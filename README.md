@@ -42,3 +42,15 @@ Your stack will use your vector class as default underlaying container, it must 
 compatible with others containers like the STL one.</br>
 STL containers are forbidden.</br>
 You are allowed to use the STD library.
+
+</br>
+</br>
+</br>
+TEMPORARY :
+• https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/
+• https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/stl_introduction.html
+• https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/Container.html
+• https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/Iterators.html
+• https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/Allocators.html
+• https://www.cplusplus.com/reference/iterator/RandomAccessIterator/
+• https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator

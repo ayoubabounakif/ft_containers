@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/14 13:23:14 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/14 13:25:43 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace ft {
             ~VectorIterator() {};
 
         private:
-            value_type  _value_type;
+            value_type  _data;
     };
 
     template < class T, class Alloc = std::allocator<T> >  // Generic template
