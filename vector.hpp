@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/15 15:24:40 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/15 18:28:12 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,14 @@ namespace ft {
         public:
             typedef             T                          value_type;
             typedef             Alloc                      allocator_type;
-            typedef             ptrdiff_t                  difference_type;
             typedef typename    allocator_type::reference  reference;
+            typedef typename    allocator_type::const_reference  const_reference;
             typedef typename    allocator_type::pointer    pointer;
+            typedef typename    allocator_type::const_pointer    const_pointer;
+            
+            typedef random_access_iterator<value_type>  iterator;
+            // iterator and const interator and rev iterator and const rev iterator
+            typedef             ptrdiff_t                  difference_type;
             typedef             size_t                     size_type;
 
             /* ---- Constructors & Destructor respectively ---- */
@@ -72,6 +77,8 @@ namespace ft {
                     _alloc.destroy(&_arr[i]);
                 _alloc.deallocate(_arr, _capacity);
             };
+
+            iterator begin();
         
         private:
             T   *           _arr;
