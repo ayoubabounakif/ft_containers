@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 11:07:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/15 14:29:03 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/15 15:15:37 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ namespace ft {
             class Distance = ptrdiff_t,     // iterator::difference_type
             class Pointer = T*,             // iterator::pointer
             class Reference = T&            // iterator::reference
-            > class iterator {
-                public:
+            > struct iterator {
                     typedef Category    iterator_category;
                     typedef T           value_type;
                     typedef Distance    difference_type;

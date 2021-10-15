@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/15 13:53:14 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/15 15:17:30 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ namespace ft {
     template < class T, class Alloc = std::allocator<T> >  // generic template
     class vector {
         public:
-            typedef T           value_type;
-            typedef Alloc       allocator_type;
-            typedef ptrdiff_t   difference_type;
-            typedef typename allocator_type::reference  reference;
-            typedef typename allocator_type::pointer    pointer;
-            typedef size_t      size_type;
+            typedef             T                          value_type;
+            typedef             Alloc                      allocator_type;
+            typedef             ptrdiff_t                  difference_type;
+            typedef typename    allocator_type::reference  reference;
+            typedef typename    allocator_type::pointer    pointer;
+            typedef             size_t                     size_type;
 
             /* ---- Constructors & Destructor respectively ---- */
             // Default
