@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/14 13:25:43 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/15 13:53:14 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,19 @@
 /* ------------------------------ Allocator --------------------------------- */
 # include <memory>
 
-# include "iterators.hpp"
+# include "iterator.hpp"
+# include "iterator_traits.hpp"
+# include "random_access_iterator.hpp"
 
 namespace ft {
-    
-    // A very random, random access iterator implementation hh
-    template < class T>
-    class VectorIterator : public iterator_traits< Iterator<std::random_access_iterator_tag, T> > {
-        public:
-            VectorIterator() {};
-            VectorIterator(const VectorIterator& vI) { *this = vI; };
-            VectorIterator& operator= (const VectorIterator& vI);
-            ~VectorIterator() {};
-
-        private:
-            value_type  _data;
-    };
-
-    template < class T, class Alloc = std::allocator<T> >  // Generic template
+    template < class T, class Alloc = std::allocator<T> >  // generic template
     class vector {
         public:
             typedef T           value_type;
             typedef Alloc       allocator_type;
             typedef ptrdiff_t   difference_type;
-            typedef reference   allocator_type::reference;
-            typedef pointer     allocator_type::pointer;
+            typedef typename allocator_type::reference  reference;
+            typedef typename allocator_type::pointer    pointer;
             typedef size_t      size_type;
 
             /* ---- Constructors & Destructor respectively ---- */
@@ -70,7 +58,15 @@ namespace ft {
             /* ---------------------------------------------------- */
 
             vector (const vector& x) { *this = x; }; // Copy
-            vector& operator= (const vector& x); // Assignment operator
+            vector& operator= (const vector& x) { // Assignment operator
+                if ( this != &x ) {
+                    this->_arr = x._arr;
+                    this->_alloc = x._alloc;
+                    this->_size = x._size;
+                    this->_capacity = x._capacity;
+                }
+                return (*this);
+            }
             ~vector() {
                 for (size_t i = 0; i < _size; i++)
                     _alloc.destroy(&_arr[i]);

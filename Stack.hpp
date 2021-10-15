@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:26:16 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/13 16:55:26 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/15 14:28:25 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ namespace ft {
 		/* ---- Non-member function overloads ---- */
 			// bool operator== (const stack<T, Container>&, const stack<T, Container>&);
 
-		private:
+		protected:
 			container_type  _cntr;
 	};
 	
 	/* -------------- Relational operators [NOT WORKING] ---------------- */
 	/* ----- TO-DO :
 				1 - Make ft::vector (With overloading); */
-	template <class T, class Container>
+	/* template <class T, class Container>
 	  bool operator== (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs == rhs ? true : false); };
 	template <class T, class Container>
 	  bool operator!= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr != rhs._cntr ? true : false ); };
@@ -65,5 +65,5 @@ namespace ft {
 	template <class T, class Container>
 	  bool operator>  (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr > rhs._cntr ? true : false ); };
 	template <class T, class Container>
-	  bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr >= rhs._cntr ? true : false ); };
+	  bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) { return (lhs._cntr >= rhs._cntr ? true : false ); }; */
 ;}

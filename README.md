@@ -47,6 +47,7 @@ You are allowed to use the STD library.
 </br>
 </br>
 TEMPORARY :
+• https://www.learncpp.com/cpp-tutorial/
 • https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/
 • https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/stl_introduction.html
 • https://www.lix.polytechnique.fr/~liberti/public/computing/prog/libstdc++/Container.html
