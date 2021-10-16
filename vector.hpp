@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/16 10:35:41 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/16 11:59:52 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,9 @@ namespace ft {
 
             // wlahila haram bellah
             void push_back (const value_type& val) {
-                static size_type   new_size = 0;
 /*                 if (this->_size + 1 >= this->_capacity)
                     _buffer = _alloc.allocate(this->_size * 2); */
-                this->_buffer[new_size] = val;
-                new_size++;
+                this->_buffer[this->_size++] = val;
             };
         
         private:
