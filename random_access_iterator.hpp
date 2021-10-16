@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:04 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/15 19:33:23 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/16 10:31:50 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ namespace ft {
             inline bool operator>=( const random_access_iterator& rhs ) const { return _data >= rhs._data; }
             inline bool operator<=( const random_access_iterator& rhs ) const { return _data <= rhs._data; }
  
-            value_type  * getData( void ) { return this->_data; };
+            // value_type  * getData( void ) { return this->_data; };
 
-        private:
+        protected:
             value_type  * _data;
     };
 ;}

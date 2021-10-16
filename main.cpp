@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/15 19:32:16 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/16 10:36:44 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int	main( void )
 	ft::vector<int>	myvec(1);
 	ft::vector<int>::iterator	it = myvec.begin();
 
-	myvec.push_back(420420420);
+	myvec.push_back(42);
 
-	for (; it != myvec.begin(); ++it)
+	for (; it != myvec.end(); ++it)
 		std::cout << *it << std::endl;
 	
 	return (EXIT_SUCCESS);
