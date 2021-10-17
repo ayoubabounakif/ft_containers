@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/16 12:08:32 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/17 14:35:13 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	main( void )
 {
-	ft::vector<int>				myvec(3);
+	ft::vector<int>	myvec(2, 5);
 
 	myvec.push_back(42);
 	myvec.push_back(425);
