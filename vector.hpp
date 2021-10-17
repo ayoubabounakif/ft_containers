@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/17 14:34:23 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/17 16:56:13 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace ft {
                 _alloc(alloc),
                 _size(n),
                 _max_size(alloc.max_size()),
-                _capacity(n * 2)
+                _capacity(n)
             {
                 _buffer = _alloc.allocate(_capacity);
                 for (size_t i = 0; i < _size; i++)
@@ -133,6 +133,15 @@ namespace ft {
             const_reference back() const { return this->_buffer[this->_size - 1]; }
 
             // modifiers :
+            /* template <class InputIterator>
+                void assign (InputIterator first, InputIterator last); */
+            void    assign (size_type n, const value_type& val) {
+                if (this->_capacity < n)
+                    reserve(n);
+                for (size_type i = 0; i < n; i++)
+                    this->_buffer[i] = val;
+                this->_size = n;
+            }
             void    push_back (const value_type& val) {
                 if (this->_capacity == 0)
                     reserve(1);
@@ -140,7 +149,15 @@ namespace ft {
                     reserve(this->_capacity * 2);
                 this->_buffer[this->_size++] = val;
             };
-            void    pop_back() { _alloc.destroy(&_buffer[this->_size]); this->_size--; }
+            void    pop_back() {
+                if (this->_capacity == 0)
+                    return ;
+                _alloc.destroy(&_buffer[this->_size]);
+                this->_size--;
+            }
+            /* TO-DO:
+                1 - Make the insert method for resize
+                2 - Reverse iterator */
 
         
         private:
