@@ -1,6 +1,6 @@
 NAME = container
 CC = clang++
-CFLAGS = -Wall -Werror -Wextra -Wconversion -std=c++98
+CFLAGS = -Wall -Werror -Wextra -Wconversion -std=c++98 -fsanitize=address
 SRC = main.cpp
 
 all: $(NAME)

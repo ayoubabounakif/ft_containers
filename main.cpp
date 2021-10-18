@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/18 18:02:16 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/18 18:30:08 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,24 @@
 
 int	main( void )
 {
-	ft::vector<int>				myvec;
-	ft::vector<int>::iterator	it = myvec.begin();
+  ft::vector<int> first;
+  ft::vector<int> second;
+  ft::vector<int> third;
 
-	myvec.push_back(10);
-	myvec.push_back(420420);
-	myvec.push_back(69);
-	myvec.push_back(420);
-	myvec.push_back(42);
+  first.assign (7,100);             // 7 ints with a value of 100
 
-	myvec.resize(7, 5);
+  std::vector<int>::iterator it;
+  it=first.begin()+1;
 
-	std::cout << "capacity: " << myvec.capacity() << std::endl;
-	it = myvec.begin();
-	for (; it != myvec.end(); ++it)
-		std::cout << *it << std::endl;
-	return (EXIT_SUCCESS);
+  second.assign (it,first.end()-1); // the 5 central values of first
+
+  int myints[] = {1776,7,4};
+  third.assign (myints,myints+3);   // assigning from array.
+
+  std::cout << "Size of first: " << int (first.size()) << '\n';
+  std::cout << "Size of second: " << int (second.size()) << '\n';
+  std::cout << "Size of third: " << int (third.size()) << '\n';
+  return 0;
 }
 
 

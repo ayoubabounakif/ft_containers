@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/18 18:02:51 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/18 18:52:13 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ namespace ft {
                 _buffer(nullptr),
                 _alloc(alloc),
                 _size(0),
-                _max_size(alloc.max_size()),
                 _capacity(0) {}
     
             /* ------------------------ Fill ------------------------ */
@@ -63,7 +62,6 @@ namespace ft {
                 const allocator_type& alloc = allocator_type()) :
                 _alloc(alloc),
                 _size(n),
-                _max_size(alloc.max_size()),
                 _capacity(n) {
                     _buffer = _alloc.allocate(_capacity);
                     for (size_type i = 0; i < n; i++)
@@ -84,7 +82,6 @@ namespace ft {
                     this->_alloc = x._alloc;
                     this->_size = x._size;
                     this->_capacity = x._capacity;
-                    this->_max_size = x._max_size;
                 }
                 return (*this);
             } */
@@ -105,7 +102,7 @@ namespace ft {
 
             /* ----------------------- Capacity --------------------- */
             size_type   size() const { return this->_size; }
-            size_type   max_size() const { return this->_max_size; }
+            size_type   max_size() const { return _alloc.max_size(); }
             void        resize (size_type n, value_type val = value_type()) {
                 if (n < this->_size) { for (; this->_size > n; this->_size--) _alloc.destroy(&this->_buffer[this->_size]); }
                 if (n >= this->_size) { reserve(n); for (; this->_size < n; this->_size++) _alloc.construct(&this->_buffer[this->_size], val); };
@@ -144,7 +141,16 @@ namespace ft {
 
             /* ---------------------- Modifiers --------------------- */
             /* template <class InputIterator>
-                void assign (InputIterator first, InputIterator last); */
+                void assign (InputIterator first, InputIterator last) {
+                    size_type distance = std::distance(first, last);
+                    if (this->_capacity < distance)
+                        reserve(n);
+                    for (; i < this->_size; i++)
+                        _alloc.destroy(&this->_buffer[i]);
+                    for (i = 0; i < distance; i++)
+                        _alloc.construct(&this->_buffer[i], val);
+                    this->_size = distance;     
+                } */
             void    assign (size_type n, const value_type& val) {
                 if (this->_capacity < n)
                     reserve(n);
@@ -169,9 +175,20 @@ namespace ft {
                 _alloc.destroy(&_buffer[this->_size]);
                 this->_size--;
             }
-            
-            /* TO-DO:
-                1 - Make the insert method for resize */
+            /* iterator    insert (iterator position, const value_type& val);
+            void        insert (iterator position, size_type n, const value_type& val);
+            template <class InputIterator>
+                void    insert (iterator position, InputIterator first, InputIterator last); */
+
+            /* iterator erase (iterator position);
+            iterator erase (iterator first, iterator last); */
+
+            void    swap (vector& x) {
+                std::swap(x._capacity, this->_capacity);
+                std::swap(x._size, this->_size);
+                std::swap(x._buffer, this->_buffer);
+            }
+            void    clear() { for (size_type i = 0; i < this->_size; i++) _alloc.destroy(&_buffer[i]); this->_size = 0; }
 
             /* ---------------------- Allocator --------------------- */
             allocator_type get_allocator() const { return this->_alloc; }
@@ -180,7 +197,6 @@ namespace ft {
             value_type   *  _buffer;
             allocator_type  _alloc;
             size_type       _size;
-            size_type       _max_size;
             size_type       _capacity;
     }
 ;}
