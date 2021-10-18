@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/18 14:33:49 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/18 18:02:51 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ namespace ft {
             vector (const vector& x) { *this = x; };
             
             /* ------------------ Assignment Operator --------------- */
-            vector& operator= (const vector& x) {
+/*             vector& operator= (const vector& x) {
                 if ( this != &x ) {
                     this->_buffer = x._buffer;
                     this->_alloc = x._alloc;
@@ -87,7 +87,7 @@ namespace ft {
                     this->_max_size = x._max_size;
                 }
                 return (*this);
-            }
+            } */
             /* ---------------------- Detructor --------------------- */
             ~vector() {
                 for (size_type i = 0; i < _size; i++)
@@ -106,7 +106,10 @@ namespace ft {
             /* ----------------------- Capacity --------------------- */
             size_type   size() const { return this->_size; }
             size_type   max_size() const { return this->_max_size; }
-            /* void        resize (size_type n, value_type val = value_type()) {} // Needs insert */
+            void        resize (size_type n, value_type val = value_type()) {
+                if (n < this->_size) { for (; this->_size > n; this->_size--) _alloc.destroy(&this->_buffer[this->_size]); }
+                if (n >= this->_size) { reserve(n); for (; this->_size < n; this->_size++) _alloc.construct(&this->_buffer[this->_size], val); };
+            }
             size_type   capacity() const { return this->_capacity; }
             bool        empty() const { return (this->_size == 0 ? true : false); }
             void        reserve (size_type n) {
@@ -118,7 +121,7 @@ namespace ft {
                 T *         new_data = _alloc.allocate(new_capacity);
                 // PHASE 2 : Copy data into temp
                 for (size_type i = 0; i < new_size; i++)
-                    new_data[i] = this->_buffer[i];
+                    _alloc.construct(&new_data[i], this->_buffer[i]);
                 // PHASE 3 : Swap temporary and current storage
                 std::swap(new_capacity, this->_capacity);
                 std::swap(new_size, this->_size);
@@ -130,14 +133,10 @@ namespace ft {
             }
 
             /* -------------------- Element access ------------------ */
-            reference       operator[] (size_type n) {
-                if (n > this->_size)
-                    throw std::exception
-                return this->_buffer[n];    
-            }
+            reference       operator[] (size_type n) { return this->_buffer[n]; }
             const_reference operator[] (size_type n) const { return this->_buffer[n]; }
-            reference       at(size_type n) { return this->_buffer[n]; }
-            const_reference at(size_type n) const { return this->_buffer[n]; }
+            reference       at(size_type n) { if (n >= this->_size) throw std::out_of_range("vector: element's out of bounds"); return this->_buffer[n]; }
+            const_reference at(size_type n) const { if (n >= this->_size) throw std::out_of_range("vector: element's out of bounds"); return this->_buffer[n]; }
             reference       front() { return this->_buffer[0]; }
             const_reference front() const { return this->_buffer[0]; }
             reference       back() { return this->_buffer[this->_size - 1]; }
@@ -149,9 +148,10 @@ namespace ft {
             void    assign (size_type n, const value_type& val) {
                 if (this->_capacity < n)
                     reserve(n);
-                for (size_type i = 0; i < this->_size; i++)
+                size_type i = 0;
+                for (; i < this->_size; i++)
                     _alloc.destroy(&this->_buffer[i]);
-                for (size_type i = 0; i < n; i++)
+                for (i = 0; i < n; i++)
                     _alloc.construct(&this->_buffer[i], val);
                 this->_size = n;
             }

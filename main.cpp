@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/18 14:21:28 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/18 18:02:16 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,21 @@
 
 int	main( void )
 {
-	ft::vector<int>				myvec(5, 5);
+	ft::vector<int>				myvec;
 	ft::vector<int>::iterator	it = myvec.begin();
 
+	myvec.push_back(10);
+	myvec.push_back(420420);
+	myvec.push_back(69);
+	myvec.push_back(420);
+	myvec.push_back(42);
+
+	myvec.resize(7, 5);
+
+	std::cout << "capacity: " << myvec.capacity() << std::endl;
 	it = myvec.begin();
 	for (; it != myvec.end(); ++it)
 		std::cout << *it << std::endl;
-
 	return (EXIT_SUCCESS);
 }
 
