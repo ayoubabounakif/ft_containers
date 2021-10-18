@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/18 12:25:15 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/18 14:33:49 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <memory>
 /* -------------------------------- Math ------------------------------------ */
 # include <cmath>
+/* ------------------------------ Exception --------------------------------- */
+# include <stdexcept>
 
 # include "iterator.hpp"
 # include "iterator_traits.hpp"
@@ -54,7 +56,7 @@ namespace ft {
                 _alloc(alloc),
                 _size(0),
                 _max_size(alloc.max_size()),
-                _capacity(0) {}        
+                _capacity(0) {}
     
             /* ------------------------ Fill ------------------------ */
             explicit vector (size_type n, const value_type& val = value_type(),
@@ -64,8 +66,8 @@ namespace ft {
                 _max_size(alloc.max_size()),
                 _capacity(n) {
                     _buffer = _alloc.allocate(_capacity);
-                    for (size_t i = 0; i < n; i++)
-                        _buffer[i] = val;
+                    for (size_type i = 0; i < n; i++)
+                        _alloc.construct(&_buffer[i], val);
                 }
             /* ------------------------ Range ----------------------- */
             /* template <class InputIterator> */
@@ -88,6 +90,8 @@ namespace ft {
             }
             /* ---------------------- Detructor --------------------- */
             ~vector() {
+                for (size_type i = 0; i < _size; i++)
+                    _alloc.destroy(&_buffer[i]);
                 _alloc.deallocate(_buffer, _capacity);
             };
 
@@ -96,7 +100,8 @@ namespace ft {
             const_iterator  begin() const { return iterator(this->_buffer); }
             iterator        end() { return iterator(this->_buffer + this->_size); }
             const_iterator  end() const { return iterator(this->_buffer + this->_size); }
-            // reverse iterator
+                /* TO-DO:
+                    - Make a reverse iterator */
 
             /* ----------------------- Capacity --------------------- */
             size_type   size() const { return this->_size; }
@@ -119,11 +124,17 @@ namespace ft {
                 std::swap(new_size, this->_size);
                 std::swap(new_data, this->_buffer);
                 // PHASE 4 : Deallocate temporary (was the original data)
+                for (size_type i = 0; i < _size; i++)
+                    _alloc.destroy(&new_data[i]);
                 _alloc.deallocate(new_data, _capacity);
             }
 
             /* -------------------- Element access ------------------ */
-            reference       operator[] (size_type n) { return this->_buffer[n]; }
+            reference       operator[] (size_type n) {
+                if (n > this->_size)
+                    throw std::exception
+                return this->_buffer[n];    
+            }
             const_reference operator[] (size_type n) const { return this->_buffer[n]; }
             reference       at(size_type n) { return this->_buffer[n]; }
             const_reference at(size_type n) const { return this->_buffer[n]; }
@@ -138,8 +149,10 @@ namespace ft {
             void    assign (size_type n, const value_type& val) {
                 if (this->_capacity < n)
                     reserve(n);
+                for (size_type i = 0; i < this->_size; i++)
+                    _alloc.destroy(&this->_buffer[i]);
                 for (size_type i = 0; i < n; i++)
-                    this->_buffer[i] = val;
+                    _alloc.construct(&this->_buffer[i], val);
                 this->_size = n;
             }
             void    push_back (const value_type& val) {
@@ -153,12 +166,12 @@ namespace ft {
             void    pop_back() {
                 if (this->_capacity == 0 || this->_size == 0)
                     return ;
+                _alloc.destroy(&_buffer[this->_size]);
                 this->_size--;
             }
             
             /* TO-DO:
-                1 - Make the insert method for resize
-                2 - Reverse iterator */
+                1 - Make the insert method for resize */
 
             /* ---------------------- Allocator --------------------- */
             allocator_type get_allocator() const { return this->_alloc; }
@@ -170,5 +183,4 @@ namespace ft {
             size_type       _max_size;
             size_type       _capacity;
     }
-    
 ;}
