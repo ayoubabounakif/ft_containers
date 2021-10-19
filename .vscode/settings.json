@@ -63,6 +63,7 @@
         "streambuf": "cpp",
         "system_error": "cpp",
         "tuple": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "__memory": "cpp"
     }
 }
