@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/18 18:30:08 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/20 12:03:53 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,25 @@
 
 int	main( void )
 {
-  ft::vector<int> first;
-  ft::vector<int> second;
-  ft::vector<int> third;
+	ft::vector<int> first(3, 10);
 
-  first.assign (7,100);             // 7 ints with a value of 100
+	std::cout << "size: " << first.size() << std::endl;
+	std::cout << "capacity: " << first.capacity() << std::endl;
+	first.assign (7,100);             // 7 ints with a value of 100
+	std::cout << "new size: " << first.size() << std::endl;
+	std::cout << "new capacity: " << first.capacity() << std::endl;
 
-  std::vector<int>::iterator it;
-  it=first.begin()+1;
+	std::cout << "---------------" << std::endl;
 
-  second.assign (it,first.end()-1); // the 5 central values of first
-
-  int myints[] = {1776,7,4};
-  third.assign (myints,myints+3);   // assigning from array.
-
-  std::cout << "Size of first: " << int (first.size()) << '\n';
-  std::cout << "Size of second: " << int (second.size()) << '\n';
-  std::cout << "Size of third: " << int (third.size()) << '\n';
-  return 0;
+	ft::vector<int> second(2);
+	std::cout << "size: " << second.size() << std::endl;
+	std::cout << "capacity: " << second.capacity() << std::endl;
+	ft::vector<int>::iterator it = first.begin();
+	second.assign(it, first.end()); 
+	std::cout << "new size: " << second.size() << std::endl;
+	std::cout << "new capacity: " << second.capacity() << std::endl;
+	
+	return 0;
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/18 18:52:13 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/20 12:09:47 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include "iterator.hpp"
 # include "iterator_traits.hpp"
 # include "random_access_iterator.hpp"
+# include "type_traits.hpp"
 
 namespace ft {
     template < class T, class Alloc = std::allocator<T> >  // generic template
@@ -64,8 +65,7 @@ namespace ft {
                 _size(n),
                 _capacity(n) {
                     _buffer = _alloc.allocate(_capacity);
-                    for (size_type i = 0; i < n; i++)
-                        _alloc.construct(&_buffer[i], val);
+                    for (size_type i  = 0; i < n; i++) _alloc.construct(&_buffer[i], val);
                 }
             /* ------------------------ Range ----------------------- */
             /* template <class InputIterator> */
@@ -87,16 +87,15 @@ namespace ft {
             } */
             /* ---------------------- Detructor --------------------- */
             ~vector() {
-                for (size_type i = 0; i < _size; i++)
-                    _alloc.destroy(&_buffer[i]);
+                for (size_type i = 0; i < _size; i++) _alloc.destroy(&_buffer[i]);
                 _alloc.deallocate(_buffer, _capacity);
             };
 
             /* ---------------------- Iterators --------------------- */
-            iterator        begin() { return iterator(this->_buffer); }
-            const_iterator  begin() const { return iterator(this->_buffer); }
-            iterator        end() { return iterator(this->_buffer + this->_size); }
-            const_iterator  end() const { return iterator(this->_buffer + this->_size); }
+            iterator        begin() { return iterator(&this->_buffer[0]); }
+            const_iterator  begin() const { return iterator(&this->_buffer[0]); }
+            iterator        end() { return iterator(&this->_buffer[this->_size]); }
+            const_iterator  end() const { return iterator(&this->_buffer[this->_size]); }
                 /* TO-DO:
                     - Make a reverse iterator */
 
@@ -110,22 +109,19 @@ namespace ft {
             size_type   capacity() const { return this->_capacity; }
             bool        empty() const { return (this->_size == 0 ? true : false); }
             void        reserve (size_type n) {
-                if (n <= this->_capacity)
-                    return ;
+                if (n <= this->_capacity) return ;
                 // PHASE 1 : Create temporary object in temporary_storage
                 size_type   new_capacity = n;
                 size_type   new_size = this->_size;
                 T *         new_data = _alloc.allocate(new_capacity);
                 // PHASE 2 : Copy data into temp
-                for (size_type i = 0; i < new_size; i++)
-                    _alloc.construct(&new_data[i], this->_buffer[i]);
+                for (size_type i = 0; i < new_size; i++) _alloc.construct(&new_data[i], this->_buffer[i]);
                 // PHASE 3 : Swap temporary and current storage
                 std::swap(new_capacity, this->_capacity);
                 std::swap(new_size, this->_size);
                 std::swap(new_data, this->_buffer);
                 // PHASE 4 : Deallocate temporary (was the original data)
-                for (size_type i = 0; i < _size; i++)
-                    _alloc.destroy(&new_data[i]);
+                for (size_type i = 0; i < _size; i++) _alloc.destroy(&new_data[i]);
                 _alloc.deallocate(new_data, _capacity);
             }
 
@@ -140,38 +136,30 @@ namespace ft {
             const_reference back() const { return this->_buffer[this->_size - 1]; }
 
             /* ---------------------- Modifiers --------------------- */
-            /* template <class InputIterator>
+            // template <class InputIterator, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type >
+            template <class InputIterator>
                 void assign (InputIterator first, InputIterator last) {
-                    size_type distance = std::distance(first, last);
-                    if (this->_capacity < distance)
-                        reserve(n);
-                    for (; i < this->_size; i++)
-                        _alloc.destroy(&this->_buffer[i]);
-                    for (i = 0; i < distance; i++)
-                        _alloc.construct(&this->_buffer[i], val);
-                    this->_size = distance;     
-                } */
+                    difference_type distance = std::distance(first, last);
+                    if (this->_capacity < distance) reserve(static_cast<size_type>(distance));
+                    for (size_type i = 0; i < this->_size; i++) _alloc.destroy(&this->_buffer[i]);
+                    this->_size = 0;
+                    for (difference_type i = 0; i < distance; i++) { _alloc.construct(&this->_buffer[i], *first); first++; this->_size++; }
+                }
             void    assign (size_type n, const value_type& val) {
-                if (this->_capacity < n)
-                    reserve(n);
+                if (this->_capacity < n) reserve(n);
                 size_type i = 0;
-                for (; i < this->_size; i++)
-                    _alloc.destroy(&this->_buffer[i]);
-                for (i = 0; i < n; i++)
-                    _alloc.construct(&this->_buffer[i], val);
+                for (; i < this->_size; i++) _alloc.destroy(&this->_buffer[i]);
+                for (i = 0; i < n; i++) _alloc.construct(&this->_buffer[i], val);
                 this->_size = n;
             }
             void    push_back (const value_type& val) {
-                if (this->_capacity == 0)
-                    reserve(1);
-                if (this->_size + 1 > this->_capacity)
-                    reserve(this->_capacity * 2);
+                if (this->_capacity == 0) reserve(1);
+                if (this->_size + 1 > this->_capacity) reserve(this->_capacity * 2);
                 this->_buffer[this->_size] = val;
                 this->_size++;
             };
             void    pop_back() {
-                if (this->_capacity == 0 || this->_size == 0)
-                    return ;
+                if (this->_capacity == 0 || this->_size == 0) return ;
                 _alloc.destroy(&_buffer[this->_size]);
                 this->_size--;
             }

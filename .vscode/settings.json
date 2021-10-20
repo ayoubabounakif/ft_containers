@@ -64,6 +64,7 @@
         "system_error": "cpp",
         "tuple": "cpp",
         "typeinfo": "cpp",
-        "__memory": "cpp"
+        "__memory": "cpp",
+        "memory_resource": "cpp"
     }
 }
