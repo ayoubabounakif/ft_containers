@@ -6,17 +6,21 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 10:10:55 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 10:59:18 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/20 16:44:21 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 # include <type_traits>
 
 namespace ft {
 
             /* ----- Miscellaneous transformations ----- */
-    template<bool Cond, class T = void> struct enable_if {};
-    template<class T> struct enable_if<true, T> { typedef T type; };
+    template<bool Cond, class T = void> 
+    struct enable_if {};
+    template<class T> 
+    struct enable_if<true, T> { typedef T type; };
     
             /* --------- Primary type category --------- */
     template <class T> struct is_integral { static const bool value = false; };

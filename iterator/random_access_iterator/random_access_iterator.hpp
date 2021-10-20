@@ -6,13 +6,13 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:04 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 12:03:02 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/20 16:44:23 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-# include "iterator_traits.hpp"
+# include "../iterator_traits/iterator_traits.hpp"
 
 namespace ft {
     // A very random, random access iterator implementation hh
@@ -43,22 +43,20 @@ namespace ft {
             inline T& operator*() const { return *_data; }
             inline T* operator->() const { return _data; }
             
-            inline T& operator[]( difference_type rhs ) { return (_data[rhs]); };
+            inline T& operator[]( difference_type rhs ) const { return (_data[rhs]); };
 
                         /* TO-DO: -- Some of these should be non-member functions */
     
                 /* Arithmetic Operators */
             inline random_access_iterator& operator++() { ++_data; return *this; }
             inline random_access_iterator& operator--() { --_data; return *this; }
-            inline random_access_iterator operator++( int ) const { random_access_iterator tmp(*this); ++_data; return tmp; }
-            inline random_access_iterator operator--( int ) const { random_access_iterator tmp(*this); --_data; return tmp; }
+            inline random_access_iterator operator++( int ) { random_access_iterator tmp(*this); ++_data; return tmp; }
+            inline random_access_iterator operator--( int ) { random_access_iterator tmp(*this); --_data; return tmp; }
 
-          /*   inline difference_type operator+( const random_access_iterator& rhs ) const { return random_access_iterator(_data + rhs._data); }
-            inline difference_type operator-( const random_access_iterator& rhs ) const { return random_access_iterator(_data - rhs._data); }
+            inline difference_type operator+( const random_access_iterator& rhs ) const { return _data + rhs._data; }
+            inline difference_type operator-( const random_access_iterator& rhs ) const { return _data - rhs._data; }
             inline random_access_iterator operator+( difference_type rhs ) const { return random_access_iterator(_data + rhs); }
             inline random_access_iterator operator-( difference_type rhs ) const { return random_access_iterator(_data - rhs); }
-            inline random_access_iterator operator+( difference_type lhs, const random_access_iterator& rhs ) { return random_access_iterator(lhs + rhs._data); }
-            inline random_access_iterator operator-( difference_type lhs, const random_access_iterator& rhs ) { return random_access_iterator(lhs - rhs._data); } */
     
                 /* Comparison Operators */
             inline bool operator==( const random_access_iterator& rhs ) const { return _data == rhs->_data; }

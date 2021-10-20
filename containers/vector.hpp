@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 12:09:47 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/20 17:06:26 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,14 @@
 # include <cmath>
 /* ------------------------------ Exception --------------------------------- */
 # include <stdexcept>
+/* ------------------------------ Iterator --------------------------------- */
+# include <iterator>
 
-# include "iterator.hpp"
-# include "iterator_traits.hpp"
-# include "random_access_iterator.hpp"
-# include "type_traits.hpp"
+# include "../iterator/iterator/iterator.hpp"
+# include "../iterator/iterator_traits/iterator_traits.hpp"
+# include "../iterator/random_access_iterator/random_access_iterator.hpp"
+# include "../type_traits/type_traits.hpp"
+# include "../algorithm/algorithm.hpp"
 
 namespace ft {
     template < class T, class Alloc = std::allocator<T> >  // generic template
@@ -67,24 +70,35 @@ namespace ft {
                     _buffer = _alloc.allocate(_capacity);
                     for (size_type i  = 0; i < n; i++) _alloc.construct(&_buffer[i], val);
                 }
+
             /* ------------------------ Range ----------------------- */
-            /* template <class InputIterator> */
-            /* vector (InputIterator first, InputIterator last, */
-            /*         const allocator_type& alloc = allocator_type()); */
+            template <class InputIterator>
+            vector (InputIterator first, InputIterator last,
+                    const allocator_type& alloc = allocator_type(),
+                    typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) :
+                _alloc(alloc),
+                _size(last - first),
+                _capacity(last - first) {
+                    _buffer = _alloc.allocate(_capacity);
+                    size_type distance = last - first;
+                    for (size_type i = 0; i < distance; i++) _alloc.construct(&_buffer[i], *first); first++;
+                }
             
             /* ------------------------ Copy ------------------------ */
             vector (const vector& x) { *this = x; };
             
             /* ------------------ Assignment Operator --------------- */
-/*             vector& operator= (const vector& x) {
+            vector& operator= (const vector& x) {
                 if ( this != &x ) {
-                    this->_buffer = x._buffer;
+                    this->_buffer = _alloc.allocate(x._capacity);
+                    for (size_type i = 0; i < this->_size; i++)
+                       _alloc.construct(&_buffer[i], x._buffer[i]);
+                    this->_capacity = x._capacity;
                     this->_alloc = x._alloc;
                     this->_size = x._size;
-                    this->_capacity = x._capacity;
                 }
                 return (*this);
-            } */
+            }
             /* ---------------------- Detructor --------------------- */
             ~vector() {
                 for (size_type i = 0; i < _size; i++) _alloc.destroy(&_buffer[i]);
@@ -136,14 +150,13 @@ namespace ft {
             const_reference back() const { return this->_buffer[this->_size - 1]; }
 
             /* ---------------------- Modifiers --------------------- */
-            // template <class InputIterator, typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type >
             template <class InputIterator>
-                void assign (InputIterator first, InputIterator last) {
-                    difference_type distance = std::distance(first, last);
-                    if (this->_capacity < distance) reserve(static_cast<size_type>(distance));
+                void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) {
+                    size_type distance = last - first;
+                    if (this->_capacity < distance) reserve(distance);
                     for (size_type i = 0; i < this->_size; i++) _alloc.destroy(&this->_buffer[i]);
-                    this->_size = 0;
-                    for (difference_type i = 0; i < distance; i++) { _alloc.construct(&this->_buffer[i], *first); first++; this->_size++; }
+                    for (size_type i = 0; i < distance; i++) { _alloc.construct(&this->_buffer[i], *first); first++; }
+                    this->_size = distance;
                 }
             void    assign (size_type n, const value_type& val) {
                 if (this->_capacity < n) reserve(n);
@@ -157,7 +170,7 @@ namespace ft {
                 if (this->_size + 1 > this->_capacity) reserve(this->_capacity * 2);
                 this->_buffer[this->_size] = val;
                 this->_size++;
-            };
+            }
             void    pop_back() {
                 if (this->_capacity == 0 || this->_size == 0) return ;
                 _alloc.destroy(&_buffer[this->_size]);
@@ -186,5 +199,22 @@ namespace ft {
             allocator_type  _alloc;
             size_type       _size;
             size_type       _capacity;
-    }
-;}
+    };
+            /* ----------- Non-member function overloads ----------- */
+    /* ------------------------ Relational Operators ------------------------ */
+/* 	template <class T, class Alloc>
+	  bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (lhs._buffer == rhs._buffer ? true : false); };
+	template <class T, class Alloc>
+	  bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (lhs._buffer != rhs._buffer ? true : false ); };
+	template <class T, class Alloc>
+	  bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (lhs._buffer < rhs._buffer ? true : false ); };
+	template <class T, class Alloc>
+	  bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (lhs._buffer <= rhs._buffer ? true : false ); };
+	template <class T, class Alloc>
+	  bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (lhs._buffer > rhs._buffer ? true : false ); };
+	template <class T, class Alloc>
+	  bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (lhs._buffer >= rhs._buffer ? true : false ); }; */
+
+    /* ------------------------------- Swap --------------------------------- */
+
+}

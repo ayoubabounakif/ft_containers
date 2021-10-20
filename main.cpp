@@ -6,34 +6,17 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 12:03:53 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/20 16:55:06 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "vector.hpp"
-# include "stack.hpp"
+# include "containers/vector.hpp"
+# include "containers/stack.hpp"
 
 int	main( void )
 {
-	ft::vector<int> first(3, 10);
+	ft::vector<int> myvec;
 
-	std::cout << "size: " << first.size() << std::endl;
-	std::cout << "capacity: " << first.capacity() << std::endl;
-	first.assign (7,100);             // 7 ints with a value of 100
-	std::cout << "new size: " << first.size() << std::endl;
-	std::cout << "new capacity: " << first.capacity() << std::endl;
-
-	std::cout << "---------------" << std::endl;
-
-	ft::vector<int> second(2);
-	std::cout << "size: " << second.size() << std::endl;
-	std::cout << "capacity: " << second.capacity() << std::endl;
-	ft::vector<int>::iterator it = first.begin();
-	second.assign(it, first.end()); 
-	std::cout << "new size: " << second.size() << std::endl;
-	std::cout << "new capacity: " << second.capacity() << std::endl;
-	
-	return 0;
 }
 
 
