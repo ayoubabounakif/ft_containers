@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/21 17:39:28 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/21 19:01:15 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,8 @@ namespace ft {
                 size_type   new_capacity = n;
                 size_type   new_size = this->_size;
                 T *         new_data = _alloc.allocate(new_capacity);
-
                 // PHASE 2 : Copy data into temp
                 for (size_type i = 0; i < new_size; i++) _alloc.construct(&new_data[i], this->_buffer[i]);
-                // std::cout << "IM HERE\n";
                 // PHASE 3 : Swap temporary and current storage
                 std::swap(new_capacity, this->_capacity);
                 std::swap(new_size, this->_size);
@@ -155,7 +153,7 @@ namespace ft {
             /* ---------------------- Modifiers --------------------- */
             template <class InputIterator>
                 void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) {
-                    size_type distance = last - first;
+                    size_type distance = std::distance(first, last);
                     if (this->_capacity < distance) reserve(distance);
                     for (size_type i = 0; i < this->_size; i++) _alloc.destroy(&this->_buffer[i]);
                     for (size_type i = 0; i < distance; i++) { _alloc.construct(&this->_buffer[i], *first); first++; }
@@ -179,38 +177,34 @@ namespace ft {
                 _alloc.destroy(&_buffer[this->_size]);
                 this->_size--;
             }
-
-            template<class InputIterator>
-            typename iterator_traits<InputIterator>::difference_type distance (InputIterator first, InputIterator last)
-            {
-                typename iterator_traits<InputIterator>::difference_type rtn = 0;
-                while (first != last)
-                {
-                    first++;
-                    rtn++;
-                }
-                return (rtn);
-            }
-                    /* ------ Goddamit man heap-buffer-overflow ------ */
             iterator    insert (iterator position, const value_type& val) {
-                if (this->_size + 1 > this->_capacity)
-                    reserve(this->_capacity * 2);
-                std::cout << "capacity: " << _capacity << std::endl;
-                difference_type idx = ft::distance(begin(), position);
-                std::cout << idx << std::endl;
-                for (difference_type i = this->_size; i > idx; i--)
-                    this->_buffer[i + 1] = this->_buffer[i];
-                this->_buffer[position - begin()] = val;
+                difference_type idx = std::distance(begin(), position);
+                if (this->_size + 1 > this->_capacity) reserve(this->_capacity * 2);
+                for (difference_type i = this->_size; i > idx; i--) _alloc.construct(&_buffer[i + 1], _buffer[i]);
+                this->_buffer[idx] = val;
                 this->_size++;
                 return (position); 
             }
-/*             void        insert (iterator position, size_type n, const value_type& val); */
-/*             template <class InputIterator>
-                void    insert (iterator position, InputIterator first, InputIterator last); */
-    
+			void    insert(iterator position, size_type n, const value_type& val)
+			{
+				difference_type	idx = std::distance(begin(), position);
+				if (this->_size + n > this->_capacity) { if (n > _size) reserve(_size + n); else reserve(_capacity * 2); }
+				for (difference_type i = this->_size - 1; i >= idx; i--) _alloc.construct(&_buffer[i + n], _buffer[i]);
+				for (size_type i = 0; i < n; i++) _alloc.construct(&_buffer[idx + i], val);
+				this->_size += n;
+			}
+			template <class InputIterator>
+			void    insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+			{
+				difference_type	idx = std::distance(begin(), position);
+				size_type n = std::distance(first, last);
+				if (this->_size + n > _capacity) { if (n > _size) reserve(_size + n); else reserve(_capacity * 2); }
+				for (difference_type i = _size - 1; i >= idx; i--) _alloc.construct(&_buffer[i + n], _buffer[i]);
+				for (size_type i = 0; i < n; i++) { _alloc.construct(&_buffer[idx + i], *first); first++; }
+				this->_size += n;
+			}
             iterator erase (iterator position) {
                 difference_type idx = position - begin();
-                std::cout <<  idx << std::endl;
                 _alloc.destroy(this->_buffer + idx);
                 for (size_type i = idx; i < this->_size; i++)
                     this->_buffer[i] = this->_buffer[i + 1];
@@ -218,8 +212,8 @@ namespace ft {
                 return (iterator(position));
             }
             iterator erase (iterator first, iterator last) {
-                difference_type idx = first - begin();
-                difference_type n = last - first;
+                difference_type idx = std::distance(begin(), first);
+                difference_type n = std::distance(first, last);
                 for (difference_type i = idx; i < n; i++)
                     _alloc.destroy(&this->_buffer[i]);
                 this->_size -= n;
@@ -227,8 +221,8 @@ namespace ft {
                    this->_buffer[i] = this->_buffer[n++];
                 return (iterator(this->_buffer + idx));
             }
-
             void    swap (vector& x) {
+                std::swap(x._buffer, this->_buffer);
                 std::swap(x._capacity, this->_capacity);
                 std::swap(x._buffer, this->_buffer);
             }

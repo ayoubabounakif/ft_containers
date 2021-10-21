@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:50 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 16:44:07 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/21 18:41:40 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,15 @@ namespace ft {
         typedef const T&                    reference;
         typedef typename std::random_access_iterator_tag    iterator_category;
     };
-;}
+/*     template<class InputIterator>
+    typename iterator_traits<InputIterator>::difference_type distance (InputIterator first, InputIterator last)
+    {
+        typename iterator_traits<InputIterator>::difference_type rtn = 0;
+        while (first != last)
+        {
+            first++;
+            rtn++;
+        }
+        return (rtn);
+    } */
+}
