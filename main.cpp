@@ -6,19 +6,24 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 16:55:06 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/21 17:32:22 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "containers/vector.hpp"
 # include "containers/stack.hpp"
 
-int	main( void )
+int main ()
 {
-	ft::vector<int> myvec;
+  ft::vector<int> myvector (3,100);
+  ft::vector<int>::iterator it;
 
+  it = myvector.begin();
+  it = myvector.insert ( it , 200 );
+  for (it = myvector.begin(); it != myvector.end(); it++)
+	std::cout << *it << std::endl;
+  
 }
-
 
 /* #if 1 //CREATE A REAL STL EXAMPLE
 	#include <map>

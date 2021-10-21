@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 17:06:26 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/21 17:39:28 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ namespace ft {
                 }
                 return (*this);
             }
+            
             /* ---------------------- Detructor --------------------- */
             ~vector() {
                 for (size_type i = 0; i < _size; i++) _alloc.destroy(&_buffer[i]);
@@ -128,8 +129,10 @@ namespace ft {
                 size_type   new_capacity = n;
                 size_type   new_size = this->_size;
                 T *         new_data = _alloc.allocate(new_capacity);
+
                 // PHASE 2 : Copy data into temp
                 for (size_type i = 0; i < new_size; i++) _alloc.construct(&new_data[i], this->_buffer[i]);
+                // std::cout << "IM HERE\n";
                 // PHASE 3 : Swap temporary and current storage
                 std::swap(new_capacity, this->_capacity);
                 std::swap(new_size, this->_size);
@@ -176,17 +179,57 @@ namespace ft {
                 _alloc.destroy(&_buffer[this->_size]);
                 this->_size--;
             }
-            /* iterator    insert (iterator position, const value_type& val);
-            void        insert (iterator position, size_type n, const value_type& val);
-            template <class InputIterator>
-                void    insert (iterator position, InputIterator first, InputIterator last); */
 
-            /* iterator erase (iterator position);
-            iterator erase (iterator first, iterator last); */
+            template<class InputIterator>
+            typename iterator_traits<InputIterator>::difference_type distance (InputIterator first, InputIterator last)
+            {
+                typename iterator_traits<InputIterator>::difference_type rtn = 0;
+                while (first != last)
+                {
+                    first++;
+                    rtn++;
+                }
+                return (rtn);
+            }
+                    /* ------ Goddamit man heap-buffer-overflow ------ */
+            iterator    insert (iterator position, const value_type& val) {
+                if (this->_size + 1 > this->_capacity)
+                    reserve(this->_capacity * 2);
+                std::cout << "capacity: " << _capacity << std::endl;
+                difference_type idx = ft::distance(begin(), position);
+                std::cout << idx << std::endl;
+                for (difference_type i = this->_size; i > idx; i--)
+                    this->_buffer[i + 1] = this->_buffer[i];
+                this->_buffer[position - begin()] = val;
+                this->_size++;
+                return (position); 
+            }
+/*             void        insert (iterator position, size_type n, const value_type& val); */
+/*             template <class InputIterator>
+                void    insert (iterator position, InputIterator first, InputIterator last); */
+    
+            iterator erase (iterator position) {
+                difference_type idx = position - begin();
+                std::cout <<  idx << std::endl;
+                _alloc.destroy(this->_buffer + idx);
+                for (size_type i = idx; i < this->_size; i++)
+                    this->_buffer[i] = this->_buffer[i + 1];
+                this->_size--;
+                return (iterator(position));
+            }
+            iterator erase (iterator first, iterator last) {
+                difference_type idx = first - begin();
+                difference_type n = last - first;
+                for (difference_type i = idx; i < n; i++)
+                    _alloc.destroy(&this->_buffer[i]);
+                this->_size -= n;
+                for (size_type i = idx; i < this->_size; i++)
+                   this->_buffer[i] = this->_buffer[n++];
+                return (iterator(this->_buffer + idx));
+            }
 
             void    swap (vector& x) {
                 std::swap(x._capacity, this->_capacity);
-                std::swap(x._size, this->_size);
                 std::swap(x._buffer, this->_buffer);
             }
             void    clear() { for (size_type i = 0; i < this->_size; i++) _alloc.destroy(&_buffer[i]); this->_size = 0; }

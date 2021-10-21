@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:04 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 16:44:23 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/21 16:48:43 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ namespace ft {
             inline random_access_iterator operator-( difference_type rhs ) const { return random_access_iterator(_data - rhs); }
     
                 /* Comparison Operators */
-            inline bool operator==( const random_access_iterator& rhs ) const { return _data == rhs->_data; }
+            inline bool operator==( const random_access_iterator& rhs ) const { return _data == rhs._data; }
             inline bool operator!=( const random_access_iterator& rhs ) const { return _data != rhs._data; }
             inline bool operator>( const random_access_iterator& rhs ) const { return _data > rhs._data; }
             inline bool operator<( const random_access_iterator& rhs ) const { return _data < rhs._data; }
