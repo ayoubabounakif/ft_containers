@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/21 19:01:15 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/22 16:20:09 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,10 +180,11 @@ namespace ft {
             iterator    insert (iterator position, const value_type& val) {
                 difference_type idx = std::distance(begin(), position);
                 if (this->_size + 1 > this->_capacity) reserve(this->_capacity * 2);
-                for (difference_type i = this->_size; i > idx; i--) _alloc.construct(&_buffer[i + 1], _buffer[i]);
-                this->_buffer[idx] = val;
+                for (difference_type i = this->_size - 1; i > idx; i--) _alloc.construct(&_buffer[i + 1], _buffer[i]);
+                _alloc.construct(&_buffer[idx], val);
                 this->_size++;
-                return (position); 
+                std::cout << idx << std::endl;
+                return (iterator(position)); 
             }
 			void    insert(iterator position, size_type n, const value_type& val)
 			{
