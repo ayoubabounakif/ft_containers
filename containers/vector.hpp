@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/23 10:09:16 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/23 11:23:42 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ namespace ft {
             typedef typename    allocator_type::const_pointer       const_pointer;
             typedef             random_access_iterator<value_type>          iterator;
             typedef             random_access_iterator<const value_type>    const_iterator;
+            typedef             reverse_iterator<iterator>                  reverse_iterator;
+            typedef             const_reverse_iterator<const_iterator>      const_reverse_iterator;
             typedef             ptrdiff_t                           difference_type;
             typedef             size_t                              size_type;
 
@@ -112,6 +114,8 @@ namespace ft {
             const_iterator  begin() const { return iterator(&this->_buffer[0]); }
             iterator        end() { return iterator(&this->_buffer[this->_size]); }
             const_iterator  end() const { return iterator(&this->_buffer[this->_size]); }
+            reverse_iterator    rbegin() { return iterator(end() - 1); }
+            reverse_iterator    rend() { return iterator(begin()); }
                 /* TO-DO:
                     - Make a reverse iterator */
 

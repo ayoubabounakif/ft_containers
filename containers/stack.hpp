@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:26:16 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/20 16:44:37 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/23 11:38:00 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace ft {
 			void pop() { return _cntr.pop_back(); };
 
 		/* ---- Non-member function overloads ---- */
-			// bool operator== (const stack<T, Container>&, const stack<T, Container>&);
+			// friend bool operator== (const stack<T, Container>&, const stack<T, Container>&);
 
 		protected:
 			container_type  _cntr;
