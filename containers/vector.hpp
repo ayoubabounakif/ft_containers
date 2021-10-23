@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/22 16:20:09 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/23 10:09:16 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <iterator>
 
 # include "../iterator/iterator/iterator.hpp"
+# include "../iterator/iterator/reverse_iterator.hpp"
 # include "../iterator/iterator_traits/iterator_traits.hpp"
 # include "../iterator/random_access_iterator/random_access_iterator.hpp"
 # include "../type_traits/type_traits.hpp"
@@ -183,8 +184,7 @@ namespace ft {
                 for (difference_type i = this->_size - 1; i > idx; i--) _alloc.construct(&_buffer[i + 1], _buffer[i]);
                 _alloc.construct(&_buffer[idx], val);
                 this->_size++;
-                std::cout << idx << std::endl;
-                return (iterator(position)); 
+                return (iterator(this->_buffer + idx)); 
             }
 			void    insert(iterator position, size_type n, const value_type& val)
 			{
@@ -210,7 +210,7 @@ namespace ft {
                 for (size_type i = idx; i < this->_size; i++)
                     this->_buffer[i] = this->_buffer[i + 1];
                 this->_size--;
-                return (iterator(position));
+                return (iterator(this->_buffer + idx));
             }
             iterator erase (iterator first, iterator last) {
                 difference_type idx = std::distance(begin(), first);
