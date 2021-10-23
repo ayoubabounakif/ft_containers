@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/23 12:22:51 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/23 14:10:28 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ namespace ft {
             typedef typename    allocator_type::const_pointer       const_pointer;
             typedef             random_access_iterator<value_type>          iterator;
             typedef             random_access_iterator<const value_type>    const_iterator;
+            typedef             reverse_iterator<const_iterator>            const_reverse_iterator;
             typedef             reverse_iterator<iterator>                  reverse_iterator;
-            // typedef             reverse_iterator<const_iterator>      const_reverse_iterator;
             typedef             ptrdiff_t                           difference_type;
             typedef             size_t                              size_type;
 
@@ -114,10 +114,10 @@ namespace ft {
             const_iterator  begin() const { return iterator(&this->_buffer[0]); }
             iterator        end() { return iterator(&this->_buffer[this->_size]); }
             const_iterator  end() const { return iterator(&this->_buffer[this->_size]); }
-            reverse_iterator    rbegin() { return iterator(end()); }
-            reverse_iterator    rend() { return iterator(begin()); }
-                /* TO-DO:
-                    - Make a reverse iterator */
+            reverse_iterator    rbegin() { return reverse_iterator(iterator(end())); }
+            reverse_iterator    rend() { return reverse_iterator(iterator(begin())); }
+            // const_reverse_iterator    rbegin() const { return const_reverse_iterator(end()); }
+            // const_reverse_iterator    rend() const { return const_reverse_iterator(begin()); }
 
             /* ----------------------- Capacity --------------------- */
             size_type   size() const { return this->_size; }
