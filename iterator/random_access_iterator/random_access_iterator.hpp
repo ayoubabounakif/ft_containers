@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:04 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/23 11:49:15 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/23 12:17:31 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,20 @@ namespace ft {
             random_access_iterator operator++( int ) { random_access_iterator tmp(*this); ++_data; return tmp; }
             random_access_iterator operator--( int ) { random_access_iterator tmp(*this); --_data; return tmp; }
 
-            difference_type operator+( const random_access_iterator& rhs w) const { return _data + rhs._data; }
+            difference_type operator+( const random_access_iterator& rhs ) const { return _data + rhs._data; }
             difference_type operator-( const random_access_iterator& rhs ) const { return _data - rhs._data; }
             random_access_iterator operator+( difference_type rhs ) const { return random_access_iterator(_data + rhs); }
             random_access_iterator operator-( difference_type rhs ) const { return random_access_iterator(_data - rhs); }
     
                 /* Comparison Operators */
-            friend bool operator==( const random_access_iterator& rhs ) const { return _data == rhs._data; }
-            friend bool operator!=( const random_access_iterator& rhs ) const { return _data != rhs._data; }
-            friend bool operator>( const random_access_iterator& rhs ) const { return _data > rhs._data; }
-            friend bool operator<( const random_access_iterator& rhs ) const { return _data < rhs._data; }
-            friend bool operator>=( const random_access_iterator& rhs ) const { return _data >= rhs._data; }
-            friend bool operator<=( const random_access_iterator& rhs ) const { return _data <= rhs._data; }
+            bool operator==( const random_access_iterator& rhs ) const { return _data == rhs._data; }
+            bool operator!=( const random_access_iterator& rhs ) const { return _data != rhs._data; }
+            bool operator>( const random_access_iterator& rhs ) const { return _data > rhs._data; }
+            bool operator<( const random_access_iterator& rhs ) const { return _data < rhs._data; }
+            bool operator>=( const random_access_iterator& rhs ) const { return _data >= rhs._data; }
+            bool operator<=( const random_access_iterator& rhs ) const { return _data <= rhs._data; }
 
-            operator random_access_iterator<const value_type> () const { return random_access_iterator<const value_type>(_ptr) ; }
+            operator random_access_iterator<const value_type> () const { return random_access_iterator<const value_type>(_data) ; }
  
         protected:
             pointer  _data;
