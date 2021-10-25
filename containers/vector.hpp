@@ -6,30 +6,22 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 11:46:15 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/25 14:20:06 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-/* --------------------------- Base Libraries  ------------------------------ */
 # include <iostream>
 # include <stdlib.h>
 # include <string>
-/* ----------------------------- Containers --------------------------------- */
 # include <vector>
 # include <stack>
 # include <deque>
 # include <list>
-/* ------------------------------ Allocator --------------------------------- */
 # include <memory>
-/* -------------------------------- Math ------------------------------------ */
 # include <cmath>
-/* ------------------------------ Exception --------------------------------- */
 # include <stdexcept>
-/* ------------------------------ Iterator --------------------------------- */
 # include <iterator>
-
 # include "../iterator/iterator/iterator.hpp"
 # include "../iterator/iterator/reverse_iterator.hpp"
 # include "../iterator/iterator_traits/iterator_traits.hpp"
@@ -38,6 +30,11 @@
 # include "../algorithm/algorithm.hpp"
 
 namespace ft {
+    /* --       Definition:
+        A vector is a sequence that supports random access to elements, constant
+        time insertion and removal of elements at the end, and linear time insertion
+        and removal of elements at the beginning or in the middle. The number of
+        elements in a vector may vary dynamically; memory management is automatic. */
     template < class T, class Alloc = std::allocator<T> >  // generic template
     class vector {
         public:
@@ -59,7 +56,7 @@ namespace ft {
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */
             explicit vector (const allocator_type& alloc = allocator_type()) :
-                _buffer(nullptr),
+                _buffer(0),
                 _alloc(alloc),
                 _size(0),
                 _capacity(0) {}
@@ -116,8 +113,8 @@ namespace ft {
             const_iterator  end() const { return iterator(&this->_buffer[this->_size]); }
             reverse_iterator    rbegin() { return reverse_iterator(iterator(end())); }
             reverse_iterator    rend() { return reverse_iterator(iterator(begin())); }
-            // const_reverse_iterator    rbegin() const { return const_reverse_iterator(end()); }
-            // const_reverse_iterator    rend() const { return const_reverse_iterator(begin()); }
+            const_reverse_iterator    rbegin() const { return const_reverse_iterator(end()); }
+            const_reverse_iterator    rend() const { return const_reverse_iterator(begin()); }
 
             /* ----------------------- Capacity --------------------- */
             size_type   size() const { return this->_size; }
@@ -242,15 +239,15 @@ namespace ft {
             size_type       _size;
             size_type       _capacity;
     };
+
             /* ----------- Non-member function overloads ----------- */
     /* ------------------------ Relational Operators ------------------------ */
-
-            /* ---------------- Equivalent operators --------------- */
+            /* ---------------- Equivalent Operators --------------- */
             /* Here are some operators whose work is same.
                 (a != b) is equivalent to !(a == b)
                 (a > b) equivalent to (b < a)
                 (a <= b) equivalent to !(b < a) */
-
+                
 	template < class T, class Alloc>
 		bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
             return (equal(lhs.begin(), lhs.end(), rhs.begin())); }
@@ -260,14 +257,14 @@ namespace ft {
  		bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
 			return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
 	template < class T, class Alloc>
- 		bool operato6769r>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (operator<(rhs, lhs)); }
+ 		bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (operator<(rhs, lhs)); }
 	template < class T, class Alloc>
  		bool operator<=  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!operator<(rhs, lhs)); }
 	template < class T, class Alloc>
  		bool operator>=  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!operator<(lhs, rhs)); }
-	template <class T, class Alloc>
-  		void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) { x.swap(y); }
 
     /* ------------------------------- Swap --------------------------------- */
-
+	template <class T, class Alloc>
+  		void swap (vector<T,Alloc>& x, vector<T,Alloc>& y){ x.swap(y); }
+          
 }
