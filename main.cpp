@@ -6,35 +6,34 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/23 14:12:05 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/25 11:41:41 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "containers/vector.hpp"
-# include "containers/stack.hpp"
+// # include "containers/stack.hpp"
+
+bool mycomp (char c1, char c2)
+{ return std::tolower(c1)<std::tolower(c2); }
 
 int main () {
-  ft::vector<int> myvector;
-  for (int i=0; i<10; i++) myvector.push_back(i);
+  char foo[]="Apple";
+  char bar[]="apartment";
 
-  typedef ft::vector<int>::iterator iter_type;
-                                                         // ? 0 1 2 3 4 5 6 7 8 9 ?
-  iter_type from (myvector.begin());                     //   ^
-                                                         //         ------>
-  iter_type until (myvector.end());                      //                       ^
-                                                         //
-  ft::reverse_iterator<iter_type> rev_until (from);     // ^
-                                                         //         <------
-  ft::reverse_iterator<iter_type> rev_from (until);     //                     ^
+  std::cout << std::boolalpha;
 
-  std::cout << "myvector:";
-  while (rev_from != rev_until)
-    std::cout << ' ' << *rev_from++;
+  std::cout << "Comparing foo and bar lexicographically (foo<bar):\n";
+
+  std::cout << "Using default comparison (operator<): ";
+  std::cout << ft::lexicographical_compare(foo,foo+5,bar,bar+9);
+  std::cout << '\n';
+
+  std::cout << "Using mycomp as comparison object: ";
+  std::cout << ft::lexicographical_compare(foo,foo+5,bar,bar+9,mycomp);
   std::cout << '\n';
 
   return 0;
 }
-
 /* #if 1 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
