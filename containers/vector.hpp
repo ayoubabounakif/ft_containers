@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 14:20:06 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/25 14:51:32 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,18 @@ namespace ft {
                     const allocator_type& alloc = allocator_type(),
                     typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) :
                 _alloc(alloc),
-                _size(std::distance(first, last)),
-                _capacity(std::distance(first, last)) {
+                _size(static_cast<size_type>(std::distance(first, last))),
+                _capacity(static_cast<size_type>(std::distance(first, last))) {
                     _buffer = _alloc.allocate(_capacity);
                     difference_type distance = std::distance(first, last);
                     for (difference_type i = 0; i < distance; i++) { _alloc.construct(&_buffer[i], *first); first++; }
                 }
             
             /* ------------------------ Copy ------------------------ */
-            vector (const vector& x) { *this = x; };
+            vector (const vector<T, Alloc>& x) { *this = x; };
             
             /* ------------------ Assignment Operator --------------- */
-            vector& operator= (const vector& x) {
+            vector& operator= (const vector<T, Alloc>& x) {
                 if ( this != &x ) {
                     this->_buffer = _alloc.allocate(x._capacity);
                     for (size_type i = 0; i < this->_size; i++)
@@ -223,7 +223,7 @@ namespace ft {
                    this->_buffer[i] = this->_buffer[n++];
                 return (iterator(this->_buffer + idx));
             }
-            void    swap (vector& x) {
+            void    swap (vector<T, Alloc>& x) {
                 std::swap(x._buffer, this->_buffer);
                 std::swap(x._capacity, this->_capacity);
                 std::swap(x._buffer, this->_buffer);
@@ -249,19 +249,17 @@ namespace ft {
                 (a <= b) equivalent to !(b < a) */
                 
 	template < class T, class Alloc>
-		bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-            return (equal(lhs.begin(), lhs.end(), rhs.begin())); }
+		bool operator== (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (equal(lhs.begin(), lhs.end(), rhs.begin())); }
 	template < class T, class Alloc>
-		bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!operator==(lhs, rhs)); }
+		bool operator!= (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (!operator==(lhs, rhs)); }
 	template < class T, class Alloc>
- 		bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-			return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
+ 		bool operator<  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
 	template < class T, class Alloc>
- 		bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (operator<(rhs, lhs)); }
+ 		bool operator>  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (operator<(rhs, lhs)); }
 	template < class T, class Alloc>
- 		bool operator<=  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!operator<(rhs, lhs)); }
+ 		bool operator<=  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (!operator<(rhs, lhs)); }
 	template < class T, class Alloc>
- 		bool operator>=  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!operator<(lhs, rhs)); }
+ 		bool operator>=  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (!operator<(lhs, rhs)); }
 
     /* ------------------------------- Swap --------------------------------- */
 	template <class T, class Alloc>
