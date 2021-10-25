@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:04 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 14:45:45 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/25 16:16:55 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ namespace ft {
             random_access_iterator& operator-= ( difference_type rhs ) { this->_data -= rhs; return *this; };
             
             reference operator*() const { return *_data; }
-            pointer operator->() const { return _data; }
+            pointer   operator->() const { return _data; }
             
             reference operator[]( difference_type rhs ) const { return (_data[rhs]); };
     
                 /* Arithmetic Operators */
             random_access_iterator& operator++() { ++_data; return *this; }
             random_access_iterator& operator--() { --_data; return *this; }
-            random_access_iterator operator++( int ) { random_access_iterator tmp(*this); ++_data; return tmp; }
-            random_access_iterator operator--( int ) { random_access_iterator tmp(*this); --_data; return tmp; }
+            random_access_iterator  operator++( int ) { random_access_iterator tmp(*this); ++_data; return tmp; }
+            random_access_iterator  operator--( int ) { random_access_iterator tmp(*this); --_data; return tmp; }
 
             difference_type operator+( const random_access_iterator& rhs ) const { return _data + rhs._data; }
             difference_type operator-( const random_access_iterator& rhs ) const { return _data - rhs._data; }
@@ -54,8 +54,9 @@ namespace ft {
             random_access_iterator operator-( difference_type rhs ) const { return random_access_iterator(_data - rhs); }
 
             operator random_access_iterator<const value_type> () const { return random_access_iterator<const value_type>(_data) ; }
- 
+
             pointer getData( void ) const { return (this->_data); }
+            /* pointer base() { pointer tmp(*this); ++_data; return tmp; } */
 
         protected:
             pointer  _data;
@@ -68,7 +69,8 @@ namespace ft {
                 (a != b) is equivalent to !(a == b)
                 (a > b) equivalent to (b < a)
                 (a <= b) equivalent to !(b < a) */
-    
+    template < class T >
+		random_access_iterator<T> operator+ (ptrdiff_t lhs, const random_access_iterator<T>& rhs) { return (rhs + lhs); }
 	template < class T >
 		bool operator== (const random_access_iterator<T>& lhs, const random_access_iterator<T>& rhs) { return lhs.getData() == rhs.getData(); }
 	template < class T >

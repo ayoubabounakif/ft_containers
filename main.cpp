@@ -6,31 +6,19 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 11:41:41 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/25 16:12:35 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "containers/vector.hpp"
 // # include "containers/stack.hpp"
 
-bool mycomp (char c1, char c2)
-{ return std::tolower(c1)<std::tolower(c2); }
-
 int main () {
-  char foo[]="Apple";
-  char bar[]="apartment";
+	ft::vector<int> tst(100, 100);
 
-  std::cout << std::boolalpha;
+	ft::vector<int>::iterator iter(tst.begin());
 
-  std::cout << "Comparing foo and bar lexicographically (foo<bar):\n";
-
-  std::cout << "Using default comparison (operator<): ";
-  std::cout << ft::lexicographical_compare(foo,foo+5,bar,bar+9);
-  std::cout << '\n';
-
-  std::cout << "Using mycomp as comparison object: ";
-  std::cout << ft::lexicographical_compare(foo,foo+5,bar,bar+9,mycomp);
-  std::cout << '\n';
+	std::cout << *(1 + iter) << std::endl;
 
   return 0;
 }
