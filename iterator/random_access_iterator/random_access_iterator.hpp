@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:04 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 16:16:55 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/25 17:13:35 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ namespace ft {
             operator random_access_iterator<const value_type> () const { return random_access_iterator<const value_type>(_data) ; }
 
             pointer getData( void ) const { return (this->_data); }
-            /* pointer base() { pointer tmp(*this); ++_data; return tmp; } */
 
         protected:
             pointer  _data;
