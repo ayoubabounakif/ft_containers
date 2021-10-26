@@ -29,6 +29,9 @@
 # include "../type_traits/type_traits.hpp"
 # include "../algorithm/algorithm.hpp"
 
+//! if Linux 1
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
+
 namespace ft {
     /* --       Definition:
         A vector is a sequence that supports random access to elements, constant

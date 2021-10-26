@@ -17,6 +17,9 @@
 # include <memory>
 # include <iterator>
 
+//! if Linux
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
+
 namespace ft {
 
     /* --       Definition:

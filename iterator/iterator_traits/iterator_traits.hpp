@@ -13,6 +13,9 @@
 #pragma once
 # include "../iterator/iterator.hpp"
 
+//! if Linux
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
+
 namespace ft {
     /* --       Definition:
         iterator_traits is the type trait class that provides uniform interface to the properties of LegacyIterator types.
