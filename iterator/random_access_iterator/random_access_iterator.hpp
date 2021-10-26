@@ -84,5 +84,5 @@ namespace ft {
 	template < class T >
  		bool operator<=  (const random_access_iterator<T>& lhs, const random_access_iterator<T>& rhs) { return !operator<(rhs, lhs); }
 	template < class T >
- 		bool operator>=  (const random_access_iterator<T>& lhs, const random_access_iterator<T>& rhs) { return !operator<(lhs, rhs); }
+ 		bool operator>=  (const random_access_iterator<T>& lhs, const random_access_iterator<T>& rhs) { return !operator<=(lhs, rhs); }
 }
