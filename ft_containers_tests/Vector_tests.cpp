@@ -1843,7 +1843,6 @@ void vector_tests(void)
          * bool to store the comparison
          */
         bool cond;
-
         /*------------------------------- test 1: empty vector ----------------------------------------*/
         // insert at the begin
         {
@@ -1862,6 +1861,7 @@ void vector_tests(void)
             for (size_t i = 0; i < ft_v.size(); ++i)
                 ft_str += ft_v[i];
             cond = ((str == ft_str) && (s == ft_s) && (c == ft_c) && (*ft_it == *it));
+
         }
         // insert at the end
         {
@@ -1884,6 +1884,7 @@ void vector_tests(void)
             for (size_t i = 0; i < ft_v.size(); ++i)
                 ft_str += ft_v[i];
             cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c) && (*it == *ft_it));
+
         }
         /*---------------------------------------------------------------------------------------------------*/
         /*------------------------------- test 2: the vector capacity >= size + the new element ----------------------------------------*/
@@ -1932,6 +1933,7 @@ void vector_tests(void)
             for (size_t i = 0; i < ft_v.size(); ++i)
                 ft_str += ft_v[i];
             cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c) && (*it == *ft_it));
+
         }
         /*---------------------------------------------------------------------------------------------------*/
         EQUAL(cond);

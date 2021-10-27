@@ -6,21 +6,42 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 16:12:35 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:00:36 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "containers/vector.hpp"
+#include "containers/vector.hpp"
 // # include "containers/stack.hpp"
 
-int main () {
-	ft::vector<int> tst(100, 100);
+int main()
+{
+	std::string str, ft_str;
+	ft::vector<std::string>::size_type s, ft_s;
+	ft::vector<std::string>::size_type c, ft_c;
+	ft::vector<std::string>::iterator ft_it;
+	std::vector<std::string>::iterator it;
+	bool cond = false;
 
-	ft::vector<int>::iterator iter(tst.begin());
+	std::vector<std::string> v;
+	ft::vector<std::string> ft_v;
 
-	std::cout << *(1 + iter) << std::endl;
+	it = v.insert(v.end(), "hello");
+	ft_it = ft_v.insert(ft_v.end(), "hello");
+	ft_it->length();
 
-  return 0;
+	str.clear();
+	ft_str.clear();
+
+	s = v.size();
+	ft_s = ft_v.size();
+	c = v.capacity();
+	ft_c = ft_v.capacity();
+	for (size_t i = 0; i < v.size(); ++i)
+		str += v[i];
+	for (size_t i = 0; i < ft_v.size(); ++i)
+		ft_str += ft_v[i];
+	cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c) && (*it == *ft_it));
+	return 0;
 }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE

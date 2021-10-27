@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 10:08:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/27 13:06:49 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/27 15:53:36 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ namespace ft {
             reverse_iterator  operator++( int ) { reverse_iterator tmp = *this; ++(*this); return tmp; }
             reverse_iterator  operator--( int ) { reverse_iterator tmp = *this; --(*this); return tmp; }
 
-            difference_type operator+( const reverse_iterator& rhs ) const { return _iter + rhs._iter; }
-            difference_type operator-( const reverse_iterator& rhs ) const { return _iter - rhs._iter; }
+            // difference_type operator+( const reverse_iterator& rhs ) const { return _iter + rhs._iter; }
+            // difference_type operator-( const reverse_iterator& rhs ) const { return _iter - rhs._iter; }
             reverse_iterator operator+( difference_type rhs ) const { return reverse_iterator(_iter - (rhs - 1)); }
             reverse_iterator operator-( difference_type rhs ) const { return reverse_iterator(_iter + (rhs + 1)); }
 
@@ -80,10 +80,13 @@ namespace ft {
         //! 1 - \\ ------- Should do the comparaison by base() ---------
         //! 2 - \\ ------- https://stackoverflow.com/questions/46648555/check-whether-a-reverse-iterator-has-crossed-forward-iterator-or-not/46648975 ------- */
 
-    template < class T >
-	    reverse_iterator<T> operator+ (ptrdiff_t lhs, const reverse_iterator<T>& rhs) { return (rhs + lhs); }
-   /*  template <class T>
-        reverse_iterator<T> operator- (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) { return (lhs.base() + rhs.base()); } */
+
+    template< class Iter >
+        reverse_iterator<Iter> operator+( typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it ) { return reverse_iterator<Iter>(it.base() - n); }
+    template< class Iterator >
+        typename reverse_iterator<Iterator>::difference_type operator-( const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs ) { return (rhs.base() - lhs.base()); }
+/*     template <class T>
+        reverse_iterator<T> operator- (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) { return (rhs.base() - lhs.base()); } */
 	template < class T >
 		bool operator== (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) { return lhs.base() == rhs.base(); }
 	template < class T >
