@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 10:08:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 17:21:33 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/27 13:06:49 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 # include "../random_access_iterator/random_access_iterator.hpp"
 # include "../iterator_traits/iterator_traits.hpp"
 
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+/* //! if Linux 1
+#define ptrdiff_t __gnu_cxx::ptrdiff_t */
 
 namespace ft {
     template <class Iterator>
@@ -61,7 +62,6 @@ namespace ft {
 
             // operator reverse_iterator<const iterator_type> () const { return reverse_iterator<const iterator_type>(_iter) ; }
 
-            // iterator_type getIter( void ) const { return _iter; }
             iterator_type base() const { iterator_type tmp = _iter; ++tmp; return tmp; }
 
         protected:
@@ -82,8 +82,8 @@ namespace ft {
 
     template < class T >
 	    reverse_iterator<T> operator+ (ptrdiff_t lhs, const reverse_iterator<T>& rhs) { return (rhs + lhs); }
-    template <class T>
-        reverse_iterator<T> operator- (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) { return (lhs.base() + rhs.base()); }
+   /*  template <class T>
+        reverse_iterator<T> operator- (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) { return (lhs.base() + rhs.base()); } */
 	template < class T >
 		bool operator== (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) { return lhs.base() == rhs.base(); }
 	template < class T >

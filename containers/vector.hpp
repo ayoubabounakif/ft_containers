@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/25 15:32:09 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/10/27 14:52:20 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@
 # include "../type_traits/type_traits.hpp"
 # include "../algorithm/algorithm.hpp"
 
-//! if Linux 1
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+/* //! if Linux 1
+#define ptrdiff_t __gnu_cxx::ptrdiff_t */
 
 namespace ft {
     /* --       Definition:
@@ -91,13 +91,15 @@ namespace ft {
             
             /* ------------------ Assignment Operator --------------- */
             vector& operator= (const vector<T, Alloc>& x) {
+                if (this->_capacity < x._capacity)
+                    reserve(x._capacity);
                 if ( this != &x ) {
+                    this->_capacity = x._capacity;
+                    this->_size = x._size;
+                    this->_alloc = x._alloc;
                     this->_buffer = _alloc.allocate(x._capacity);
                     for (size_type i = 0; i < this->_size; i++)
                        _alloc.construct(&_buffer[i], x._buffer[i]);
-                    this->_capacity = x._capacity;
-                    this->_alloc = x._alloc;
-                    this->_size = x._size;
                 }
                 return (*this);
             }
@@ -120,7 +122,7 @@ namespace ft {
 
             /* ----------------------- Capacity --------------------- */
             size_type   size() const { return this->_size; }
-            size_type   max_size() const { return _alloc.max_size(); }
+            size_type   max_size( ) const { return _alloc.max_size(); }
             void        resize (size_type n, value_type val = value_type()) {
                 if (n < this->_size) { for (; this->_size > n; this->_size--) _alloc.destroy(&this->_buffer[this->_size]); }
                 if (n >= this->_size) { reserve(n); for (; this->_size < n; this->_size++) _alloc.construct(&this->_buffer[this->_size], val); };
