@@ -13,8 +13,8 @@
 #pragma once
 # include "../iterator_traits/iterator_traits.hpp"
 
-/* //! if Linux */
-/* #define ptrdiff_t __gnu_cxx::ptrdiff_t */
+//! if Linux
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
     template < class T >

@@ -70,6 +70,9 @@
         "iomanip": "cpp",
         "__tree": "cpp",
         "map": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "*.tcc": "cpp",
+        "clocale": "cpp",
+        "fstream": "cpp"
     }
 }

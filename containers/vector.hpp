@@ -29,8 +29,8 @@
 # include "../type_traits/type_traits.hpp"
 # include "../algorithm/algorithm.hpp"
 
-/* //! if Linux 1
-#define ptrdiff_t __gnu_cxx::ptrdiff_t */
+//! if Linux 1
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
     /* --       Definition:
@@ -175,7 +175,7 @@ namespace ft {
             void    push_back (const value_type& val) {
                 if (this->_capacity == 0) reserve(1);
                 if (this->_size + 1 > this->_capacity) reserve(this->_capacity * 2);
-                this->_buffer[this->_size] = val;
+                this->_buffer[_size] = val;
                 this->_size++;
             }
             void    pop_back() {
@@ -192,25 +192,27 @@ namespace ft {
                 this->_size++;
                 return (iterator(this->_buffer + idx)); 
             }
-    /* ==20299==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x603000000f58 at pc 0x000106e86239 bp 0x7ffee8deb9a0 sp 0x7ffee8deb998 == */
+            
 			void    insert(iterator position, size_type n, const value_type& val)
 			{
 				difference_type	idx = std::distance(begin(), position);
-                if (this->_size == 0) reserve(1);
-				else if (this->_size + n > this->_capacity) { if (n > _size) reserve(_size + n + 1); else reserve(_capacity * 2); }
-				for (difference_type i = this->_size - 1; i > idx; i--) _alloc.construct(&_buffer[i + 1], _buffer[i]);
-				for (size_type i = 0; i < n - 1; i++) _alloc.construct(&_buffer[idx + i], val);
+                if (this->_size == 0) reserve(n);
+				else if (this->_size + n > this->_capacity) { if (this->_size + n > this->_capacity) { if (this->_size < n) reserve(this->_size + n); else reserve(this->_capacity * 2); } }
+				for (difference_type i = this->_size - 1; i >= idx; i--) _alloc.construct(&_buffer[i + n], _buffer[i]);
+				for (size_type i = 0; i < n; i++) _alloc.construct(&_buffer[idx++], val);
 				this->_size += n;
 			}
+
 			template <class InputIterator>
                 void    insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) {
-                    size_type	idx = std::distance(begin(), position);
-                    size_type n = std::distance(first, last);
+                    difference_type	idx = std::distance(begin(), position);
+                    difference_type n = std::distance(first, last);
                     if (this->_size + n > _capacity) { if (n > _size) reserve(_size + n); else reserve(_capacity * 2); }
                     for (size_type i = _size - 1; i >= idx; i--) _alloc.construct(&_buffer[i + n], _buffer[i]);
                     for (size_type i = 0; i < n; i++) { _alloc.construct(&_buffer[idx + i], *first); first++; }
                     this->_size += n;
                 }
+
             iterator erase (iterator position) {
                 size_type idx = position - begin();
                 _alloc.destroy(this->_buffer + idx);

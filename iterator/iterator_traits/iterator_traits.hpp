@@ -13,8 +13,8 @@
 #pragma once
 # include "../iterator/iterator.hpp"
 
-/* //! if Linux
-#define ptrdiff_t __gnu_cxx::ptrdiff_t */
+//! if Linux
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
     /* --       Definition:

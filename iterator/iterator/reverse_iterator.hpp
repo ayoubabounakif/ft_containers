@@ -15,8 +15,8 @@
 # include "../random_access_iterator/random_access_iterator.hpp"
 # include "../iterator_traits/iterator_traits.hpp"
 
-/* //! if Linux 1
-#define ptrdiff_t __gnu_cxx::ptrdiff_t */
+//! if Linux 1
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
     template <class Iterator>
