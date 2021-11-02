@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 10:08:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/27 15:53:36 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/02 11:39:35 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@
 # include "../iterator_traits/iterator_traits.hpp"
 
 //! if Linux 1
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+// #define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
     template <class Iterator>
     class reverse_iterator {
         public:
+
                     /* ------------ Member Types ----------- */
             typedef Iterator    iterator_type;
             typedef typename iterator_traits<Iterator>::iterator_category iterator_category;

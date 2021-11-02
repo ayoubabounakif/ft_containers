@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/13 11:07:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/27 12:58:43 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/02 11:42:42 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <iterator>
 
 //! if Linux
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+// #define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
 

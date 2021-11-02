@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/27 16:44:06 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/02 11:48:55 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,20 @@
 # include "../algorithm/algorithm.hpp"
 
 //! if Linux 1
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+// #define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
+    
     /* --       Definition:
         A vector is a sequence that supports random access to elements, constant
         time insertion and removal of elements at the end, and linear time insertion
         and removal of elements at the beginning or in the middle. The number of
         elements in a vector may vary dynamically; memory management is automatic. */
+
     template < class T, class Alloc = std::allocator<T> >  // generic template
     class vector {
         public:
+        
                     /* ------------ Member Types ----------- */
             typedef             T                                   value_type;
             typedef             Alloc                               allocator_type;

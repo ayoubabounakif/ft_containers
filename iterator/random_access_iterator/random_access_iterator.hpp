@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/15 12:26:04 by aabounak          #+#    #+#             */
-/*   Updated: 2021/10/27 12:58:42 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/02 10:13:31 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # include "../iterator_traits/iterator_traits.hpp"
 
 //! if Linux
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+// #define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
     template < class T >
