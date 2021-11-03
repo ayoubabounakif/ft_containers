@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/02 15:33:03 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/03 14:56:48 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <stdexcept>
 # include <iterator>
 
-# include "../RBT/RBT.hpp"
+# include "../GBT/GBT.hpp"
 # include "../utility/pair.hpp"
 # include "../utility/make_pair.hpp"
 
@@ -35,7 +35,7 @@ namespace ft {
     a combination of a key value and a mapped value, following a specific order. */
 
     template <class Key, class T, class Compare = std::less<Key>,
-        class Allocator = std::allocator<std::pair<const Key, T> >
+        class Allocator = std::allocator<ft::pair<const Key, T> >
     > class map {
         public:
         
@@ -56,7 +56,7 @@ namespace ft {
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */ 
-            map();
+            map() : _gbtree()
             
             /* ------------------------ Copy ------------------------ */
 
@@ -77,9 +77,8 @@ namespace ft {
             allocator_type get_allocator() const { return this->_alloc; }
     
         private:
-            value_type  *   _data;
+            GBT<value_type, key_compare, allocator_type> _gbtree;
             allocator_type  _alloc;
-            size_type       _size;
     };
                 /* ----------- Non-member function overloads ----------- */
     /* ------------------------ Relational Operators ------------------------ */
