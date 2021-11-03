@@ -6,20 +6,17 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/03 18:02:57 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:03:07 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "containers/vector.hpp"
+// # include "containers/vector.hpp"
 // # include "containers/stack.hpp"
 # include "GBT/GBT.hpp"
 
 int main( void ) 
 {
-    ft::GBT	myBootyfulTree;
-
-	myBootyfulTree.insert(5);
-	std::cout << myBootyfulTree << std::endl;
+    
 }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE
