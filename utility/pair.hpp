@@ -6,11 +6,15 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 11:05:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/03 17:23:33 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/03 21:15:24 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
+# include <iostream>
+# include <stdlib.h>
+# include <string>
 
 namespace ft {
 
