@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/03 21:19:22 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/04 10:38:32 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ namespace ft {
         }
 
         public:       
-            
              
             // Constructor
             GBT( void ) {
