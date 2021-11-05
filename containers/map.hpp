@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/03 14:56:48 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/05 10:42:31 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ namespace ft {
             allocator_type get_allocator() const { return this->_alloc; }
     
         private:
-            GBT<value_type, key_compare, allocator_type> _gbtree;
+            GBT<value_type, key_compare, allocator_type>    _gbtree;
             allocator_type  _alloc;
     };
                 /* ----------- Non-member function overloads ----------- */

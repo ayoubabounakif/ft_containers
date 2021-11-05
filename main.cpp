@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/03 21:19:09 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/05 16:00:30 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,14 @@
 
 int main( void ) 
 {
-    ft::GBT<>	bestTree;
+    ft::GBT<int>	bestTree;
+
 
 	bestTree.insert(55);
-	// bestTree.insert(40);
-	// bestTree.insert(65);
-	// bestTree.insert(60);
-	// bestTree.insert(75);
-	// bestTree.insert(57);
+	bestTree.insert(10);
+	bestTree.insert(20);
 
-	bestTree.preOrder();
+	bestTree.preOrder(bestTree.getRoot());
 }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE
