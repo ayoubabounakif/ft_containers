@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/05 10:42:31 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:42:07 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <stdexcept>
 # include <iterator>
 
-# include "../GBT/GBT.hpp"
+# include "../RBT/RBT.hpp"
 # include "../utility/pair.hpp"
 # include "../utility/make_pair.hpp"
 
@@ -56,7 +56,7 @@ namespace ft {
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */ 
-            map() : _gbtree()
+            map() : _RBTree()
             
             /* ------------------------ Copy ------------------------ */
 
@@ -77,7 +77,7 @@ namespace ft {
             allocator_type get_allocator() const { return this->_alloc; }
     
         private:
-            GBT<value_type, key_compare, allocator_type>    _gbtree;
+            RBT<value_type, key_compare, allocator_type>    _RBTree;
             allocator_type  _alloc;
     };
                 /* ----------- Non-member function overloads ----------- */

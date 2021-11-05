@@ -6,24 +6,31 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/05 16:00:30 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:25:58 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // # include "containers/vector.hpp"
 // # include "containers/stack.hpp"
-# include "GBT/GBT.hpp"
+# include "RBT/RBT.hpp"
 
 int main( void ) 
 {
-    ft::GBT<int>	bestTree;
+    ft::RBT<int>	bst;
 
 
-	bestTree.insert(55);
-	bestTree.insert(10);
-	bestTree.insert(20);
+	bst.insert(50);
+	bst.insert(55);
+	bst.insert(52);
+	bst.insert(60);
 
-	bestTree.preOrder(bestTree.getRoot());
+	bst.insert(40);
+	bst.insert(45);
+	bst.insert(20);
+
+	bst.printTree();
+
+
 }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE

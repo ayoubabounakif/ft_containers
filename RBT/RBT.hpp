@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   GBT.hpp                                            :+:      :+:    :+:   */
+/*   RBT.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/05 16:02:40 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/05 18:42:24 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@
 # include "../utility/make_pair.hpp"
 # include "../containers/vector.hpp"
 
-# define GREEN 420
-# define BLACK 42
-# define BLACK_BLACK 99
+# define RED 1
+# define BLACK 0
+# define BLACKED_BLACK 007
 
 namespace ft {
     
     template < class T, class Compare = std::less<T> , class Alloc = std::allocator<T> >
-    class GBT
+    class RBT
     {
         public:
         
-            typedef             T                                       value_type;
-            typedef             Compare                                 key_compare;
-            typedef             Alloc                                   allocator_type;
+            typedef             T                  value_type;
+            typedef             Compare            key_compare;
+            typedef             Alloc              allocator_type;
             
             struct Node {
                 value_type  * data;
@@ -40,14 +40,13 @@ namespace ft {
             };            
           
             typedef typename    Alloc::template rebind<Node>::other   rebind_allocator;
-            
              
             // Constructor
-            GBT( void ) {
+            RBT( void ) {
                 this->_root = NULL;
             }
 
-            void    preOrder( Node * root ) {
+            /* void    preOrder( Node * root ) {
                 if (root == NULL) { return ; }
                 std::cout << *root->data << " ";
                 preOrder(root->left);
@@ -66,7 +65,7 @@ namespace ft {
                 postOrder(root->left);
                 postOrder(root->right);
                 std::cout << *root->data << " ";
-            }
+            } */
 
             Node *  getRoot( void ) {
                 return this->_root;
@@ -76,6 +75,12 @@ namespace ft {
                 Node * tmpNode = newNode(key);
                 this->_root = this->BST_insert(this->_root, tmpNode);
                 return ;
+            }
+
+            void printTree() {
+                if (_root) {
+                    printHelper(this->_root, nullptr, false);
+                }
             }
 
         private:
@@ -89,10 +94,8 @@ namespace ft {
                 nouveauNode = _nodeAlloc.allocate(1);
                 nouveauNode->data = _alloc.allocate(1);
                 *(nouveauNode->data) = key;
-                nouveauNode->parent = NULL;
-                nouveauNode->left = NULL;
-                nouveauNode->right = NULL;
-                nouveauNode->color = GREEN;
+                nouveauNode->parent = nouveauNode->left = nouveauNode->right = NULL;
+                nouveauNode->color = RED;
                 return nouveauNode;
             }
 
@@ -103,7 +106,37 @@ namespace ft {
                 else if (*root->data > *newNode->data) { root->left = BST_insert(root->left, newNode); }
                 return root;
             }
-
             
+
+                    /* ---------- | Recursive print of a "RBT" | ---------- */
+
+            struct Trunk {
+                Trunk *prev;
+                std::string str;
+                Trunk(Trunk *prev, std::string str) { this->prev = prev; this->str = str; }
+            };
+
+            // Helper function to print branches of the binary tree
+            void showTrunks(Trunk *p) {
+                if (p == nullptr) { return ; }
+                showTrunks(p->prev);
+                std::cout << p->str;
+            }
+            
+            void printHelper(Node* root, Trunk *prev, bool isLeft) {
+                if (root == nullptr) { return; }
+                std::string prev_str = "    ";
+                Trunk *trunk = new Trunk(prev, prev_str);
+                printHelper(root->right, trunk, true);
+                if (!prev) { trunk->str = "——— "; }
+                else if (isLeft) { trunk->str = " .——— "; prev_str = "   |"; }
+                else { trunk->str = " `——— "; prev->str = prev_str; }
+                showTrunks(trunk);
+                std::string sColor = root->color ? "R" : "B";
+                std::cout << *root->data << "(" << sColor <<  ")" << std::endl;
+                if (prev) { prev->str = prev_str; }
+                trunk->str = "   |";
+                printHelper(root->left, trunk, false);
+            }
     }; 
 }
