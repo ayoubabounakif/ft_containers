@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/05 18:42:24 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/06 18:46:07 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "../utility/pair.hpp"
 # include "../utility/make_pair.hpp"
 # include "../containers/vector.hpp"
+# include <errno.h>
 
 # define RED 1
 # define BLACK 0
@@ -74,6 +75,7 @@ namespace ft {
             void    insert( value_type key ) {
                 Node * tmpNode = newNode(key);
                 this->_root = this->BST_insert(this->_root, tmpNode);
+                // fixInsertionViolation(this->_root, tmpNode);
                 return ;
             }
 
@@ -82,6 +84,7 @@ namespace ft {
                     printHelper(this->_root, nullptr, false);
                 }
             }
+            
 
         private:
             Node    *           _root;
@@ -100,20 +103,148 @@ namespace ft {
             }
 
             // Insertion of a node
-            Node * BST_insert( Node *root,  Node *newNode ) {
+            Node *  BST_insert( Node *root, Node *newNode ) {
                 if (root == NULL) { return newNode; }
                 if (*root->data < *newNode->data) { root->right = BST_insert(root->right, newNode); }
                 else if (*root->data > *newNode->data) { root->left = BST_insert(root->left, newNode); }
                 return root;
             }
+
+            void    rotateLeft( Node *& root, Node *& pt ) {
+                Node * pt_right = pt->right;
+                pt->right = pt_right->left;
+                if (pt->right != NULL) { pt->right->parent = pt->parent; }
+                pt_right->parent = pt->parent;
+                if (pt->parent == NULL) { root = pt->right; }
+                else if (pt == pt->parent->left) { pt->parent->left = pt_right; }
+                else pt->parent->right = pt_right;
+                pt_right->left = pt;
+                pt->parent = pt_right;
+                return ;
+            }
+
+            // void    rotateRight( Node *&root, Node *&pt )
+            // {
+            //     Node * pt_left = pt->left;
+            //     pt->left = pt_left->right;
+            //     if (pt->left != NULL) { pt->left->parent = pt; }
+            //     pt_left->parent = pt->parent;
+            //     if (pt->parent == NULL) { root = pt_left; }
+            //     else if (pt == pt->parent->left) { pt->parent->left = pt_left; }
+            //     else pt->parent->right = pt_left;
+            //     pt_left->right = pt;
+            //     pt->parent = pt_left;
+            //     return ;
+            // }
+
+            /* void    fixInsertionViolation( Node *root, Node *newNode ) {
+                
+            } */
+
+            // This function fixes violations
+            // caused by BST insertion
+            // void fixInsertionViolation(Node *&root, Node *&pt)
+            // {
+            //     Node *parent_pt = NULL;
+            //     Node *grand_parent_pt = NULL;
             
+            //     while ((pt != root) && (pt->color != BLACK) &&
+            //         (pt->parent->color == RED))
+            //     {
+            
+            //         parent_pt = pt->parent;
+            //         grand_parent_pt = pt->parent->parent;
+            
+            //         /*  Case : A
+            //             Parent of pt is left child
+            //             of Grand-parent of pt */
+            //         if (parent_pt == grand_parent_pt->left)
+            //         {
+            //             Node *uncle_pt = grand_parent_pt->right;
+            
+            //             /* Case : 1
+            //             The uncle of pt is also red
+            //             Only Recoloring required */
+            //             if (uncle_pt != NULL && uncle_pt->color ==
+            //                                                 RED)
+            //             {
+            //                 grand_parent_pt->color = RED;
+            //                 parent_pt->color = BLACK;
+            //                 uncle_pt->color = BLACK;
+            //                 pt = grand_parent_pt;
+            //             }
+            
+            //             else
+            //             {
+            //                 /* Case : 2
+            //                 pt is right child of its parent
+            //                 Left-rotation required */
+            //                 if (pt == parent_pt->right)
+            //                 {
+            //                     rotateLeft(root, parent_pt);
+            //                     pt = parent_pt;
+            //                     parent_pt = pt->parent;
+            //                 }
+            
+            //                 /* Case : 3
+            //                 pt is left child of its parent
+            //                 Right-rotation required */
+            //                 rotateRight(root, grand_parent_pt);
+            //                 std::swap(parent_pt->color,
+            //                         grand_parent_pt->color);
+            //                 pt = parent_pt;
+            //             }
+            //         }
+            
+            //         /* Case : B
+            //         Parent of pt is right child
+            //         of Grand-parent of pt */
+            //         else
+            //         {
+            //             Node *uncle_pt = grand_parent_pt->left;
+            
+            //             /*  Case : 1
+            //                 The uncle of pt is also red
+            //                 Only Recoloring required */
+            //             if ((uncle_pt != NULL) && (uncle_pt->color ==
+            //                                                     RED))
+            //             {
+            //                 grand_parent_pt->color = RED;
+            //                 parent_pt->color = BLACK;
+            //                 uncle_pt->color = BLACK;
+            //                 pt = grand_parent_pt;
+            //             }
+            //             else
+            //             {
+            //                 /* Case : 2
+            //                 pt is left child of its parent
+            //                 Right-rotation required */
+            //                 if (pt == parent_pt->left)
+            //                 {
+            //                     rotateRight(root, parent_pt);
+            //                     pt = parent_pt;
+            //                     parent_pt = pt->parent;
+            //                 }
+            
+            //                 /* Case : 3
+            //                 pt is right child of its parent
+            //                 Left-rotation required */
+            //                 rotateLeft(root, grand_parent_pt);
+            //                 std::swap(parent_pt->color,
+            //                         grand_parent_pt->color);
+            //                 pt = parent_pt;
+            //             }
+            //         }
+            //     }
+            //     root->color = BLACK;
+            // }
 
                     /* ---------- | Recursive print of a "RBT" | ---------- */
 
             struct Trunk {
                 Trunk *prev;
                 std::string str;
-                Trunk(Trunk *prev, std::string str) { this->prev = prev; this->str = str; }
+                Trunk( Trunk *prev, std::string str ) { this->prev = prev; this->str = str; }
             };
 
             // Helper function to print branches of the binary tree
@@ -123,7 +254,7 @@ namespace ft {
                 std::cout << p->str;
             }
             
-            void printHelper(Node* root, Trunk *prev, bool isLeft) {
+            void printHelper( Node* root, Trunk *prev, bool isLeft ) {
                 if (root == nullptr) { return; }
                 std::string prev_str = "    ";
                 Trunk *trunk = new Trunk(prev, prev_str);
