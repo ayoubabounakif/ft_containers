@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/08 18:40:49 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/08 19:43:59 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ namespace ft {
             void    insert( value_type key ) {
                 Node * tmpNode = newNode(key);
                 this->_root = this->BST_insert(this->_root, tmpNode);
-                fixInsertionViolation(this->_root, tmpNode);
+                // fixInsertionViolation(this->_root, tmpNode);
                 return ;
             }
 
@@ -115,7 +115,8 @@ namespace ft {
                 }
                 return root;
             }
-            void    rotateLeft( Node *& root, Node *& x ) {
+
+            /* void    rotateLeft( Node *& root, Node *& x ) {
                 
                 Node * y = x->right;
                 x->right = y->left;
@@ -203,7 +204,7 @@ namespace ft {
                 }
                 root->color = BLACK;
             }
-
+ */
             // This function fixes violations
             // caused by BST insertion
             // void fixInsertionViolation(Node *&root, Node *&pt)
