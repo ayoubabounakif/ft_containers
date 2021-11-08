@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/06 18:46:07 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/08 17:30:32 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,9 @@ namespace ft {
             void    insert( value_type key ) {
                 Node * tmpNode = newNode(key);
                 this->_root = this->BST_insert(this->_root, tmpNode);
-                // fixInsertionViolation(this->_root, tmpNode);
+                // rotateLeft(this->_root, tmpNode);
+                // rotateRight(this->_root, tmpNode);
+                fixInsertionViolation(this->_root, tmpNode);
                 return ;
             }
 
@@ -103,43 +105,127 @@ namespace ft {
             }
 
             // Insertion of a node
-            Node *  BST_insert( Node *root, Node *newNode ) {
-                if (root == NULL) { return newNode; }
-                if (*root->data < *newNode->data) { root->right = BST_insert(root->right, newNode); }
-                else if (*root->data > *newNode->data) { root->left = BST_insert(root->left, newNode); }
+            Node *  BST_insert( Node *root, Node *z ) {
+                if (root == NULL) { return z; }
+                if (*root->data < *z->data) {
+                    root->right = BST_insert(root->right, z);
+                    root->right->parent = root;
+                }
+                else if (*root->data > *z->data) {
+                    root->left = BST_insert(root->left, z);
+                    root->left->parent = root;
+                }
+                return root;
+         /*        Node * y = NULL;
+                Node * temp = root;
+                
+                while (temp != NULL) {
+                    y = temp;
+                    if (z->data < temp->data)
+                        temp = temp->left;
+                    else
+                        temp = temp->right;
+                }
+                z->parent = y;
+                if (y == NULL)
+                    root = z;
+                else if (z->data < y->data)
+                    y->left = z;
+                else
+                    y->right = z;
+                z->right = NULL;
+                z->left = NULL; */
+                // fixInsertionViolation(root, z);
                 return root;
             }
+            void    rotateLeft( Node *& root, Node *& x ) {
+                
+                Node * y = x->right;
+                x->right = y->left;
 
-            void    rotateLeft( Node *& root, Node *& pt ) {
-                Node * pt_right = pt->right;
-                pt->right = pt_right->left;
-                if (pt->right != NULL) { pt->right->parent = pt->parent; }
-                pt_right->parent = pt->parent;
-                if (pt->parent == NULL) { root = pt->right; }
-                else if (pt == pt->parent->left) { pt->parent->left = pt_right; }
-                else pt->parent->right = pt_right;
-                pt_right->left = pt;
-                pt->parent = pt_right;
-                return ;
+                if (y->left != NULL)
+                    y->left->parent = x;
+
+                y->parent = x->parent;
+
+                if (x->parent == NULL)
+                    root = y;
+                else if (x == x->parent->left)
+                    x->parent->left = y;
+                else
+                    x->parent->right = y;
+
+                y->left = x;
+                x->parent = y;
             }
 
-            // void    rotateRight( Node *&root, Node *&pt )
-            // {
-            //     Node * pt_left = pt->left;
-            //     pt->left = pt_left->right;
-            //     if (pt->left != NULL) { pt->left->parent = pt; }
-            //     pt_left->parent = pt->parent;
-            //     if (pt->parent == NULL) { root = pt_left; }
-            //     else if (pt == pt->parent->left) { pt->parent->left = pt_left; }
-            //     else pt->parent->right = pt_left;
-            //     pt_left->right = pt;
-            //     pt->parent = pt_left;
-            //     return ;
-            // }
+            void    rotateRight( Node *&root, Node *&x )
+            {
+                Node * y = x->left;
+                x->left = y->right;
 
-            /* void    fixInsertionViolation( Node *root, Node *newNode ) {
+                if (y->right != NULL)
+                    y->right->parent = x;
                 
-            } */
+                y->parent = x->parent;
+
+                if (x->parent == NULL)
+                    root = y;
+
+                else if (x == x->parent->right)
+                    x->parent->right = y;
+                else
+                    x->parent->left = y;
+                
+                y->right = x;
+                x->parent = y;
+            }
+
+            void    fixInsertionViolation( Node *root, Node *z ) {
+                // std::cout << "EEE"  << std::endl;
+                // std::cout << z->color << std::endl;
+                while (z->parent->color == RED) {
+                    if (z->parent == z->parent->parent->left) { 
+                        Node * y = z->parent->parent->right; // Aunt of Z
+                        // If Aunt is RED we RECOLOR || If aunt is BLACK we rotate
+                        if (y && y->color == RED) {
+                            z->parent->color = BLACK;
+                            y->color = BLACK;
+                            z->parent->parent->color = RED;
+                            z = z->parent->parent;
+                        }
+                        else { // Case 2 or Case 3
+                            if (z == z->parent->right) {
+                                z = z->parent;
+                                rotateLeft(root, z);
+                            }
+                            // Case 3
+                            z->parent->color = BLACK; // Make parent black and gradparent RED
+                            z->parent->parent->color = RED;
+                            rotateRight(root, z->parent->parent);
+                        }  
+                    }
+                    else { // z->parent is the right child
+                        Node * y = z->parent->parent->left; // Aunt of Z;
+                        if (y && y->color == RED) {
+                            z->parent->color = BLACK;
+                            y->color = BLACK;
+                            z->parent->parent->color = RED;
+                            z = z->parent->parent;
+                        }
+                        else {
+                            if (z == z->parent->left) {
+                                z = z->parent; // marked z->parent as new z
+                                rotateRight(root, z);
+                            }
+                            z->parent->color = BLACK; // mAKE THE parent black
+                            z->parent->parent->color = RED;
+                            rotateLeft(root, z->parent->parent);
+                        }
+                    }
+                }
+                root->color = BLACK;
+            }
 
             // This function fixes violations
             // caused by BST insertion

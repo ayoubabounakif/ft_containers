@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/06 18:46:04 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/08 14:16:21 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ int main( void )
 	bst.insert(60);
 
 	bst.insert(40);
-	bst.insert(45);
-	bst.insert(20);
+	// bst.insert(45);
+	// bst.insert(20);
 
 	bst.printTree();
+
 
 
 }
