@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/10 11:48:58 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/11 20:09:07 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,24 @@
 
 namespace ft {
     
+    /* --       Description:
+        RBT is a self-balancing BST in which each node contains \
+        an extra bit for denoting the color of the node, either RED or BLACK */
+    
+    /* --       RBT Properties:
+        1 - R/B Property: Every node is colored, either RED or BLACK.
+        2 - Root Property: The ROOT is always BLACK.
+        3 - Leaf Property: Every LEAF (NIL) is BLACK.
+        4 - Red Property: If a RED node has CHILDREN, they will always be BLACK.
+        5 - Depth Property: For each NODE, any SIMPLE PATH from this node to any \
+        of its DESCENDANT LEAF has the same BLACK-DEPTH (The number of BLACK nodes) */
+
+    /* --       How the RBT maintains SELF-BALANCING property:
+        1 - The R/B color is meant for balancing the tree.
+        2 - The limitations put on the NODE COLORS ensure that any SIMPLE PATH \
+        from the ROOT to a LEAF is not more than twice as long as any other such PATH. \
+        It helps in maintaining the self-balancing property of the RBT. */
+
     template < class T, class Compare = std::less<T> , class Alloc = std::allocator<T> >
     class RBT
     {
@@ -38,8 +56,8 @@ namespace ft {
                 Node        * left;
                 Node        * right;
                 short         color;      
-            };            
-          
+            };           
+
             typedef typename    Alloc::template rebind<Node>::other   rebind_allocator;
              
             // Constructor
@@ -72,22 +90,29 @@ namespace ft {
                 return this->_root;
             }
 
+            /* --   Insertion of an element into a RBT:
+                While inserting a new node, the ney node is always inserted as a RED node.
+                After insertion of a new node, if the tree is violating the properties of the RBT
+                we do the following operations:
+                    1 - Recolor
+                    2 - Rotation */
             void    insert( value_type key ) {
                 Node * tmpNode = newNode(key);
                 this->_root = this->BST_insert(this->_root, tmpNode);
                 if (tmpNode->parent == nullptr)
-                    return ;
-                if (tmpNode->parent->parent == nullptr)
                 {
                     tmpNode->parent->color = BLACK;
                     return ;
                 }
+                if (tmpNode->parent->parent == nullptr)
+                    return ;
                 fixInsertionViolation(this->_root, tmpNode);
                 return ;
             }
 
             void    deleteNode( value_type key ) {
                 BST_delete(this->_root, key);
+                return ;
             }
 
             void    printTree() {
@@ -113,6 +138,10 @@ namespace ft {
             allocator_type      _alloc;
             rebind_allocator    _nodeAlloc;
 
+            /* --   Why newly inserted nodes are always RED in a RBT?
+                This is because insertion a RED node does not vioolate the depth property of a RBT.
+                If you attack a RED node to another RED node, then the rule is violated \
+                but it is easier to fix this problem than the problem introduced by violating the DEPTH property. */
             Node *  newNode( value_type key ) {
                 Node  * nouveauNode;
                 nouveauNode = _nodeAlloc.allocate(1);
@@ -123,7 +152,7 @@ namespace ft {
                 return nouveauNode;
             }
 
-            // Insertion of a node
+            
             Node *  BST_insert( Node *root, Node *z ) {
                 if (root == nullptr) { return z; }
                 if (*root->data < *z->data) {
@@ -194,147 +223,153 @@ namespace ft {
             } */
 
 
-
+            /* ---------------------- Operations ---------------------- */
+                /* --- Subtrees rotations // */
+            
+            /* -- Left Rotation:
+                The arrangement of the nodes on the right is transformed into the arrangements on the left node
+                -- Algorithm:
+                    1 - If Y has a left subtree, assign X as the parent of the left substree of Y.
+                    2 - If the parent of X is NULL, make Y as the root of the tree. 
+                    3 - Else if X is the left child of its parent P, make Y as the left child of P. 
+                    4 - Else assign Y as the right child of P. 
+                    5 - Make Y as the parent of X. */
             void    rotateLeft( Node *& root, Node *& x ) {
-                
-                Node * y = x->right;
-                x->right = y->left;
-
-                if (y->left != nullptr)
-                    y->left->parent = x;
-
+                Node * y = x->right; x->right = y->left;
+                if (y->left != nullptr) y->left->parent = x;
                 y->parent = x->parent;
-
-                if (x->parent == nullptr)
-                    root = y;
-                else if (x == x->parent->left)
-                    x->parent->left = y;
-                else
-                    x->parent->right = y;
-
-                y->left = x;
-                x->parent = y;
+                if (x->parent == nullptr) root = y;
+                else if (x == x->parent->left) x->parent->left = y;
+                else x->parent->right = y;
+                y->left = x; x->parent = y;
             }
 
+            /* -- Right Rotation:
+                The arrangement of the nodes on the left is transformed into the arrangements on the right node
+                -- Algorithm:
+                    1 - If X has a right subtree, assign Y as the parent of the right subtree of X. 
+                    2 - If the parent of Y is NULL, make  as the root of the tree. 
+                    3 - Else if Y is the right child of its parent P, make X as the right child of P. 
+                    4 - Else assign X as the left cchild of P. 
+                    5 - Make X as the parent of Y. */
             void    rotateRight( Node *&root, Node *&x )
             {
-                Node * y = x->left;
-                x->left = y->right;
-
-                if (y->right != nullptr)
-                    y->right->parent = x;
-                
+                Node * y = x->left; x->left = y->right;
+                if (y->right != nullptr) y->right->parent = x;
                 y->parent = x->parent;
-
-                if (x->parent == nullptr)
-                    root = y;
-
-                else if (x == x->parent->right)
-                    x->parent->right = y;
-                else
-                    x->parent->left = y;
-                
-                y->right = x;
-                x->parent = y;
+                if (x->parent == nullptr) root = y;
+                else if (x == x->parent->right) x->parent->right = y;
+                else x->parent->left = y;
+                y->right = x; x->parent = y;
             }
 
-            // This function fixes violations
-            // caused by BST insertion
-            void fixInsertionViolation(Node *&root, Node *&pt)
-            {
-                Node *parent_pt = nullptr;
-                Node *grand_parent_pt = nullptr;
-            
-                while ((pt != root) && (pt->color != BLACK) &&
-                    (pt->parent->color == RED))
-                {
-            
-                    parent_pt = pt->parent;
-                    grand_parent_pt = pt->parent->parent;
-            
-                    /*  Case : A
-                        Parent of pt is left child
-                        of Grand-parent of pt */
-                    if (parent_pt == grand_parent_pt->left)
-                    {
-                        Node *uncle_pt = grand_parent_pt->right;
-            
-                        /* Case : 1
-                        The uncle of pt is also red
-                        Only Recoloring required */
-                        if (uncle_pt != nullptr && uncle_pt->color ==
-                                                            RED)
-                        {
-                            grand_parent_pt->color = RED;
-                            parent_pt->color = BLACK;
-                            uncle_pt->color = BLACK;
-                            pt = grand_parent_pt;
-                        }
-            
-                        else
-                        {
-                            /* Case : 2
-                            pt is right child of its parent
-                            Left-rotation required */
-                            if (pt == parent_pt->right)
-                            {
-                                rotateLeft(root, parent_pt);
-                                pt = parent_pt;
-                                parent_pt = pt->parent;
-                            }
-            
-                            /* Case : 3
-                            pt is left child of its parent
-                            Right-rotation required */
-                            rotateRight(root, grand_parent_pt);
-                            std::swap(parent_pt->color,
-                                    grand_parent_pt->color);
-                            pt = parent_pt;
-                        }
-                    }
-            
-                    /* Case : B
-                    Parent of pt is right child
-                    of Grand-parent of pt */
-                    else
-                    {
-                        Node *uncle_pt = grand_parent_pt->left;
-            
-                        /*  Case : 1
-                            The uncle of pt is also red
-                            Only Recoloring required */
-                        if ((uncle_pt != nullptr) && (uncle_pt->color ==
-                                                                RED))
-                        {
-                            grand_parent_pt->color = RED;
-                            parent_pt->color = BLACK;
-                            uncle_pt->color = BLACK;
-                            pt = grand_parent_pt;
-                        }
-                        else
-                        {
-                            /* Case : 2
-                            pt is left child of its parent
-                            Right-rotation required */
-                            if (pt == parent_pt->left)
-                            {
-                                rotateRight(root, parent_pt);
-                                pt = parent_pt;
-                                parent_pt = pt->parent;
-                            }
-            
-                            /* Case : 3
-                            pt is right child of its parent
-                            Left-rotation required */
-                            rotateLeft(root, grand_parent_pt);
-                            std::swap(parent_pt->color,
-                                    grand_parent_pt->color);
-                            pt = parent_pt;
-                        }
-                    }
-                }
-                root->color = BLACK;
+            /* -- Insertion Violation Fix:
+                This function is used for maintaining the property of a RBT \ 
+                if the insertion of a newNode violates this property. 
+                -- Alorithm:
+                    1 - Do the following suite of instructions while the parent of a newNode <pt> is RED.
+                    2 - If <pt> is the left child of grandParent. */
+
+            void    fixInsertionViolation( Node *&root, Node *&pt ) {
+                Node * parent = nullptr;
+                Node * grandParent = nullptr;
             }
+            // void    fixInsertionViolation(Node *&root, Node *&pt)
+            // {
+            //     Node *parent_pt = nullptr;
+            //     Node *grand_parent_pt = nullptr;
+            
+            //     while ((pt != root) && (pt->color != BLACK) &&
+            //         (pt->parent->color == RED))
+            //     {
+            
+            //         parent_pt = pt->parent;
+            //         grand_parent_pt = pt->parent->parent;
+            
+            //         /*  Case : A
+            //             Parent of pt is left child
+            //             of Grand-parent of pt */
+            //         if (parent_pt == grand_parent_pt->left)
+            //         {
+            //             Node *uncle_pt = grand_parent_pt->right;
+            
+            //             /* Case : 1
+            //             The uncle of pt is also red
+            //             Only Recoloring required */
+            //             if (uncle_pt != nullptr && uncle_pt->color ==
+            //                                                 RED)
+            //             {
+            //                 grand_parent_pt->color = RED;
+            //                 parent_pt->color = BLACK;
+            //                 uncle_pt->color = BLACK;
+            //                 pt = grand_parent_pt;
+            //             }
+            
+            //             else
+            //             {
+            //                 /* Case : 2
+            //                 pt is right child of its parent
+            //                 Left-rotation required */
+            //                 if (pt == parent_pt->right)
+            //                 {
+            //                     rotateLeft(root, parent_pt);
+            //                     pt = parent_pt;
+            //                     parent_pt = pt->parent;
+            //                 }
+            
+            //                 /* Case : 3
+            //                 pt is left child of its parent
+            //                 Right-rotation required */
+            //                 rotateRight(root, grand_parent_pt);
+            //                 std::swap(parent_pt->color,
+            //                         grand_parent_pt->color);
+            //                 pt = parent_pt;
+            //             }
+            //         }
+            
+            //         /* Case : B
+            //         Parent of pt is right child
+            //         of Grand-parent of pt */
+            //         else
+            //         {
+            //             Node *uncle_pt = grand_parent_pt->left;
+            
+            //             /*  Case : 1
+            //                 The uncle of pt is also red
+            //                 Only Recoloring required */
+            //             if ((uncle_pt != nullptr) && (uncle_pt->color ==
+            //                                                     RED))
+            //             {
+            //                 grand_parent_pt->color = RED;
+            //                 parent_pt->color = BLACK;
+            //                 uncle_pt->color = BLACK;
+            //                 pt = grand_parent_pt;
+            //             }
+            //             else
+            //             {
+            //                 /* Case : 2
+            //                 pt is left child of its parent
+            //                 Right-rotation required */
+            //                 if (pt == parent_pt->left)
+            //                 {
+            //                     rotateRight(root, parent_pt);
+            //                     pt = parent_pt;
+            //                     parent_pt = pt->parent;
+            //                 }
+            
+            //                 /* Case : 3
+            //                 pt is right child of its parent
+            //                 Left-rotation required */
+            //                 rotateLeft(root, grand_parent_pt);
+            //                 std::swap(parent_pt->color,
+            //                         grand_parent_pt->color);
+            //                 pt = parent_pt;
+            //             }
+            //         }
+            //     }
+            //     root->color = BLACK;
+            // }
+
 
                     /* ---------- | Recursive print of a "RBT" | ---------- */
 
