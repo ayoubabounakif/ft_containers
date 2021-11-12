@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/10 11:49:06 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/12 14:05:51 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,16 @@ int main( void )
 {
     ft::RBT<int>	bst;
 	
-	bst.insert(50);
+	bst.insert(33);
+	bst.insert(13);
+	bst.insert(53);
+	bst.insert(11);
+	bst.insert(21);
+	bst.insert(41);
+	bst.insert(61);
+	bst.insert(15);
+	bst.insert(31);
 	
-	bst.insert(55);
-	bst.insert(52);
-	bst.insert(60);
-
-	bst.insert(40);
-	bst.insert(45);
-	bst.insert(139830);
-	
-	bst.insert(80);
-	bst.insert(-20);
-	bst.insert(70);
 
 	// bst.deleteNode(55);
 	// bst.deleteNode(45);
