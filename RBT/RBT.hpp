@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/12 14:07:38 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/13 19:03:59 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ namespace ft {
             // Constructor
             RBT( void ) {
                 this->_root = nullptr;
+                this->_size = 0;
             }
 
             /* void    preOrder( Node * root ) {
@@ -90,6 +91,10 @@ namespace ft {
                 return this->_root;
             }
 
+            Node *  getTreeSize( void ) {
+                return this->_size;
+            }
+
             /* --   Insertion of an element into a RBT:
                 While inserting a new node, the ney node is always inserted as a RED node.
                 After insertion of a new node, if the tree is violating the properties of the RBT
@@ -99,6 +104,7 @@ namespace ft {
             void    insert( value_type key ) {
                 Node * tmpNode = newNode(key);
                 this->_root = this->BST_insert(this->_root, tmpNode);
+                this->_size++;
                 if (tmpNode->parent == nullptr)
                 {
                     tmpNode->color = BLACK;
@@ -111,6 +117,7 @@ namespace ft {
 
             void    deleteNode( value_type key ) {
                 BST_delete(this->_root, key);
+                this->_size--;
             }
 
             void    printTree() {
@@ -135,6 +142,7 @@ namespace ft {
             key_compare         _comp;
             allocator_type      _alloc;
             rebind_allocator    _nodeAlloc;
+            size_type           _size;
 
             /* --   Why newly inserted nodes are always RED in a RBT?
                 This is because insertion a RED node does not vioolate the depth property of a RBT.
@@ -163,7 +171,6 @@ namespace ft {
                 }
                 return root;
             }
-
 
             /* // Util method for deletion
             Node * minValueNode( Node * node ) {
@@ -277,7 +284,14 @@ namespace ft {
                                 -- Left Right (<PARENT> is LEFT CHILD of <GRAND PARENT> and <X> is RIGHT CHILD of <PARENT>)
                                 -- Right Right (<PARENT> is RIGHT CHILD of <GRAND PARENT> and <X> is RIGHT CHILD of <PARENT>)
                                 -- Right Left (<PARENT> is RIGHT CHILD of <GRAND PARENT> and <X> is LEFT CHILD of <PARENT>)
-                            ii - Change <X = X's PARENT>, repeat steps 2 and 3 for new <X>. */
+                            ii - Change <X = X's PARENT>, repeat steps 2 and 3 for new <X>.
+                            
+                                        ROB-EDWARDS:
+                            - If the imbalance is on the right child right subtree we do a left rotation.
+                            - If the imbalance is on the right child left subtree we do a right left rotation.
+                            - If the imbalance is on the left child right subtree we do a left right rotation.
+                            - If the imbalance is on the left child left subtree we do a right rotation. */
+                
             void    fixInsertionViolation(Node *&root, Node *&x) {
                 
                 Node *parent_x = nullptr;
