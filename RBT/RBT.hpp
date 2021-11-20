@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/17 18:09:57 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/20 15:17:48 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # define RED 1
 # define BLACK 0
-# define DOUBLE_BLACK 007
+# define DOUBLE_BLACK 2
 
 namespace ft {
     
@@ -49,13 +49,43 @@ namespace ft {
             typedef             T                  value_type;
             typedef             Compare            key_compare;
             typedef             Alloc              allocator_type;
+            typedef             size_t              size_type;
             
             struct Node {
                 value_type  * data;
                 Node        * parent;
                 Node        * left;
                 Node        * right;
-                short         color;      
+                short         color;
+
+                Node ( const value_type& x ) : data(x), parent(nullptr), left(nullptr), right(nullptr), color(RED) {}
+
+                /* Check if node is left child of parent */
+                bool    isOnLeft( void ) {
+                    return this == this->parent->left;
+                }
+
+                bool    hasRedChild() {
+                    return (this->left != nullptr and this->left->color == RED) ||
+                        (this->right != nullptr and this->right->color == RED);
+                }
+                /* This method returns a pointer to aunt */
+                Node *  getAunt( void ) {
+                    if (this->parent == nullptr || parent->parent == nullptr)
+                        return nullptr;
+                    if (this->parent->isOnLeft())
+                        return this->parent->parent->right;
+                    else
+                        return this->parent->parent->left;
+                }
+                
+                Node *  getSibling( void ) {
+                    if (this->parent == nullptr)
+                        return nullptr;
+                    if (isOnLeft())
+                        return this->parent->right;
+                    return this->parent->left;
+                }
             };           
 
             typedef typename    Alloc::template rebind<Node>::other   rebind_allocator;
@@ -116,8 +146,9 @@ namespace ft {
             }
 
             void    deleteNode( value_type key ) {
-                BST_delete(this->_root, key);
-                this->_size--;
+                if (this->_root == nullptr)
+                    return ;
+                RBT_delete(this->_root, key);
             }
 
             void    printTree() {
@@ -158,20 +189,6 @@ namespace ft {
                 return nouveauNode;
             }
 
-            
-            Node *  BST_insert( Node *root, Node *z ) {
-                if (root == nullptr) { return z; }
-                if (*root->data < *z->data) {
-                    root->right = BST_insert(root->right, z);
-                    root->right->parent = root;
-                }
-                else if (*root->data > *z->data) {
-                    root->left = BST_insert(root->left, z);
-                    root->left->parent = root;
-                }
-                return root;
-            }
-
             Node *  maximum( Node * node ) {
                 while (node->right != nullptr)
                     node = node->right;
@@ -210,8 +227,21 @@ namespace ft {
                 return temp;
             }
 
-                    // TO-DO: Fix deletion and It's fix || 
 
+            Node *  BST_insert( Node *root, Node *z ) {
+                if (root == nullptr) { return z; }
+                if (*root->data < *z->data) {
+                    root->right = BST_insert(root->right, z);
+                    root->right->parent = root;
+                }
+                else if (*root->data > *z->data) {
+                    root->left = BST_insert(root->left, z);
+                    root->left->parent = root;
+                }
+                return root;
+            }
+            
+                    
             // Util method for deletion
 /*             Node * minValueNode( Node * node ) {
                 Node * current = node;
@@ -221,19 +251,15 @@ namespace ft {
                 return current;
             } */
 
-            // Deletion of a node
+            // Basic BST Deletion
 /*             Node *  BST_delete( Node *root, value_type key ) {
                 // Base case
                 if (root == nullptr) { return root; }
-
-                // If the key to be deleted is smaller
-                // than the root's key, then it lies in left subtree
                 if (key < *root->data) {
                     root->left = BST_delete(root->left, key);
                     return root;
                 }
-                else if (key > *root->data)
-                {
+                else if (key > *root->data) {
                     root->right = BST_delete(root->right, key);
                     return root;
                 }
@@ -247,16 +273,13 @@ namespace ft {
                     _nodeAlloc.deallocate(root, 1);
                     return temp;
                 }
-
                 else {
-                    
                     Node * successorParent = root;
                     Node * successor = root->right;
                     while (successor->left != nullptr) {
                         successorParent = successor;
                         successor = successor->left;
                     }
-
                     if (successorParent != root)
                         successorParent->left = successor->right;
                     else
@@ -265,6 +288,43 @@ namespace ft {
                     _nodeAlloc.deallocate(successor, 1);
                     return root;
                 }        
+            } */
+
+            /* -- Deletion in RBT
+                Step 1: Perform BST Deletion
+                Step 2: Apply the appropriate case
+                    Case 1:
+                        - If NODE to be deleted is a RED LEAF NODE -> Just remove it from the tree.
+                    Case 2:
+                        - If DB NODE is ROOT -> Remove the DB & ROOT NODE becomes BLACK
+                    Case 3:
+                        - If DB's SIBLING is BLACK and both its CHILDREN are BLACK 
+                            a -> Remove the DB 
+                            b -> Add BLACK to its PARENT (P)
+                                (3.1) |-> If P is RED, make it BLACK.
+                                (3.2) |-> If P is BLACK, make it DB
+                            c -> Make SIBLING RED
+                        - If DB still exists, apply other cases 
+                    Case 4:
+                        - If DB's SIBLING is RED 
+                            a -> Swap colors of DB's PARENT with DB's sibling 
+                            b -> Rotate PARENT in DB's direction 
+                            c -> Check which case can be applied to this new tree and perform that action
+                    Case 5:
+                        - If DB's SIBLING is BLACK && DB's SIBLING's CHILD which is FAR from DB is BLACK, 
+                        && DB's SIBLING's CHILD which is NEAR to DB is RED
+                            a -> Swap color of DB's SIBLING with SIBLING'S CHILD who is NEAR to DB
+                            b -> Rotate SIBLING in opposite direction to DB 
+                            c -> Apply Case 6
+                    Case 6:
+                        - If DB's SIBLING is BLACK && DB's SIBLING'S FAR CHILD is RED
+                            a -> Swap color of DB's PARENT with DB's SIBLING's color 
+                            b -> Rotate DB's PARENT in DB's direction 
+                            c -> Remove DB sign nd make the NODE BLACK 
+                            d -> Change color of DB's SIBLING's FAR RED CHILD to BLACK */
+
+            /* void    RBT_delete( Node * root, value_type key ) {
+                
             } */
 
 
