@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/11 20:05:35 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/17 18:43:39 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,6 @@ namespace ft {
 
     /* ------------------------------- Swap --------------------------------- */
 	template <class T, class Alloc>
-  		void swap (vector<T,Alloc>& x, vector<T,Alloc>& y){ x.swap(y); }
+  		void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) { x.swap(y); }
           
 }

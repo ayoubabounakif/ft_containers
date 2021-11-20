@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/13 19:03:59 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/17 18:09:57 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ namespace ft {
                 this->_size = 0;
             }
 
-            /* void    preOrder( Node * root ) {
+            void    preOrder( Node * root ) {
                 if (root == nullptr) { return ; }
                 std::cout << *root->data << " ";
                 preOrder(root->left);
@@ -85,7 +85,7 @@ namespace ft {
                 postOrder(root->left);
                 postOrder(root->right);
                 std::cout << *root->data << " ";
-            } */
+            }
 
             Node *  getRoot( void ) {
                 return this->_root;
@@ -172,17 +172,57 @@ namespace ft {
                 return root;
             }
 
-            /* // Util method for deletion
-            Node * minValueNode( Node * node ) {
+            Node *  maximum( Node * node ) {
+                while (node->right != nullptr)
+                    node = node->right;
+                return node;
+            }
+
+            Node *  inorder_predecessor( Node * node ) {
+                if (node == nullptr)
+                    return nullptr;
+                if (node->left != nullptr)
+                    return maximum(node->left);
+                Node * temp = node->parent;
+                while (temp != nullptr && node == temp->right) {
+                    node = temp;
+                    temp = temp->parent;
+                }
+                return temp;
+            }
+
+            Node *  minimum( Node * node ) {
+                while (node->left != nullptr)
+                    node = node->left;
+                return node;
+            }
+            
+            Node * inorder_successor( Node * node ) {
+                if (node == nullptr)
+                    return nullptr;
+                if (node->right != nullptr)
+                    return minimum(node->right);
+                Node * temp = node->parent;
+                while (temp != nullptr && node == temp->right) {
+                    node = temp;
+                    temp = temp->parent;
+                }
+                return temp;
+            }
+
+                    // TO-DO: Fix deletion and It's fix || 
+
+            // Util method for deletion
+/*             Node * minValueNode( Node * node ) {
                 Node * current = node;
 
                 while (current && current->left)
                     current = current->left;
                 return current;
-            }
+            } */
 
             // Deletion of a node
-            Node *  BST_delete( Node *root, value_type key ) {
+/*             Node *  BST_delete( Node *root, value_type key ) {
                 // Base case
                 if (root == nullptr) { return root; }
 
