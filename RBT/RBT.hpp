@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/20 15:17:48 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/20 15:33:35 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ namespace ft {
             typedef             Compare            key_compare;
             typedef             Alloc              allocator_type;
             typedef             size_t              size_type;
+
+
+
+
+
+
+       
             
             struct Node {
                 value_type  * data;
@@ -88,6 +95,16 @@ namespace ft {
                 }
             };           
 
+
+
+
+
+
+
+
+
+            /* --- THESE ARE PUBLIC --- */
+
             typedef typename    Alloc::template rebind<Node>::other   rebind_allocator;
              
             // Constructor
@@ -95,28 +112,7 @@ namespace ft {
                 this->_root = nullptr;
                 this->_size = 0;
             }
-
-            void    preOrder( Node * root ) {
-                if (root == nullptr) { return ; }
-                std::cout << *root->data << " ";
-                preOrder(root->left);
-                preOrder(root->right);
-            }
-
-            void    inOrder( Node * root ) {
-                if (root == nullptr) { return ; }
-                inOrder(root->left);
-                std::cout << *root->data << " ";
-                inOrder(root->right);
-            }
-
-            void    postOrder( Node * root ) {
-                if (root == nullptr) { return ; }
-                postOrder(root->left);
-                postOrder(root->right);
-                std::cout << *root->data << " ";
-            }
-
+            
             Node *  getRoot( void ) {
                 return this->_root;
             }
@@ -148,7 +144,8 @@ namespace ft {
             void    deleteNode( value_type key ) {
                 if (this->_root == nullptr)
                     return ;
-                RBT_delete(this->_root, key);
+                Node * tmpNode = newNode(key);
+                RBT_delete(this->_root, tmpNode);
             }
 
             void    printTree() {
@@ -166,7 +163,20 @@ namespace ft {
                 while (getRoot()->right != nullptr) { node = node->right; }
                 return node;
             } */
-            
+
+
+
+
+
+
+
+
+
+
+
+
+        /** ------ THESE ARE PRIVATES ------- */
+
 
         private:
             Node    *           _root;
@@ -225,20 +235,6 @@ namespace ft {
                     temp = temp->parent;
                 }
                 return temp;
-            }
-
-
-            Node *  BST_insert( Node *root, Node *z ) {
-                if (root == nullptr) { return z; }
-                if (*root->data < *z->data) {
-                    root->right = BST_insert(root->right, z);
-                    root->right->parent = root;
-                }
-                else if (*root->data > *z->data) {
-                    root->left = BST_insert(root->left, z);
-                    root->left->parent = root;
-                }
-                return root;
             }
             
                     
@@ -327,6 +323,7 @@ namespace ft {
                 
             } */
 
+            /* ------------- I SHOULD HAVE THE FIX FUNCTION IN HERE -------- */
 
             /* ---------------------- Operations ---------------------- */
                 /* --- Subtrees rotations // */
@@ -472,6 +469,19 @@ namespace ft {
                     }
                 }
                 root->color = BLACK;
+            }
+
+            Node *  BST_insert( Node *root, Node *z ) {
+                if (root == nullptr) { return z; }
+                if (*root->data < *z->data) {
+                    root->right = BST_insert(root->right, z);
+                    root->right->parent = root;
+                }
+                else if (*root->data > *z->data) {
+                    root->left = BST_insert(root->left, z);
+                    root->left->parent = root;
+                }
+                return root;
             }
 
                     /* ---------- | Recursive print of a "RBT" | ---------- */
