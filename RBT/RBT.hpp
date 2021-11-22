@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/22 13:29:13 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:38:18 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,18 +323,18 @@ namespace ft {
                 if (*root->data == *x->data) {
                     if (x->left == nullptr && x->right == nullptr) { // if no children
                         if (x == this->_root) {
-                            _alloc.deallocate(x->data, 1);
                             _nodeAlloc.deallocate(x, 1);
-                            x = nullptr;
-                            x->data = nullptr;
+                            _alloc.deallocate(x->data, 1);
+                            /* x = nullptr;
+                            x->data = nullptr; */
                             this->_size--;
                             return ;
                         }
                         fixDeletionViolation(x);
                         _alloc.deallocate(x->data, 1);
                         _nodeAlloc.deallocate(x, 1);
-                        x = nullptr;
-                        x->data = nullptr;
+                        /* x = nullptr;
+                        x->data = nullptr; */
                         this->_size--;
                     }
                     else { // If CHILDREN
