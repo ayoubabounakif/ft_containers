@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/20 15:33:35 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:29:13 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,10 @@ namespace ft {
 
 
 
-
-
-
        
             
             struct Node {
+
                 value_type  * data;
                 Node        * parent;
                 Node        * left;
@@ -71,34 +69,8 @@ namespace ft {
                 bool    isOnLeft( void ) {
                     return this == this->parent->left;
                 }
-
-                bool    hasRedChild() {
-                    return (this->left != nullptr and this->left->color == RED) ||
-                        (this->right != nullptr and this->right->color == RED);
-                }
-                /* This method returns a pointer to aunt */
-                Node *  getAunt( void ) {
-                    if (this->parent == nullptr || parent->parent == nullptr)
-                        return nullptr;
-                    if (this->parent->isOnLeft())
-                        return this->parent->parent->right;
-                    else
-                        return this->parent->parent->left;
-                }
                 
-                Node *  getSibling( void ) {
-                    if (this->parent == nullptr)
-                        return nullptr;
-                    if (isOnLeft())
-                        return this->parent->right;
-                    return this->parent->left;
-                }
             };           
-
-
-
-
-
 
 
 
@@ -117,7 +89,7 @@ namespace ft {
                 return this->_root;
             }
 
-            Node *  getTreeSize( void ) {
+            size_type   getTreeSize( void ) {
                 return this->_size;
             }
 
@@ -142,9 +114,9 @@ namespace ft {
             }
 
             void    deleteNode( value_type key ) {
-                if (this->_root == nullptr)
+                Node * tmpNode = search(this->_root, key);
+                if (tmpNode == nullptr)
                     return ;
-                Node * tmpNode = newNode(key);
                 RBT_delete(this->_root, tmpNode);
             }
 
@@ -163,14 +135,6 @@ namespace ft {
                 while (getRoot()->right != nullptr) { node = node->right; }
                 return node;
             } */
-
-
-
-
-
-
-
-
 
 
 
@@ -204,6 +168,12 @@ namespace ft {
                     node = node->right;
                 return node;
             }
+            
+            Node *  minimum( Node * node ) {
+                while (node->left != nullptr)
+                    node = node->left;
+                return node;
+            }
 
             Node *  inorder_predecessor( Node * node ) {
                 if (node == nullptr)
@@ -218,11 +188,6 @@ namespace ft {
                 return temp;
             }
 
-            Node *  minimum( Node * node ) {
-                while (node->left != nullptr)
-                    node = node->left;
-                return node;
-            }
             
             Node * inorder_successor( Node * node ) {
                 if (node == nullptr)
@@ -236,55 +201,19 @@ namespace ft {
                 }
                 return temp;
             }
-            
+
+            Node *  search( Node * root, value_type key ) {
+                if (root == nullptr)
+                    return (nullptr);
+                if (*root->data == key)
+                    return root;
+                else if (*root->data > key)
+                    return search(root->left, key);
+                else if (*root->data < key)
+                    return search(root->right, key);
+                return nullptr;
+            }
                     
-            // Util method for deletion
-/*             Node * minValueNode( Node * node ) {
-                Node * current = node;
-
-                while (current && current->left)
-                    current = current->left;
-                return current;
-            } */
-
-            // Basic BST Deletion
-/*             Node *  BST_delete( Node *root, value_type key ) {
-                // Base case
-                if (root == nullptr) { return root; }
-                if (key < *root->data) {
-                    root->left = BST_delete(root->left, key);
-                    return root;
-                }
-                else if (key > *root->data) {
-                    root->right = BST_delete(root->right, key);
-                    return root;
-                }
-                if (root->left == nullptr) {
-                    Node * temp = root->right;
-                    _nodeAlloc.deallocate(root, 1);
-                    return temp;
-                }
-                else if (root->right == nullptr) {
-                    Node * temp = root->left;
-                    _nodeAlloc.deallocate(root, 1);
-                    return temp;
-                }
-                else {
-                    Node * successorParent = root;
-                    Node * successor = root->right;
-                    while (successor->left != nullptr) {
-                        successorParent = successor;
-                        successor = successor->left;
-                    }
-                    if (successorParent != root)
-                        successorParent->left = successor->right;
-                    else
-                        successorParent->right = successor->right;
-                    *root->data = *successor->data;
-                    _nodeAlloc.deallocate(successor, 1);
-                    return root;
-                }        
-            } */
 
             /* -- Deletion in RBT
                 Step 1: Perform BST Deletion
@@ -319,11 +248,116 @@ namespace ft {
                             c -> Remove DB sign nd make the NODE BLACK 
                             d -> Change color of DB's SIBLING's FAR RED CHILD to BLACK */
 
-            /* void    RBT_delete( Node * root, value_type key ) {
-                
-            } */
-
             /* ------------- I SHOULD HAVE THE FIX FUNCTION IN HERE -------- */
+            void    fixDeletionViolation( Node *& x ) {
+                if (this->_root == x) {
+                    x->color = BLACK;
+                    return ;
+                }
+                else if (x->color == RED)
+                    return ;
+                Node * sibling = nullptr;
+                if (x->isOnLeft())
+                    sibling = x->parent->right;
+                else
+                    sibling = x->parent->left;
+                if (sibling != nullptr && sibling->color == BLACK) {
+                    /* Case3 */
+                    if ((sibling->left == nullptr || sibling->left->color == BLACK) &&
+                    (sibling->right == nullptr || sibling->right->color == BLACK)) {
+                        x->color = BLACK;
+                        sibling->color = RED;
+                        if (x->parent->color == BLACK) {
+                            x->parent->color = DOUBLE_BLACK;
+                            fixDeletionViolation(x->parent);
+                        }
+                        else
+                            x->parent->color = BLACK;
+                        return ;
+                    }
+                    if (x->isOnLeft()) {
+                        /* Case 4 */
+                        if ((sibling->left != nullptr || sibling->left->color == RED) &&
+                        (sibling->right != nullptr || sibling->right->color == BLACK)) {
+                            std::swap(sibling->left->color, sibling->color);
+                            rotateRight(this->_root, sibling);
+                        }
+                        else if (sibling->right != nullptr && sibling->right->color == RED) {
+                            /* Case 5 */
+                            std::swap(x->parent->color, sibling->color);
+                            rotateLeft(this->_root, x->parent);
+                            x->color = BLACK;
+                            sibling->right->color = BLACK;
+                        }
+                    }
+                    else if (!x->isOnLeft()) { // Mirror te previous
+                        /* Case 4 */
+                        if ((sibling->right != nullptr || sibling->right->color == RED) &&
+                        (sibling->left != nullptr || sibling->left->color == BLACK)) {
+                            std::swap(sibling->right->color, sibling->color);
+                            rotateLeft(this->_root, sibling);
+                        }
+                        else if (sibling->left != nullptr && sibling->left->color == RED) {
+                            /* Case 5 */
+                            std::swap(x->parent->color, sibling->color);
+                            rotateRight(this->_root, x->parent);
+                            x->color = BLACK;
+                            sibling->left->color = BLACK;
+                        }
+                    }
+                }
+                else if (sibling != nullptr && sibling->color == RED) {
+					std::swap(x->parent->color, sibling->color);
+					if (x->parent->left == x)
+						rotateLeft(this->_root, x->parent);
+                    else
+						rotateRight(this->_root, x->parent);
+					fixDeletionViolation(x->parent);
+					return ;
+				}
+            }
+
+            void    RBT_delete( Node *& root, Node *& x ) {
+                if  (x == nullptr)
+                    return ;
+                if (*root->data == *x->data) {
+                    if (x->left == nullptr && x->right == nullptr) { // if no children
+                        if (x == this->_root) {
+                            _alloc.deallocate(x->data, 1);
+                            _nodeAlloc.deallocate(x, 1);
+                            x = nullptr;
+                            x->data = nullptr;
+                            this->_size--;
+                            return ;
+                        }
+                        fixDeletionViolation(x);
+                        _alloc.deallocate(x->data, 1);
+                        _nodeAlloc.deallocate(x, 1);
+                        x = nullptr;
+                        x->data = nullptr;
+                        this->_size--;
+                    }
+                    else { // If CHILDREN
+                        if (x->left) {
+                            Node * predecessor = inorder_predecessor(x);
+                            x->data = predecessor->data;
+                            RBT_delete(x, predecessor);
+                        }
+                        else if (x->right) {
+                            Node * successor = inorder_successor(x);
+                            x->data = successor->data;
+                            RBT_delete(x, successor);
+                        }
+                    }
+                    return ;
+                }
+                if (*root->data < *x->data)
+                    RBT_delete(root->right, x);
+                else
+                    RBT_delete(root->left, x);
+                return ;
+            }
+
 
             /* ---------------------- Operations ---------------------- */
                 /* --- Subtrees rotations // */
@@ -390,34 +424,24 @@ namespace ft {
                             - If the imbalance is on the left child left subtree we do a right rotation. */
                 
             void    fixInsertionViolation(Node *&root, Node *&x) {
-                
                 Node *parent_x = nullptr;
                 Node *grand_parent_x = nullptr;
-            
-                while ((x != root) && (x->color != BLACK) && (x->parent->color == RED))
-                {
+                while ((x != root) && (x->color != BLACK) && (x->parent->color == RED)) {
                     parent_x = x->parent;
                     grand_parent_x = x->parent->parent;
-
                     /* -- Case: A
                         <PARENT>> is LEFT CHILD of <GRAND PARENT> of <X> */
-
-                    if (parent_x == grand_parent_x->left) {
-                        
+                    if (parent_x == grand_parent_x->left) {   
                         Node *aunt_x = grand_parent_x->right;
-
                         /* -- Case : 1
                             <X's AUNT> is also RED --->> RECOLORING required */
-
                         if (aunt_x != nullptr && aunt_x->color == RED) {
                             parent_x->color = BLACK;
                             aunt_x->color = BLACK;
                             grand_parent_x->color = RED;
                             x = grand_parent_x;
                         }
-        
                         else {
-                            
                             /* -- Case : 2
                                 <X>> is RIGHT CHILD of its <PARENT> || LEFT-ROTATION required */
                             if (x == parent_x->right) {
@@ -425,7 +449,6 @@ namespace ft {
                                 x = parent_x;
                                 parent_x = x->parent;
                             }
-            
                             /* -- Case : 3
                                 <X> is LEFT CHILD of its <PARENT> || RIGHT-ROTATION required */
                             rotateRight(root, grand_parent_x);
@@ -433,25 +456,19 @@ namespace ft {
                             x = parent_x;
                         }
                     }
-            
                     /* -- Case: B
                         <PARENT> is RIGHT CHILD of <GRAND PARENT> of <X> */
                     else {
-                        
                         Node *aunt_x = grand_parent_x->left;
-
                         /* -- Case : 1
                             <X's AUNT> is also RED --->> RECOLORING required */
-
                         if (aunt_x != nullptr && aunt_x->color == RED) {
                             parent_x->color = BLACK;
                             aunt_x->color = BLACK;
                             grand_parent_x->color = RED;
                             x = grand_parent_x;
                         }
-        
                         else {
-                            
                             /* -- Case : 2
                                 <X>> is LEFT CHILD of its <PARENT> || RIGHT-ROTATION required */
                             if (x == parent_x->left) {
@@ -459,7 +476,6 @@ namespace ft {
                                 x = parent_x;
                                 parent_x = x->parent;
                             }
-            
                             /* -- Case : 3
                                 <X> is RIGHT CHILD of its <PARENT> || LEFT-ROTATION required */
                             rotateLeft(root, grand_parent_x);

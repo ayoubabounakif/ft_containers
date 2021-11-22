@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/12 14:05:51 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:24:28 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,10 @@ int main( void )
 	bst.insert(31);
 	
 
-	// bst.deleteNode(55);
-	// bst.deleteNode(45);
-	// bst.deleteNode(20);
+	bst.deleteNode(33);
 
-	bst.printTree();
+	std::cout << bst.getTreeSize() << std::endl;
+
 
 
 
