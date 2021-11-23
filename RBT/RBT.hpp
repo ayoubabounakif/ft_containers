@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:19:07 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/23 10:34:33 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/23 17:04:19 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,8 @@ namespace ft {
                     4 - Else assign Y as the right child of P. 
                     5 - Make Y as the parent of X. */
             void    rotateLeft( Node *& root, Node *& x ) {
-                Node * y = x->right; x->right = y->left;
+                Node * y = x->right;
+                x->right = y->left;
                 if (y->left != nullptr) y->left->parent = x;
                 y->parent = x->parent;
                 if (x->parent == nullptr) root = y;
