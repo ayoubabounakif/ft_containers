@@ -6,33 +6,23 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/22 13:37:58 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/23 10:23:06 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // # include "containers/vector.hpp"
 // # include "containers/stack.hpp"
-# include "RBT/RBT.hpp"
+# include "RBT/rbt_v2.hpp"
 
 int main( void ) 
 {
-    ft::RBT<int>	bst;
+    ft::rbt_v2<int>	bst(5);
 	
 	bst.insert(33);
-	bst.insert(13);
-	bst.insert(53);
-	bst.insert(11);
-	bst.insert(21);
 
 
-	// bst.deleteNode(15);
-	// bst.deleteNode(61);
-	// bst.deleteNode(1103);
-	bst.deleteNode(33);
+	// bst.print();
 
-	std::cout << bst.getTreeSize() << std::endl;
-
-	bst.printTree();
 
 
 
