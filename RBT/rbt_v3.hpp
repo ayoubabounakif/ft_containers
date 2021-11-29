@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rbt_v2.hpp                                         :+:      :+:    :+:   */
+/*   rbt_v3.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 07:56:52 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/29 15:14:08 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/29 15:02:39 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ namespace ft {
 
 
     template < class Pair, class Compare = std::less<Pair> , class Alloc = std::allocator<Pair> >
-    class rbt_v2 {
+    class rbt_v3 {
         public:
             typedef Pair                    value_type;
             typedef Compare                 key_compare;
@@ -122,21 +122,21 @@ namespace ft {
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */
-            explicit rbt_v2( const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
+            explicit rbt_v3( const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
                 _root(nullptr),
                 _comp(compare),
                 _alloc(allocator),
                 _size(0) {}
 
             /* ------------------------ Fill ------------------------ */
-            explicit rbt_v2( const value_type& pair, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
+            explicit rbt_v3( const value_type& pair, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
                 _root(__initNode(pair)),
                 _comp(compare),
                 _alloc(allocator),
                 _size(1) {}
 
             /* ---------------------- Detructor --------------------- */
-            /* ~rbt_v2( void ) {} */
+            /* ~rbt_v3( void ) {} */
 
         public:
             /* --------------------- HHHHHHHHHH --------------------- */
@@ -168,17 +168,19 @@ namespace ft {
                     3 - Else if X is the left child of its parent P, make Y as the left child of P. 
                     4 - Else assign Y as the right child of P. 
                     5 - Make Y as the parent of X. */
-            void    __rotateLeft( node_type *& x ) {
-                node_type * y = x->right;
-                x->right = y->left;
-                if (x->right != nullptr) x->right->parent = x;
-                y->parent = x->parent;
-                if (!x->parent) this->_root = y;
-                else if (x->isOnLeft()) x->parent->left = y;
-                y->left = x;
-                x->parent = y;
-            }
             
+            node_type * __rotateLeft( node_type *& node ) {
+                node_type * x = node->right;
+                node_type * y = x->left;
+                x->left = node;
+                node->right = y;
+                node->parent = x;
+                if (y != nullptr)
+                    y->parent = node;
+                return (x);
+            }
+        
+
             /* -- Right Rotation:
                 The arrangement of the nodes on the left is transformed into the arrangements on the right node
                 -- Algorithm:
@@ -187,23 +189,24 @@ namespace ft {
                     3 - Else if Y is the right child of its parent P, make X as the right child of P. 
                     4 - Else assign X as the left cchild of P. 
                     5 - Make X as the parent of Y. */
-            void    __rotateRight( node_type *& x ) {
-                node_type * y = x->left;
-                x->left = y->right;
-                if (x->left != nullptr) x->left->parent = x;
-                y->parent = x->parent;
-                if (!x->parent) this->_root = y;
-                else if (!x->isOnLeft()) x->parent->right = y;
-                y->right = x;
-                x->parent = y;
+            
+            node_type * __rotateRight(node_type *& node)
+            {
+                node_type * x = node->left;
+                node_type * y = x->right;
+                x->right = node;
+                node->left = y;
+                node->parent = x;
+                if (y != nullptr)
+                    y->parent = node;
+                return (x);
             }
-
             /* -- Insertion Violation Fix:
                 This function is used for maintaining the property of a RBT \ 
                 if the insertion of a newNode violates this property. 
                 -- Alorithm:
                     1 - If <X> is ROOT, change color of <X> as BLACK.
-                    2 - Do the followng if <X's PARENT> is not BLACK or <X> ain't ROOT.
+                    2 - Do the followng if <X's PARENT> is not BLACK or <X> ain't->
                         I - If <X's AUNT> is RED (GP must have been black from the property of RBT.)
                             i - Change color of <PARENT> and <AUNT> as BLACK.
                             ii - Color <GRAND PARENT> as RED.
@@ -227,42 +230,116 @@ namespace ft {
             } */
 
         public:
-            node_type * insert( const value_type& val ) {
-				node_type * x = __initNode(val);
-                this->_root = this->__insert(this->_root, x);
-                if (x->parent == nullptr)
-                {
-                    x->color = BLACK;
-                    return x;
-                }
-                if (x->parent->parent == nullptr)
-                    return x;
-                // __fixInsertionViolation(x);
-                this->_size++;
-                return x;
+            void    insert( const value_type& val ) {
+                node_type * x = __initNode(val);
+                if (this->_root == nullptr) {
+                    this->_root = x;
+                    this->_root->color = BLACK;
+                } else
+                    this->_root = this->__insert(this->_root, x);
             }
 
         private:
-            node_type * __insert( node_type *& __root, node_type *& __nodeToInsert ) {
-                if (__root == nullptr)
-                    return __nodeToInsert;
-                if (!_comp(*__root->data, *__nodeToInsert->data) && !_comp(*__nodeToInsert->data, *__root->data))
-                    return __root;
-				else if (!_comp(*__root->data, *__nodeToInsert->data)) {
-					__root->left = __insert(__root->left, __nodeToInsert);
-					__root->left->parent = __root;
+
+            bool LL = false;
+            bool RR = false;
+            bool LR = false;
+            bool RL = false;
+            
+            node_type * __insert( node_type *& root, node_type *& nodeToInsert )
+            {
+                // F is true when RED RED conflict is there.
+                bool F = false;
+                
+                // recursive calls to insert at proper position according to BST properties.
+                if (root == nullptr)
+                    return nodeToInsert;
+                if (!_comp(*root->data, *nodeToInsert->data) && !_comp(*nodeToInsert->data, *root->data))
+                    return root;
+				else if (!_comp(*root->data, *nodeToInsert->data)) {
+					root->left = __insert(root->left, nodeToInsert);
+					root->left->parent = root;
+                    if (root != this->_root)
+                    {
+                        if (root->color == RED && root->left->color == RED)
+                            F = true;
+                    }
 				}
-                else if (_comp(*__root->data, *__nodeToInsert->data)) {
-					__root->right = __insert(__root->right, __nodeToInsert);
-					__root->right->parent = __root;
+                else if (_comp(*root->data, *nodeToInsert->data)) {
+					root->right = __insert(root->right, nodeToInsert);
+					root->right->parent = root;
+                    if (root != this->_root)
+                    {
+                        if (root->color == RED && root->right->color==RED)
+                            F = true;
+                    }
 				}
-				return (__root);
+                // at the same time of insertion, we are also assigning parent nodes
+                // also we are checking for RED RED conflicts
+        
+                // now lets rotate.
+                if (this->LL) { // for left rotate.
+                    root = __rotateLeft(root);
+                    root->color = BLACK;
+                    root->left->color = RED;
+                    this->LL = false;
+                } else if (this->RR) { // for right rotate
+                    root = __rotateRight(root);
+                    root->color = BLACK;
+                    root->right->color = RED;
+                    this->RR = false;
+                } else if (this->RL) { // for right and then left
+                    root->right = __rotateRight(root->right);
+                    root->right->parent = root;
+                    root = __rotateLeft(root);
+                    root->color = BLACK;
+                    root->left->color = RED;
+                    this->RL = false;
+                } else if (this->LR) { // for left and then right
+                    root->left = __rotateLeft(root->left);
+                    root->left->parent = root;
+                    root = __rotateRight(root);
+                    root->color = BLACK;
+                    root->right->color = RED;
+                    this->LR = false;
+                }
+                // When rotation and recoloring is done flags are reset.
+                // Now let's take care of RED RED conflict
+                if (F) {
+                    if (root->parent->right == root) { // to check which child is the current node of its parent
+                        if (root->parent->left == nullptr || root->parent->left->color == BLACK) { // case when parent's sibling is black
+                        // perform certaing rotation and recolouring. This will be done while backtracking. Hence setting up respective flags.
+                            if (root->left != nullptr && root->left->color == RED)
+                                this->RL = true;
+                            else if (root->right != nullptr && root->right->color == RED)
+                                this->LL = true;
+                        }
+                        else { // case when parent's sibling is red
+                            root->parent->left->color = BLACK;
+                            root->color = BLACK;
+                            if (root->parent != this->_root)
+                                root->parent->color = RED;
+                        }
+                    }
+                    else {
+                        if (root->parent->right == nullptr || root->parent->right->color == BLACK)
+                        {
+                            if (root->left != nullptr && root->left->color == RED)
+                                this->RR = true;
+                            else if (root->right != nullptr && root->right->color == RED)
+                                this->LR = true;
+                        }
+                        else {
+                            root->parent->right->color = BLACK;
+                            root->color = BLACK;
+                            if (root->parent != this->_root)
+                                root->parent->color = RED;
+                        }
+                    }
+                    F = false;
+                }
+                return (root); 
             }
-
-
-
-
-
         
         private:
                     /* ---------- | Recursive print of a "RBT" | ---------- */

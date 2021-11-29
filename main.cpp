@@ -6,27 +6,27 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/23 17:04:44 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/29 15:13:33 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // # include "containers/vector.hpp"
 // # include "containers/stack.hpp"
-# include "RBT/rbt_v2.hpp"
+# include "RBT/rbt_v3.hpp"
 
 int main( void ) 
 {
-    ft::rbt_v2<int>	bst;
+    ft::rbt_v3<int>	rbt;
 	int nadafak = 0;
 	
 	srand(time(nullptr));
 	for (int i = 0; i < 10; i++) {
 		nadafak = rand() % 100;
 		std::cout << nadafak << std::endl;
-		bst.insert(nadafak);
+		rbt.insert(nadafak);
 	}
 
-	bst.print();
+	rbt.print();
 
 }
 
