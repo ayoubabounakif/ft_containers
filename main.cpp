@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/29 15:13:33 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/11/29 17:19:28 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@
 int main( void ) 
 {
     ft::rbt_v3<int>	rbt;
-	int nadafak = 0;
+	// int nadafak = 0;
 	
-	srand(time(nullptr));
-	for (int i = 0; i < 10; i++) {
-		nadafak = rand() % 100;
-		std::cout << nadafak << std::endl;
-		rbt.insert(nadafak);
+	// srand(time(nullptr));
+	for (int i = 1; i < 10; i++) {
+		// nadafak = rand() % 100;
+		// std::cout << nadafak << std::endl;
+		rbt.insert(i);
 	}
+	// rbt.deleteValue(2);
+	// rbt.deleteValue(9);
+	rbt.deleteValue(5);
 
 	rbt.print();
 
