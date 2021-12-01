@@ -6,31 +6,30 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/01 15:00:27 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/01 19:27:17 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // # include "containers/vector.hpp"
 // # include "containers/stack.hpp"
 // # include "RBT/rbt_v3.hpp"
-# include "RBT/rbt_v4.hpp"
+// # include "RBT/rbt_v3.hpp"
+# include "AVL/avl.hpp"
 
 int main( void ) 
 {
-    ft::rbt_v4<int>	rbt;
+    ft::AVL<int>	avl;
 	// int nadafak = 0;
 	
 	// srand(time(nullptr));
-	for (int i = 1; i < 10; i++) {
+	for (int i = 1; i < 100; i++) {
 		// nadafak = rand() % 100;
 		// std::cout << nadafak << std::endl;
-		rbt.insert(i);
+		avl.insert(i);
 	}
-	// rbt.deleteValue(2);
-	// rbt.deleteValue(9);
-	rbt.deleteValue(5);
 
-	rbt.print();
+
+	avl.inOrder();
 
 }
 

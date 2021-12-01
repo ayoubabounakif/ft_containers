@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 07:56:52 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/01 16:45:38 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/01 18:39:02 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,89 +25,56 @@ namespace ft {
         DOUBLE_BLACK = 2,
     };
 
-    template < class Pair, class Alloc = std::allocator<Pair> >
-    struct Node {
-        typedef Pair    value_type;
-        typedef Alloc   allocator_type;
-
-        allocator_type  alloc;
-        value_type *    data;
-        Node *          parent;
-        Node *          left;
-        Node *          right;
-        Color           color;
-
-        value_type * initPair( const value_type& val ) {
-            value_type * pair = alloc.allocate(1);
-            alloc.construct(pair, val);
-            return pair;
-        }
-
-        explicit Node( const allocator_type& allocator = allocator_type() ) :
-            alloc(allocator),
-            data(0),
-            parent(nullptr),
-            left(nullptr),
-            right(nullptr),
-            color(RED) {}
-            
-
-        explicit Node( const value_type& val, const allocator_type& allocator = allocator_type() ) :
-            alloc(allocator),
-            data(initPair(val)),
-            parent(nullptr),
-            left(nullptr),
-            right(nullptr),
-            color(RED) {}
-        
-        ~Node() {
-            /* if (this->data) {
-                alloc.destroy(data);
-                alloc.dellocate(data, 1);
-            } */
-        }
-        
-
-        Node *  aunt() {
-            // If no parent or grandparent, then no aunt
-            if (this->parent == nullptr || this->parent->parent == nullptr)
-                return nullptr;
-            if (parent->isOnLeft())
-                return parent->parent->right;
-            else
-                return parent->parent->left;
-        }
-        
-        Node *  sibling() {
-            if (this->parent == nullptr)
-                return nullptr;
-            if (isOnLeft())
-                return this->parent->right;
-            else
-                return this->parent->left;
-        }
-
-        bool    isOnLeft( void ) {
-            if (this->parent && this->parent->left)
-                return this == this->parent->left;
-            return false;
-        }
-
-        bool    hasRedChild() {
-            return (this->left != nullptr && this->left->color == RED) or
-                (this->right != nullptr && this->right->color == RED);
-        }
-
-    };
-
 
     template < class Pair, class Compare = std::less<Pair> , class Alloc = std::allocator<Pair> >
     class rbt_v3 {
+        
+        private:
+            struct Node {
+
+                Pair *          data;
+                Node *          parent;
+                Node *          left;
+                Node *          right;
+                Color           color;
+            
+                Node *  aunt() {
+                    // If no parent or grandparent, then no aunt
+                    if (this->parent == nullptr || this->parent->parent == nullptr)
+                        return nullptr;
+                    if (parent->isOnLeft())
+                        return parent->parent->right;
+                    else
+                        return parent->parent->left;
+                }
+                
+                Node *  sibling() {
+                    if (this->parent == nullptr)
+                        return nullptr;
+                    if (isOnLeft())
+                        return this->parent->right;
+                    else
+                        return this->parent->left;
+                }
+
+                bool    isOnLeft( void ) {
+                    if (this->parent && this->parent->left)
+                        return this == this->parent->left;
+                    return false;
+                }
+
+                bool    hasRedChild() {
+                    return (this->left != nullptr && this->left->color == RED) or
+                        (this->right != nullptr && this->right->color == RED);
+                }
+
+            };
+        
         public:
             typedef Pair                    value_type;
             typedef Compare                 key_compare;
             typedef Alloc                   allocator_type;
-            typedef Node<value_type, Alloc> node_type;
+            typedef Node                    node_type;
             typedef size_t                  size_type;
             typedef typename                allocator_type::template rebind<node_type>::other   rebind_allocator;
             
@@ -115,12 +82,18 @@ namespace ft {
         private:
             node_type *         _root;
             key_compare         _comp;
-            rebind_allocator    _alloc;
+            allocator_type      _alloc;
+            rebind_allocator    _rebindAlloc;
             size_type           _size;
 
             node_type * __initNode( const value_type& __pair ) {
-                node_type * node = _alloc.allocate(1);
-                _alloc.construct(node, __pair);
+                node_type * node = _rebindAlloc.allocate(1);
+                node->data = _alloc.allocate(1);
+                _alloc.construct(node->data, __pair);
+                node->parent = nullptr;
+                node->left = nullptr;
+                node->right = nullptr;
+                node->color = RED;
                 return node;
             }
 
@@ -145,6 +118,7 @@ namespace ft {
                 _root(nullptr),
                 _comp(compare),
                 _alloc(allocator),
+                _rebindAlloc(allocator),
                 _size(0) {}
 
             /* ------------------------ Fill ------------------------ */
@@ -152,7 +126,8 @@ namespace ft {
                 _root(__initNode(pair)),
                 _comp(compare),
                 _alloc(allocator),
-                _size(1) {}
+                _rebindAlloc(allocator),
+                _size(0) {}
 
             /* ---------------------- Detructor --------------------- */
             /* ~rbt_v3( void ) {} */
@@ -221,11 +196,7 @@ namespace ft {
         public:
             void    insert( const value_type& val ) {
                 node_type * x = __initNode(val);
-                if (this->_root == nullptr) {
-                    this->_root = x;
-                    this->_root->color = BLACK;
-                } else
-                    this->_root = this->__insert(this->_root, x);
+                this->_root = this->__insert(this->_root, x);
             }
 
             void    deleteValue( const value_type& val ) {
@@ -455,22 +426,27 @@ namespace ft {
                         else
                             parent->right = nullptr;
                     }
-                    // Use deallocate
+                    
                     // delete v;
-                    this->_alloc.destroy(v);
-                    this->_alloc.deallocate(v, 1);
+                    this->_alloc.destroy(v->data);
+                    this->_alloc.deallocate(v->data, 1);
+                    this->_rebindAlloc.deallocate(v, 1);
+                    
                     return ;
                 }
 
-                if (v->left == nullptr || v->right == nullptr) {
+                if (v && (v->left == nullptr || v->right == nullptr)) {
                     // v has 1 child
                     if (v == this->_root) {
                         // v is root, assign the value of u to v, and delete u
                         *v->data = *u->data;
                         v->left = v->right = nullptr;
+
                         // delete u
-                        this->_alloc.destroy(u);
-                        this->_alloc.deallocate(u, 1);
+                        this->_alloc.destroy(u->data);
+                        this->_alloc.deallocate(u->data, 1);
+                        this->_rebindAlloc.deallocate(u, 1);
+                        
                     }
                     else {
                         // Detach v from tree and move u up
@@ -478,9 +454,12 @@ namespace ft {
                             parent->left = u;
                         else
                             parent->right = u;
+                            
                         // delete v
-                        this->_alloc.destroy(v);
-                        this->_alloc.deallocate(v, 1);
+                        this->_alloc.deallocate(v->data, 1);
+                        this->_alloc.destroy(v->data);
+                        this->_rebindAlloc.deallocate(v, 1);
+                        
                         u->parent = parent;
                         if (uvBlack)
                         // u and v both black, fix double black at u
@@ -497,7 +476,7 @@ namespace ft {
                 __deleteNode(u);
             }
 
-            /* void    __fixDoubleBlack( node_type *& x ) {
+            void    __fixDoubleBlack( node_type *& x ) {
                 if (x == this->_root)
                 // Reached root
                     return ;
@@ -564,7 +543,7 @@ namespace ft {
                         }
                     }
                 }
-            } */
+            }
             
 
 
@@ -581,7 +560,7 @@ namespace ft {
                 showTrunks(p->prev);
                 std::cout << p->str;
             }
-            void printHelper( Node<Pair>* root, Trunk *prev, bool isLeft ) {
+            void printHelper( Node* root, Trunk *prev, bool isLeft ) {
                 if (root == nullptr) { return; }
                 std::string prev_str = "    ";
                 Trunk *trunk = new Trunk(prev, prev_str);
