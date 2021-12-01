@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rbt_v3.hpp                                         :+:      :+:    :+:   */
+/*   rbt_v4.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 07:56:52 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/01 16:45:38 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/01 16:52:22 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ namespace ft {
 
 
     template < class Pair, class Compare = std::less<Pair> , class Alloc = std::allocator<Pair> >
-    class rbt_v3 {
+    class rbt_v4 {
         public:
             typedef Pair                    value_type;
             typedef Compare                 key_compare;
@@ -141,21 +141,21 @@ namespace ft {
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */
-            explicit rbt_v3( const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
+            explicit rbt_v4( const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
                 _root(nullptr),
                 _comp(compare),
                 _alloc(allocator),
                 _size(0) {}
 
             /* ------------------------ Fill ------------------------ */
-            explicit rbt_v3( const value_type& pair, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
+            explicit rbt_v4( const value_type& pair, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
                 _root(__initNode(pair)),
                 _comp(compare),
                 _alloc(allocator),
                 _size(1) {}
 
             /* ---------------------- Detructor --------------------- */
-            /* ~rbt_v3( void ) {} */
+            /* ~rbt_v4( void ) {} */
 
         public:
             /* --------------------- HHHHHHHHHH --------------------- */
@@ -173,6 +173,26 @@ namespace ft {
                 while (node->right != nullptr)
                     node = node->right;
                 return node;
+            }
+            node_type * successor( node_type * node ) {
+                if (node->right != nullptr)
+                    return min(node->right);
+                node_type * y = node->parent;
+                while (y != nullptr && node == y->right) {
+                    node = y;
+                    y = y->parent;
+                }
+                return y;
+            }
+            node_type * predecessor( node_type * node ) {
+                if (node->left != nullptr)
+                    return max(node->left);
+                node_type * y = node->parent;
+                while (y != nullptr && node == y->left) {
+                    node = y;
+                    y = y->parent;
+                }
+                return y;
             }
             void    print() { if (this->_root) this->printHelper(this->_root, nullptr, false); }
 
@@ -229,14 +249,15 @@ namespace ft {
             }
 
             void    deleteValue( const value_type& val ) {
-                if (this->_root == nullptr)
+               /*  if (this->_root == nullptr)
                     return ;
-                node_type *v = __search(val);
+                // node_type *v = __search(val);
                 if (*v->data != val) {
                     std::cout << "No node found to delete with value:" << val << std::endl;
                     return ;
-                }
-                __deleteNode(v);
+                } */
+                node_type *v = __search(val);
+                __deleteNode(this->_root, v);
             }
 
 
@@ -367,13 +388,6 @@ namespace ft {
             }
         
         private:
-            void    __swapColors( node_type *& x1, node_type *& x2 ) {
-                std::swap(x1->color, x2->color);
-            }
-
-            void    __swapValues( node_type *& u, node_type *& v ) {
-                std::swap(u->data, v->data);
-            }
             
             // searches for given value
             // if found returns the node (used for delete)
@@ -398,173 +412,163 @@ namespace ft {
                 return temp;
             }
 
-            // find node that do not have a left child
-            // in the subtree of the given node
-            node_type * __successor( node_type *x ) {
-                node_type *temp = x;
-                while (temp->left != NULL)
-                    temp = temp->left;
-                return temp;
-            }
 
-            // find node that replaces a deleted node in BST
-            node_type * __BSTreplace( node_type *& x ) {
-                // when node have 2 children
-                if (x->left != nullptr && x->right != nullptr)
-                    return __successor(x->right);
-
-                // when leaf
-                if (x->left == nullptr && x->right == nullptr)
-                    return nullptr;
-
-                // when single child
-                if (x->left != nullptr)
-                    return x->left;
+            void    __rbTransplant( node_type *& u, node_type *& v ) {
+                if (u->parent == nullptr)
+                    this->_root = v;
+                else if (u == u->parent->left)
+                    u->parent->left = v;
                 else
-                    return x->right;
+                    u->parent->right = v;
+                v->parent = u->parent;
             }
 
+            void    __leftRotate( node_type *& x ) {
+                node_type * y = x->right;
+                x->right = y->left;
+                if (y->left != nullptr)
+                    y->left->parent = x;
+                y->parent = x->parent;
+                if (x->parent == nullptr)
+                    this->_root = y;
+                else if (x == x->parent->left)
+                    x->parent->left = y;
+                else
+                    x->parent->right = y;
+                y->left = x;
+                x->parent = y;
+            }
 
-            void    __deleteNode( node_type *& v ) {
-                node_type * u = __BSTreplace(v);
+            void    __rightRotate(node_type *& x) {
+                node_type * y = x->left;
+                x->left = y->right;
+                if (y->right != nullptr)
+                    y->right->parent = x;
+                y->parent = x->parent;
+                if (x->parent == nullptr)
+                    this->_root = y;
+                else if (x == x->parent->right)
+                    x->parent->right = y;
+                else
+                    x->parent->left = y;
+                y->right = x;
+                x->parent = y;
+            }
 
-                // True when u and v are both black
-                bool uvBlack = ((u == nullptr || u->color == BLACK) && (v->color == BLACK));
-                node_type * parent = v->parent;
-
-                if (u == nullptr) {
-                    // u is nullptr therefore v is leaf
-                    if (v == this->_root)
-                        // v is this->_root, making this->_root nullptr
-                        this->_root = nullptr;
-                    else {
-                        if (uvBlack)
-                            // u and v both black
-                            // v is leaf, fix double black at v
-                            __fixDoubleBlack(v);
-                        else {
-                            // u or v is red
-                            if (v->sibling() != nullptr)
-                                // sibling is not nullptr, make it red"
-                                v->sibling()->color = RED;
+            void    __deleteFix(node_type *& x) {
+                node_type * s;
+                while (x != this->_root && x->color == BLACK) {
+                    if (x == x->parent->left) {
+                        s = x->parent->right;
+                        if (s->color == RED) {
+                            s->color = BLACK;
+                            x->parent->color = RED;
+                            __leftRotate(x->parent);
+                            s = x->parent->right;
                         }
-
-                        // delete v from the tree
-                        if (v->isOnLeft())
-                            parent->left = nullptr;
-                        else
-                            parent->right = nullptr;
-                    }
-                    // Use deallocate
-                    // delete v;
-                    this->_alloc.destroy(v);
-                    this->_alloc.deallocate(v, 1);
-                    return ;
-                }
-
-                if (v->left == nullptr || v->right == nullptr) {
-                    // v has 1 child
-                    if (v == this->_root) {
-                        // v is root, assign the value of u to v, and delete u
-                        *v->data = *u->data;
-                        v->left = v->right = nullptr;
-                        // delete u
-                        this->_alloc.destroy(u);
-                        this->_alloc.deallocate(u, 1);
+                        if (s->left->color == BLACK && s->right->color == BLACK) {
+                            s->color = RED;
+                            x = x->parent;
+                        }
+                        else {
+                            if (s->right->color == BLACK) {
+                                s->left->color = BLACK;
+                                s->color = RED;
+                                __rightRotate(s);
+                                s = x->parent->right;
+                            }
+                            s->color = x->parent->color;
+                            x->parent->color = BLACK;
+                            s->right->color = BLACK;
+                            __leftRotate(x->parent);
+                            x = this->_root;
+                        }
                     }
                     else {
-                        // Detach v from tree and move u up
-                        if (v->isOnLeft())
-                            parent->left = u;
-                        else
-                            parent->right = u;
-                        // delete v
-                        this->_alloc.destroy(v);
-                        this->_alloc.deallocate(v, 1);
-                        u->parent = parent;
-                        if (uvBlack)
-                        // u and v both black, fix double black at u
-                            __fixDoubleBlack(u);
-                        else
-                            // u or v red, color u black
-                            u->color = BLACK;
+                        s = x->parent->left;
+                        if (s->color == RED) {
+                            s->color = BLACK;
+                            x->parent->color = RED;
+                            __rightRotate(x->parent);
+                            s = x->parent->left;
+                        }
+                        if (s->right->color == BLACK && s->right->color == BLACK) {
+                            s->color = RED;
+                            x = x->parent;
+                        }       
+                        else {
+                            if (s->left->color == BLACK) {
+                                s->right->color = BLACK;
+                                s->color = RED;
+                                __leftRotate(s);
+                                s = x->parent->left;
+                            }
+                            s->color = x->parent->color;
+                            x->parent->color = BLACK;
+                            s->left->color = BLACK;
+                            __rightRotate(x->parent);
+                            x = this->_root;
+                        }
                     }
+                }
+                x->color = BLACK;
+            }
+
+            void    __deleteNode( node_type * root, node_type * node ) {
+                
+                node_type * z = nullptr;
+                node_type * x;
+                node_type * y;
+
+                while (root != nullptr) {
+                    if (*root->data == *node->data)
+                        z = root;
+                    if (*root->data <= *node->data)
+                        root = root->right;
+                    else
+                        root = root->left;
+                }
+
+                if (z == nullptr) {
+                    std::cout << "Key not found in the tree" << std::endl;
                     return ;
                 }
 
-                // v has 2 children, swap values with successor and recurse
-                __swapValues(u, v);
-                __deleteNode(u);
-            }
-
-            /* void    __fixDoubleBlack( node_type *& x ) {
-                if (x == this->_root)
-                // Reached root
-                    return ;
-
-                node_type * sibling = x->sibling();
-                node_type * parent = x->parent;
-                if (sibling == nullptr)
-                    // No sibiling, double black pushed up
-                    __fixDoubleBlack(parent);
+                y = z;
+                Color y_original_color = y->color;
+                if (z->left == nullptr) {
+                    x = z->right;
+                    __rbTransplant(z, z->right);
+                }
+                else if (z->right == nullptr) {
+                    x = z->left;
+                    __rbTransplant(z, z->left);
+                }
                 else {
-                    if (sibling->color == RED) {
-                        // Sibling red
-                        parent->color = RED;
-                        sibling->color = BLACK;
-                        if (sibling->isOnLeft())
-                            // left case
-                            __rotateRight(parent);
-                        else
-                            // right case
-                            __rotateLeft(parent);
-                        __fixDoubleBlack(x);
-                    }
+                    y = min(z->right);
+                    y_original_color = y->color;
+                    x = y->right;
+                    if (y->parent == z)
+                        x->parent = y;
                     else {
-                        // Sibling black
-                        if (sibling->hasRedChild()) {
-                        // at least 1 red children
-                            if (sibling->left != nullptr && sibling->left->color == RED) {
-                                if (sibling->isOnLeft()) {
-                                    // left left
-                                    sibling->left->color = sibling->color;
-                                    sibling->color = parent->color;
-                                    __rotateRight(parent);
-                                }
-                                else {
-                                    // right left
-                                    sibling->left->color = parent->color;
-                                    __rotateRight(sibling);
-                                    __rotateLeft(parent);
-                                }
-                            }
-                            else {
-                                if (sibling->isOnLeft()) {
-                                    // left right
-                                    sibling->right->color = parent->color;
-                                    __rotateLeft(sibling);
-                                    __rotateRight(parent);
-                                }
-                                else {
-                                    // right right
-                                    sibling->right->color = sibling->color;
-                                    sibling->color = parent->color;
-                                    __rotateLeft(parent);
-                                }
-                            }
-                            parent->color = BLACK;
+                        __rbTransplant(y, y->right);
+                        y->right = z->right;
+                        y->right->parent = y;
                         }
-                        else {
-                            // 2 black children
-                            sibling->color = RED;
-                            if (parent->color == BLACK)
-                                __fixDoubleBlack(parent);
-                            else
-                                parent->color = BLACK;
-                        }
-                    }
+
+                        __rbTransplant(z, y);
+                        y->left = z->left;
+                        y->left->parent = y;
+                        y->color = z->color;
                 }
-            } */
+                // delete z;
+                _alloc.destroy(z);
+                _alloc.deallocate(z, 1);
+                if (y_original_color == 0) {
+                    __deleteFix(x);
+                }
+            }
+
             
 
 

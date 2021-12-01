@@ -6,17 +6,18 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/29 17:19:28 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/01 15:00:27 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // # include "containers/vector.hpp"
 // # include "containers/stack.hpp"
-# include "RBT/rbt_v3.hpp"
+// # include "RBT/rbt_v3.hpp"
+# include "RBT/rbt_v4.hpp"
 
 int main( void ) 
 {
-    ft::rbt_v3<int>	rbt;
+    ft::rbt_v4<int>	rbt;
 	// int nadafak = 0;
 	
 	// srand(time(nullptr));
