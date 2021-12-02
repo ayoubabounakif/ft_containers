@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/02 13:50:35 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/02 17:38:42 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@
 
 int main( void ) 
 {
-    ft::AVL<int>	avl;
-	int nadafak = 0;
+    ft::AVL<ft::pair<const int, int> >	avl;
+	
+	std::vector<int> vec;
+	std::vector<int>::iterator	it;
 	
 	srand(time(nullptr));
-	for (int i = 1; i < 10; i++) {
-		nadafak = rand() % 100;
-		std::cout << nadafak << std::endl;
-		avl.insert(nadafak);
+	for (int i = 0; i < 20; i++) {
+		vec.push_back(rand() % 100);
+		// std::cout << vec[i] << std::endl;
+		avl.insert(ft::make_pair(i, vec[i]));
 	}
 
-
-	avl.print2D();
-
+	avl.print();
 }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE
