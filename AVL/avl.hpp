@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/01 19:26:20 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/02 14:17:20 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,17 +189,14 @@ namespace ft {
 
             node_type * __insert( node_type * node, value_type value ) {
                 
-                // Base case.
                 if (node == nullptr) return __initNode(value);
 
-                // Compare current value to the value in the node
-                int cmp = __comp(*node->data, value);
-                
-                // Dig into left subtree
-                if (cmp < 0)
-                    node->left = __insert(node->left, value);
-                else
-                    node->right = __insert(node->right, value);
+				if (!__comp(*node->data, value)) {
+					node->left = __insert(node->left, value);
+				}
+                else if (__comp(*node->data, value)) {
+					node->right = __insert(node->right, value);
+                }
 
                 // Update balance factor and height values.
                 __update(node);
@@ -210,35 +207,39 @@ namespace ft {
             }
 
             bool    __contains( node_type * node, value_type value ) {
-                
-                if (node == nullptr) return false;
-                
-                // Compare current value to the value in the node
-                int cmp = __comp(*node->data, value);
-                
-                // Dig into left subtree
-                if (cmp < 0) return __contains(node->left, value);
-                
-                // Dig into right subtree
-                if (cmp > 0) return __contains(node->right, value);
-                
-                // Found value in tree.
+    
+                if (node == nullptr)
+                    return false;
+                if (!__comp(*node->data, value) && !__comp(value, *node->data))
+                    return true;
+				else if (!__comp(*node->data, value)) {
+					return __contains(node->left, value);
+				}
+                else if (__comp(*node->data, value)) {
+					return __contains(node->right, value);
+                }
                 return true;
             }
 
-        private:
-            void    __inOrder( node_type * root )
-            {
-                if (root == nullptr)
-                    return ;
-                std::cout << *root->data << " ";
-                __inOrder(root->left);
-                __inOrder(root->right);
+
+
+        private:    
+            void __print(node_type *root, int space) {
+                if (root == NULL) return ;
+                space += 8;
+                __print(root->right, space);
+                std::cout << std::endl;
+                for (int i = 10; i < space; i++)
+                    std::cout << " ";
+                std::cout<< *root->data<< std::endl;
+                __print(root->left, space);
             }
         
         public:
-            void    inOrder( void ) { __inOrder(this->__root); }
-        
+            void    print( void ) {
+                __print(this->__root, 0);
+            }
+            
     }
 
 ;}

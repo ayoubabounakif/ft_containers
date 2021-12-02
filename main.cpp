@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/01 19:27:17 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/02 13:50:35 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@
 int main( void ) 
 {
     ft::AVL<int>	avl;
-	// int nadafak = 0;
+	int nadafak = 0;
 	
-	// srand(time(nullptr));
-	for (int i = 1; i < 100; i++) {
-		// nadafak = rand() % 100;
-		// std::cout << nadafak << std::endl;
-		avl.insert(i);
+	srand(time(nullptr));
+	for (int i = 1; i < 10; i++) {
+		nadafak = rand() % 100;
+		std::cout << nadafak << std::endl;
+		avl.insert(nadafak);
 	}
 
 
-	avl.inOrder();
+	avl.print2D();
 
 }
 
