@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/11/08 19:43:41 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/03 16:11:04 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <stdexcept>
 # include <iterator>
 
-# include "../RBT/RBT.hpp"
+# include "../AVL/avl.hpp"
 # include "../utility/pair.hpp"
 # include "../utility/make_pair.hpp"
 
@@ -43,20 +43,21 @@ namespace ft {
             typedef             Key                 key_type;
             typedef             T                   mapped_type;
             typedef             ft::pair<const key_type, mapped_type>  value_type;
+            typedef             ptrdiff_t           difference_type;
+            typedef             size_t              size_type;
             typedef             Compare             key_compare;
             // value_compare -> Nested function class to compare elements :: see value_comp
             typedef             Allocator           allocator_type;
+            typedef             const_reference     value_type&;
             typedef typename    allocator_type::reference           reference;
             typedef typename    allocator_type::const_reference     const_reference;
             typedef typename    allocator_type::pointer             pointer;
             typedef typename    allocator_type::const_pointer       const_pointer;
-            typedef             ptrdiff_t           difference_type;
-            typedef             size_t              size_type;
 
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */ 
-            map() : _RBTree()
+            map() : __tree()
             
             /* ------------------------ Copy ------------------------ */
 
@@ -77,7 +78,7 @@ namespace ft {
             allocator_type get_allocator() const { return this->_alloc; }
     
         private:
-            RBT<value_type, key_compare, allocator_type>    _RBTree;
+            AVL<value_type, key_compare, allocator_type>    __tree;
             allocator_type  _alloc;
     };
                 /* ----------- Non-member function overloads ----------- */

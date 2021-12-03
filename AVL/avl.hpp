@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/02 17:39:43 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/03 15:31:57 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # include "../utility/pair.hpp"
 # include "../utility/make_pair.hpp"
 # include "../containers/vector.hpp"
+# include "../iterator_traits/iterator_traits.hpp"
+# include "../iterator/iterator/iterator.hpp"
 
 # include <errno.h>
 
@@ -346,7 +348,7 @@ namespace ft {
                 std::cout << std::endl;
                 for (int i = 10; i < space; i++)
                     std::cout << " ";
-                std::cout<< root->data->__first << std::endl;
+                std::cout << root->data->__first << std::endl;
                 __print(root->left, space);
             }
         

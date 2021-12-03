@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 11:05:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/02 17:35:37 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/03 15:40:02 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ namespace ft {
                 /* ------------ Member Types ----------- */
             typedef T1  first_type;
             typedef T2  second_type;
-            typedef const first_type    const_first_type;
-            typedef const second_type    const_second_type;
 
                         /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
@@ -38,7 +36,7 @@ namespace ft {
             
             /* ------------------------ Copy --------------------------- */
             template<class U, class V>
-                pair ( const pair<U,V>& pr ) : __first(pr.__first), __second(pr.__second) {}
+                pair ( const pair<U, V>& pr ) : __first(pr.__first), __second(pr.__second) {}
                 
             /* ------------------- Initialization ---------------------- */
             pair ( const first_type& a, const second_type& b ) : __first(a), __second(b) {}
