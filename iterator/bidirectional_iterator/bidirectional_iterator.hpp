@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:29:05 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/03 15:35:01 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/04 11:42:02 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,22 @@ namespace ft {
             typedef typename iterator_traits::reference         reference;
             typedef typename iterator_traits::iterator_category iterator_category;
 
-            bidirectional_iterator() : _data(0) {};
-            bidirectional_iterator( value_type * element ) : _data(element) {};
+            bidirectional_iterator() : _data(nullptr) {};
+            /* bidirectional_iterator( value_type * element ) : _data(element) {};
             bidirectional_iterator( const bidirectional_iterator& rhs ) : _data(rhs._data) {}
             bidirectional_iterator& operator= ( const bidirectional_iterator& rhs ) { this->_data = rhs._data; return (*this); } 
-            virtual ~bidirectional_iterator() {};
+            virtual ~bidirectional_iterator() {}; */
+
+
+            bidirectional_iterator& operator+= ( difference_type rhs ) { this->_data += rhs; return *this; };
+            bidirectional_iterator& operator-= ( difference_type rhs ) { this->_data -= rhs; return *this; };
+            reference operator*() const { return *_data; }
+            pointer   operator->() const { return _data; }
             
-            pointer getData( void ) const { return (this->_data); }
+            // pointer getData( void ) const { return (this->_data); }
 
         protected:
             pointer  _data;
             
     }
-}
+;}

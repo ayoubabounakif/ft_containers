@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/03 15:31:57 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/04 11:45:23 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../containers/vector.hpp"
 # include "../iterator_traits/iterator_traits.hpp"
 # include "../iterator/iterator/iterator.hpp"
+# include "../iterator/bidirectional_iterator/bidirectional_iterator.hpp"
 
 # include <errno.h>
 
@@ -35,6 +36,8 @@ namespace ft {
             typedef Alloc       allocator_type;
             typedef size_t      size_type;
             typedef typename    allocator_type::template rebind<node_type>::other   rebind_allocator;
+            typedef             bidirectional_iterator<value_type>          iterator;
+            typedef             bidirectional_iterator<const value_type>    const_iterator;
 
         private:
             struct Node {
@@ -84,7 +87,20 @@ namespace ft {
                 __size(0) {} */
 
         public:
+            /* ---------------------- Iterators --------------------- */
+            iterator  begin() {
+                return iterator(findMinValue(this->__root), *this);
+            }
+
+            iterator  end() {
+                return iterator(nullptr, *this);
+            }
+
+        public:
+            /* ----------------------- Capacity --------------------- */
             size_type   size( void ) const { return this->__size; }
+            size_type   max_size( void ) const { return this->__alloc.max_size(); }
+            bool        empty() const { return this->_size == 0 ? true : false; }
             
             node_type * findMinValue( node_type * node ) {
                 while (node->left != nullptr)
