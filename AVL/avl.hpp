@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/04 11:45:23 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/05 15:41:32 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ namespace ft {
                 node->balanceFactor = rightNodeHeight - leftNodeHeight;   
             }
             
-            void    __parentReset( node_type * root, node_type * newRoot ) {
+            void    __setParent( node_type * root, node_type * newRoot ) {
                 if (root->parent != nullptr) {
                     newRoot->parent = nullptr;
                     if (root->left)
@@ -175,7 +175,7 @@ namespace ft {
                 node_type * newParent = node->right;
                 node->right = newParent->left;
                 newParent->left = node;
-                // __parentReset(node, newParent);
+                // __setParent(node, newParent);
                 __update(node);
                 __update(newParent);
                 return newParent;
@@ -185,7 +185,7 @@ namespace ft {
                 node_type * newParent = node->left;
                 node->left = newParent->right;
                 newParent->right = node;
-                // __parentReset(node, newParent);
+                // __setParent(node, newParent);
                 __update(node);
                 __update(newParent);
                 return newParent;
