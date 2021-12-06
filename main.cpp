@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/06 20:30:30 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/06 23:06:12 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,25 @@ int main( void )
 		avl.insert(ft::make_pair(i, vec[i]));
 	}
 
+	ft::AVL<ft::pair<const int, int> > avl2;
+	for (int i = 0; i < 20; i++) {
+		// std::cout << vec[i] << std::endl;
+		avl2.insert(ft::make_pair(i, vec[i]));
+	}
+	
+	avl = avl2;
 	ft::AVL<ft::pair<const int, int> >::iterator	treeIterator;
 
-	treeIterator = avl.begin();
-	// avl.print();
+	treeIterator = avl.end();
+	avl.print();
+	treeIterator--;
+	// for (; treeIterator != avl.end(); ++treeIterator) {
+	// 	std::cout << treeIterator->__first << std::endl;
+	// }
+	for (; treeIterator != avl.begin(); --treeIterator) {
+			std::cout << treeIterator->__first << std::endl;
+	}
+	// avl2.print();
 }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE

@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/06 20:32:19 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/06 22:56:21 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ namespace ft {
 
         private:
             struct Node {
-                
                 value_type *    data;
                 Node *          parent;
                 Node *          left;
@@ -82,37 +81,61 @@ namespace ft {
                 __size(0) {}
 
 
-            explicit avl( const value_type& val, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
+            /* explicit avl( const value_type& val, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
                 __root(val),
                 __comp(compare),
                 __alloc(allocator),
                 __rebindAllocator(allocator),
-                __size(0) {}
+                __size(0) {} */
 
-            // AVL ( const AVL& x ) { *this = x; };
+            AVL ( const AVL& x ) { *this = x; };
             
             /* ------------------ Assignment Operator --------------- */
-            /* AVL& operator= ( const AVL& x ) {
-                _alloc.deallocate(this->_buffer, this->_capacity);
-                
+            AVL& operator= ( const AVL& x ) {
+                __traverseAndDelete(this->__root);
+                this->__root = nullptr;
                 if ( this != &x ) {
-                    this->_capacity = x._capacity;
-                    this->_size = x._size;
-                    this->_buffer = _alloc.allocate(x._capacity);
-                    for (size_type i = 0; i < this->_size; i++)
-                       _alloc.construct(&_buffer[i], x._buffer[i]);
+                    this->__alloc = x.__alloc;
+                    this->__rebindAlloc = x.__rebindAlloc;
+                    this->__comp = x.__comp;
+                    this->__size = x.__size;
+                    __traverseAndInsert(x.__root);
                 }
                 return (*this);
-            } */
+            }
 
             virtual ~AVL() {}
+
+        private:
+            void    __traverseAndDelete( node_type * x ) {
+                if (x == nullptr)
+                    return ;
+                __traverseAndDelete(x->left);
+                __traverseAndDelete(x->right);
+                // this->__alloc.destroy(x->data);
+                this->__alloc.deallocate(x->data, 1);
+                this->__rebindAlloc.deallocate(x, 1);
+                    
+                return ;
+            }
+
+            void    __traverseAndInsert( node_type * x ) {
+                if (x == nullptr)
+                    return ;
+                this->__root = __insert(this->__root, *x->data);
+                __traverseAndInsert(x->left);
+                __traverseAndInsert(x->right);
+                return ;
+            }
+            
+
 
         public:
             /* ---------------------- Iterators --------------------- */
             iterator  begin() { return iterator(findMinValue(this->__root), this); }
-            // const_iterator  begin() const { return iterator(findMinValue(this->__root), this); }
+            const_iterator  begin() const { return iterator(findMinValue(this->__root), this); }
             iterator  end() { return iterator(nullptr, this); }
-            // const_iterator  end() const { return iterator(nullptr, this); }
+            const_iterator  end() const { return iterator(nullptr, this); }
 
         public:
             /* ----------------------- Capacity --------------------- */
@@ -209,7 +232,7 @@ namespace ft {
                 node_type * newParent = node->right;
                 node->right = newParent->left;
                 newParent->left = node;
-                // __setParent(node, newParent);
+                __setParent(node, newParent);
                 __update(node);
                 __update(newParent);
                 return newParent;
@@ -219,7 +242,7 @@ namespace ft {
                 node_type * newParent = node->left;
                 node->left = newParent->right;
                 newParent->right = node;
-                // __setParent(node, newParent);
+                __setParent(node, newParent);
                 __update(node);
                 __update(newParent);
                 return newParent;
