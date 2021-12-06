@@ -12,14 +12,16 @@
 
 #pragma once
 # include "../iterator_traits/iterator_traits.hpp"
+# include <stdexcept>
 
 //! if Linux
-// #define ptrdiff_t __gnu_cxx::ptrdiff_t
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
-    template < class T >
+    template < class T, class Node, class Tree, class Compare = std::less<T> >
     class bidirectional_iterator {
         public:
+                            /* ------------ Member Types ----------- */
             typedef iterator_traits< iterator<std::bidirectional_iterator_tag, T> > iterator_traits;
             typedef typename iterator_traits::value_type        value_type;
             typedef typename iterator_traits::difference_type   difference_type;
@@ -27,22 +29,72 @@ namespace ft {
             typedef typename iterator_traits::reference         reference;
             typedef typename iterator_traits::iterator_category iterator_category;
 
-            bidirectional_iterator() : _data(nullptr) {};
-            /* bidirectional_iterator( value_type * element ) : _data(element) {};
-            bidirectional_iterator( const bidirectional_iterator& rhs ) : _data(rhs._data) {}
-            bidirectional_iterator& operator= ( const bidirectional_iterator& rhs ) { this->_data = rhs._data; return (*this); } 
-            virtual ~bidirectional_iterator() {}; */
+                    /* ----------- Member Functions ---------- */    
+                /* ---- Constructors & Destructor respectively ---- */
+            bidirectional_iterator() : __node(), __avl(), __comp() {};
+            bidirectional_iterator( Node * node, const Tree *avl ) : __node(node), __avl(avl), __comp() {};
+            bidirectional_iterator( const bidirectional_iterator& rhs ) { *this = rhs; }
+            bidirectional_iterator& operator= ( const bidirectional_iterator& rhs ) {
+                this->__node = rhs.__node; this->__avl = rhs.__avl; this->__comp = rhs.__comp;
+                return *this; }
+            virtual ~bidirectional_iterator() {};
+
+                /* Misc Operators */    
+            reference operator*() const { return *this->__node->data; }
+            pointer   operator->() const { return this->__node->data; }
+
+                /* Arithmetic Operators */
+            bidirectional_iterator& operator++() {
+                Node * p;
+                if (this->__node == nullptr) {
+                    // ++ from end(). get the root of the tree
+                    this->__node = this->__avl->getRoot();
+
+                    // error! ++ requested for an empty tree
+                    /* if (this->__node == nullptr)
+                        throw std::UnderflowException { }; */
+
+                    // move to the smallest value in the tree,
+                    // which is the first node inorder
+                    while (this->__node->left != nullptr)
+                        this->__node = this->__node->left;
+                }
+                else {
+                    if (this->__node->right != nullptr) {
+                        this->__node = this->__node->right;
+                        while (this->__node->right != nullptr)
+                            this->__node = this->__node->right;
+                    }
+                    else {
+                        // have already processed the left subtree, and
+                        // there is no right subtree. move up the tree,
+                        // looking for a parent for which nodePtr is a left child,
+                        // stopping if the parent becomes NULL. a non-NULL parent
+                        // is the successor. if parent is NULL, the original node
+                        // was the last node inorder, and its successor
+                        // is the end of the list
+                        p = this->__node->parent;
+                        while (p != nullptr && this->__node == p->right) {
+                            this->__node = p;
+                            p = p->parent;
+                        }
+                        // if we were previously at the right-most node in
+                        // the tree, this->__node = nullptr, and the iterator specifies
+                        // the end of the list
+                        this->__node = p;
+                    }
+                }
+                return *this;
+            }
+            bidirectional_iterator operator++(int) { bidirectional_iterator saved(*this); ++(*this); return (saved); }
 
 
-            bidirectional_iterator& operator+= ( difference_type rhs ) { this->_data += rhs; return *this; };
-            bidirectional_iterator& operator-= ( difference_type rhs ) { this->_data -= rhs; return *this; };
-            reference operator*() const { return *_data; }
-            pointer   operator->() const { return _data; }
-            
-            // pointer getData( void ) const { return (this->_data); }
+            Node * base() const { return this->__ptr; }
 
         protected:
-            pointer  _data;
+            Node *  __node;
+            Tree    __avl;
+            Compare __comp;
             
     }
 ;}

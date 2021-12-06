@@ -21,6 +21,9 @@
 
 # include <errno.h>
 
+//! if Linux
+#define ptrdiff_t __gnu_cxx::ptrdiff_t
+
 namespace ft {
     
 
@@ -88,13 +91,10 @@ namespace ft {
 
         public:
             /* ---------------------- Iterators --------------------- */
-            iterator  begin() {
-                return iterator(findMinValue(this->__root), *this);
-            }
-
-            iterator  end() {
-                return iterator(nullptr, *this);
-            }
+            iterator  begin() { return iterator(findMinValue(this->__root), this); }
+            const_iterator  begin() const { return iterator(findMinValue(this->__root), this); }
+            iterator  end() { return iterator(nullptr, this); }
+            const_iterator  end() const { return iterator(nullptr, this); }
 
         public:
             /* ----------------------- Capacity --------------------- */
@@ -112,7 +112,19 @@ namespace ft {
                     node = node->right;
                 return node;
             }
-
+            node_type * find(node_type * node, value_type& value ) {
+                if (node == nullptr)
+                    return nullptr;
+                if (!__comp(node->data->__first, value.__first) && !__comp(value.__first, node->data->__first))
+                    return node;
+                else if (!__comp(node->data->__first, value.__first)) {
+					return find(node->left, value);
+				}
+                else if (__comp(node->data->__first, value.__first)) {
+					return find(node->right, value);
+                }
+                return node;
+            }
             bool    contains( value_type value ) {
                 return __contains(__root, value);
             }
@@ -136,6 +148,8 @@ namespace ft {
                 }
                 return ;
             }
+
+            node_type * getRoot( void ) const { return this->__root; }
 
         private:
 
