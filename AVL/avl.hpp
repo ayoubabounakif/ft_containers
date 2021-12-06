@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/05 15:41:32 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/06 20:32:19 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 # include "../utility/pair.hpp"
 # include "../utility/make_pair.hpp"
 # include "../containers/vector.hpp"
-# include "../iterator_traits/iterator_traits.hpp"
+# include "../iterator/iterator_traits/iterator_traits.hpp"
 # include "../iterator/iterator/iterator.hpp"
 # include "../iterator/bidirectional_iterator/bidirectional_iterator.hpp"
 
 # include <errno.h>
 
 //! if Linux
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+// #define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
     
@@ -39,8 +39,8 @@ namespace ft {
             typedef Alloc       allocator_type;
             typedef size_t      size_type;
             typedef typename    allocator_type::template rebind<node_type>::other   rebind_allocator;
-            typedef             bidirectional_iterator<value_type>          iterator;
-            typedef             bidirectional_iterator<const value_type>    const_iterator;
+            typedef             bidirectional_iterator<value_type, node_type, AVL>             iterator;
+            typedef             bidirectional_iterator<const value_type, const node_type, AVL> const_iterator;
 
         private:
             struct Node {
@@ -82,19 +82,37 @@ namespace ft {
                 __size(0) {}
 
 
-          /*   explicit avl( const value_type& val, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
+            explicit avl( const value_type& val, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
                 __root(val),
                 __comp(compare),
                 __alloc(allocator),
                 __rebindAllocator(allocator),
-                __size(0) {} */
+                __size(0) {}
+
+            // AVL ( const AVL& x ) { *this = x; };
+            
+            /* ------------------ Assignment Operator --------------- */
+            /* AVL& operator= ( const AVL& x ) {
+                _alloc.deallocate(this->_buffer, this->_capacity);
+                
+                if ( this != &x ) {
+                    this->_capacity = x._capacity;
+                    this->_size = x._size;
+                    this->_buffer = _alloc.allocate(x._capacity);
+                    for (size_type i = 0; i < this->_size; i++)
+                       _alloc.construct(&_buffer[i], x._buffer[i]);
+                }
+                return (*this);
+            } */
+
+            virtual ~AVL() {}
 
         public:
             /* ---------------------- Iterators --------------------- */
             iterator  begin() { return iterator(findMinValue(this->__root), this); }
-            const_iterator  begin() const { return iterator(findMinValue(this->__root), this); }
+            // const_iterator  begin() const { return iterator(findMinValue(this->__root), this); }
             iterator  end() { return iterator(nullptr, this); }
-            const_iterator  end() const { return iterator(nullptr, this); }
+            // const_iterator  end() const { return iterator(nullptr, this); }
 
         public:
             /* ----------------------- Capacity --------------------- */
@@ -149,7 +167,9 @@ namespace ft {
                 return ;
             }
 
-            node_type * getRoot( void ) const { return this->__root; }
+            rebind_allocator    get_allocator() const { return this->__rebindAlloc; }   
+            node_type * getRoot() const { return this->__root; }
+            
 
         private:
 

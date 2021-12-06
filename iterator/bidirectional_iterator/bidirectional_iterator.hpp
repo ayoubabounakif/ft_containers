@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:29:05 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/05 17:55:38 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/06 20:31:14 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 # include <stdexcept>
 
 //! if Linux
-#define ptrdiff_t __gnu_cxx::ptrdiff_t
+// #define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
-    template < class T, class Node, class Tree, class Compare = std::less<T> >
+    template < class T, class Node, class Tree>
     class bidirectional_iterator {
         public:
                             /* ------------ Member Types ----------- */
@@ -31,11 +31,11 @@ namespace ft {
 
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
-            bidirectional_iterator() : __node(), __avl(), __comp() {};
-            bidirectional_iterator( Node * node, const Tree *avl ) : __node(node), __avl(avl), __comp() {};
+            bidirectional_iterator() : __node(), __avl() {};
+            bidirectional_iterator( Node * node, const Tree *avl ) : __node(node), __avl(avl) {};
             bidirectional_iterator( const bidirectional_iterator& rhs ) { *this = rhs; }
             bidirectional_iterator& operator= ( const bidirectional_iterator& rhs ) {
-                this->__node = rhs.__node; this->__avl = rhs.__avl; this->__comp = rhs.__comp;
+                this->__node = rhs.__node; this->__avl = rhs.__avl;
                 return *this; }
             virtual ~bidirectional_iterator() {};
 
@@ -93,8 +93,6 @@ namespace ft {
 
         protected:
             Node *  __node;
-            Tree    __avl;
-            Compare __comp;
-            
+            Tree    __avl;            
     }
 ;}

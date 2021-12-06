@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/02 17:38:42 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/06 20:30:30 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int main( void )
 		avl.insert(ft::make_pair(i, vec[i]));
 	}
 
-	avl.print();
+	ft::AVL<ft::pair<const int, int> >::iterator	treeIterator;
+
+	treeIterator = avl.begin();
+	// avl.print();
 }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE
