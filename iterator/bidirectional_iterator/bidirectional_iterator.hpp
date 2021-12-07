@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:29:05 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/06 23:06:33 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/07 18:08:41 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft {
     template < class T, class Node, class Tree>
     class bidirectional_iterator {
         public:
-                            /* ------------ Member Types ----------- */
+                    /* ------------ Member Types ----------- */
             typedef iterator_traits< iterator<std::bidirectional_iterator_tag, T> > iterator_traits;
             typedef typename iterator_traits::value_type        value_type;
             typedef typename iterator_traits::difference_type   difference_type;
@@ -86,9 +86,6 @@ namespace ft {
                 }
                 return *this;
             }
-            
-            bidirectional_iterator operator++(int) { bidirectional_iterator saved(*this); ++(*this); return (saved); }
-
             bidirectional_iterator& operator--() {
                 Node * p;
                 if (this->__node == nullptr) {
@@ -132,7 +129,7 @@ namespace ft {
                 }
                 return *this;
             }
-
+            bidirectional_iterator operator++(int) { bidirectional_iterator saved(*this); ++(*this); return (saved); }
             bidirectional_iterator operator--(int) { bidirectional_iterator saved(*this); --(*this); return (saved); }
 
             Node * base() const { return this->__node; }
@@ -142,6 +139,7 @@ namespace ft {
             Tree const *  __avl;            
     };
     
+            /* ----------- Non-member function overloads ----------- */
     template < class T, class Node, class Tree>
         bool operator== (const bidirectional_iterator<T, Node, Tree>& lhs, const bidirectional_iterator<T, Node, Tree>& rhs) { return lhs.base() == rhs.base(); }
     template < class T, class Node, class Tree>

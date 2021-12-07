@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/06 23:47:30 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/07 18:06:27 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,9 @@ namespace ft {
             }
 
         public:
+                    /* ----------- Member Functions ---------- */    
+                /* ---- Constructors & Destructor respectively ---- */
+            /* ------------------------ Default ------------------------ */
             explicit AVL( const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
                 __root(nullptr),
                 __comp(compare),
@@ -80,14 +83,7 @@ namespace ft {
                 __rebindAlloc(allocator),
                 __size(0) {}
 
-
-            /* explicit avl( const value_type& val, const allocator_type& allocator = allocator_type(), const key_compare& compare = key_compare()) :
-                __root(val),
-                __comp(compare),
-                __alloc(allocator),
-                __rebindAllocator(allocator),
-                __size(0) {} */
-
+            /* ------------------------ Copy ------------------------ */
             AVL ( const AVL& x ) { *this = x; };
             
             /* ------------------ Assignment Operator --------------- */
@@ -103,8 +99,9 @@ namespace ft {
                 }
                 return (*this);
             }
-
-            virtual ~AVL() {}
+            
+            /* ---------------------- Destructor --------------------- */
+            ~AVL() {}
 
         private:
             void    __traverseAndDelete( node_type * x ) {
