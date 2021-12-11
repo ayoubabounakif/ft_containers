@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/07 18:06:27 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/11 22:15:23 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ namespace ft {
                     node = node->right;
                 return node;
             }
-            node_type * find(node_type * node, value_type& value ) {
+            node_type * find(node_type * node, value_type value ) {
                 if (node == nullptr)
                     return nullptr;
                 if (!__comp(node->data->__first, value.__first) && !__comp(value.__first, node->data->__first))
@@ -188,7 +188,7 @@ namespace ft {
             }
 
             rebind_allocator    get_allocator() const { return this->__rebindAlloc; }   
-            node_type * getRoot() const { return this->__root; }
+            node_type *         getRoot() const { return this->__root; }
             
 
         private:

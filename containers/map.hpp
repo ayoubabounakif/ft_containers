@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/05 17:59:10 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/11 22:15:21 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,38 +48,41 @@ namespace ft {
             typedef             Compare             key_compare;
             // value_compare -> Nested function class to compare elements :: see value_comp
             typedef             Allocator           allocator_type;
-            typedef             const_reference     value_type&;
             typedef typename    allocator_type::reference           reference;
             typedef typename    allocator_type::const_reference     const_reference;
             typedef typename    allocator_type::pointer             pointer;
             typedef typename    allocator_type::const_pointer       const_pointer;
+            // typedef             const_reference     value_type&;
 
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */ 
-            map() : __tree()
+            map() : __tree() {}
             
             /* ------------------------ Copy ------------------------ */
 
             /* ------------------ Assignment Operator --------------- */
             
             /* ---------------------- Detructor --------------------- */
-            ~map();
+            ~map() {}
 
             /* ---------------------- Iterators --------------------- */
 
             /* ----------------------- Capacity --------------------- */
 
             /* -------------------- Element access ------------------ */
-
+            mapped_type& operator[] (const key_type& k) {
+                return this->__tree.find(this->__tree.getRoot(), ft::make_pair(k, mapped_type()))->data->__second;
+            }
+            mapped_type& operator[] (const key_type& k) { return (*((this->insert(make_pair(k,mapped_type()))).first)).second }
             /* ---------------------- Modifiers --------------------- */
 
             /* ---------------------- Allocator --------------------- */
-            allocator_type get_allocator() const { return this->_alloc; }
+            allocator_type get_allocator() const { return this->__alloc; }
     
         private:
             AVL<value_type, key_compare, allocator_type>    __tree;
-            allocator_type  _alloc;
+            allocator_type  __alloc;
     };
                 /* ----------- Non-member function overloads ----------- */
     /* ------------------------ Relational Operators ------------------------ */

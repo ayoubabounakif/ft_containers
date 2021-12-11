@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:29:05 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/07 18:08:41 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/11 17:46:17 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // #define ptrdiff_t __gnu_cxx::ptrdiff_t
 
 namespace ft {
-    template < class T, class Node, class Tree>
+    template < class T, class Node, class Tree >
     class bidirectional_iterator {
         public:
                     /* ------------ Member Types ----------- */
