@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 11:05:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/03 15:40:02 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:21:04 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,18 @@ namespace ft {
                         /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */  
-            pair() : __first(nullptr), __second(nullptr) {}
+            pair() : first(nullptr), second(nullptr) {}
             
             /* ------------------------ Copy --------------------------- */
             template<class U, class V>
-                pair ( const pair<U, V>& pr ) : __first(pr.__first), __second(pr.__second) {}
+                pair ( const pair<U, V>& pr ) : first(pr.first), second(pr.second) {}
                 
             /* ------------------- Initialization ---------------------- */
-            pair ( const first_type& a, const second_type& b ) : __first(a), __second(b) {}
+            pair ( const first_type& a, const second_type& b ) : first(a), second(b) {}
             pair& operator= ( const pair& pr ) {
                 if (this != &pr) {
-                    this->__first = pr.__first;
-                    this->__second = pr.__second;
+                    this->first = pr.first;
+                    this->second = pr.second;
                 }
                 return *this;
             }
@@ -51,8 +51,8 @@ namespace ft {
             /* ----------------------- Detructor ----------------------- */
             ~pair() {}
         
-            first_type  __first;
-            second_type __second;
+            first_type  first;
+            second_type second;
     };
 
             /* ----------- Non-member function overloads ----------- */
@@ -63,11 +63,11 @@ namespace ft {
                 (a <= b) equivalent to !(b < a) */
 
     template <class T1, class T2>
-        bool operator== (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return lhs.__first == rhs.__first && lhs.__second == rhs.__second; }
+        bool operator== (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return lhs.first == rhs.first && lhs.second == rhs.second; }
     template <class T1, class T2>
         bool operator!= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return !(lhs == rhs); }
     template <class T1, class T2>
-        bool operator<  (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return lhs.__first < rhs.__first || (!(rhs.__first < lhs.__first) && lhs.__second < rhs.__second); }
+        bool operator<  (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second); }
     template <class T1, class T2>
         bool operator<= (const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return !(rhs < lhs); }
     template <class T1, class T2>

@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/11 22:15:24 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 18:25:21 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,17 @@ int main( void )
 		// std::cout << vec[i] << std::endl;
 		avl.insert(ft::make_pair(i, vec[i]));
 	}
-
-	ft::map<int, std::string> mymap;
-	mymap[1] = "Hi";
-    mymap[2] = "This";
-    mymap[3] = "is";
-    mymap[4] = "GeeksForGeeks";
+	
+	ft::AVL<ft::pair<const int, int> >::iterator	avlit = avl.begin();
+	for (; avlit != avl.end(); ++avlit)
+		std::cout << avlit->first << std::endl;
+	
+	// avl.print();
+	// ft::map<int, std::string> mymap;
+	// mymap[1] = "Hi";
+    // mymap[2] = "This";
+    // mymap[3] = "is";
+    // mymap[4] = "GeeksForGeeks";
      
     // using operator[] to print string
     // mapped to integer 4

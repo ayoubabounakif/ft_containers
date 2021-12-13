@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/11 22:15:23 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 18:43:56 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ namespace ft {
 
         public:
             typedef T           value_type;
+            typedef typename T::first_type key_type;
             typedef Node        node_type;
             typedef Compare     key_compare;
             typedef Alloc       allocator_type;
+            typedef ptrdiff_t   difference_type;
             typedef size_t      size_type;
             typedef typename    allocator_type::template rebind<node_type>::other   rebind_allocator;
             typedef             bidirectional_iterator<value_type, node_type, AVL>             iterator;
@@ -83,13 +85,28 @@ namespace ft {
                 __rebindAlloc(allocator),
                 __size(0) {}
 
+            /* ----------------------- Range ------------------------ */
+            template < class InputIt >
+                AVL( InputIt first, InputIt last, const key_compare& compare = key_compare(), const allocator_type& allocator = allocator_type()) {
+                    difference_type distance = std::distance(first, last);
+                    this->__size = distance;
+                    this->__comp = compare;
+                    this->__alloc = allocator;
+                    this->__rebindAlloc = allocator;
+                    for (difference_type i = 0; i < distance; i++) {
+                        this->__insert(ft::make_pair(i, *first));
+                        ++first;
+                    }
+                    
+                }
+
             /* ------------------------ Copy ------------------------ */
             AVL ( const AVL& x ) { *this = x; };
             
             /* ------------------ Assignment Operator --------------- */
             AVL& operator= ( const AVL& x ) {
                 __traverseAndDelete(this->__root);
-                this->__root = nullptr;
+                // this->__root = nullptr;
                 if ( this != &x ) {
                     this->__alloc = x.__alloc;
                     this->__rebindAlloc = x.__rebindAlloc;
@@ -105,14 +122,15 @@ namespace ft {
 
         private:
             void    __traverseAndDelete( node_type * x ) {
-                if (x == nullptr)
+                if (x == nullptr) {
+                    this->__root = nullptr;
                     return ;
+                }
                 __traverseAndDelete(x->left);
                 __traverseAndDelete(x->right);
                 // this->__alloc.destroy(x->data);
                 this->__alloc.deallocate(x->data, 1);
                 this->__rebindAlloc.deallocate(x, 1);
-                    
                 return ;
             }
 
@@ -124,23 +142,24 @@ namespace ft {
                 __traverseAndInsert(x->right);
                 return ;
             }
-            
-
 
         public:
             /* ---------------------- Iterators --------------------- */
-            iterator  begin() { return iterator(findMinValue(this->__root), this); }
-            const_iterator  begin() const { return iterator(findMinValue(this->__root), this); }
-            iterator  end() { return iterator(nullptr, this); }
-            const_iterator  end() const { return iterator(nullptr, this); }
+            iterator begin() { return iterator(findMinValue(this->__root), this); }
+            const_iterator begin() const { return iterator(findMinValue(this->__root), this); }
+            iterator end() { return iterator(nullptr, this); }
+            const_iterator end() const { return iterator(nullptr, this); }
 
         public:
             /* ----------------------- Capacity --------------------- */
-            size_type   size( void ) const { return this->__size; }
-            size_type   max_size( void ) const { return this->__alloc.max_size(); }
-            bool        empty() const { return this->_size == 0 ? true : false; }
+            size_type size( void ) const { return this->__size; }
+            size_type max_size( void ) const { return this->__alloc.max_size(); }
+            bool empty() const { return this->_size == 0 ? true : false; }
             
+            /* ------------------------ Lookup ---------------------- */
             node_type * findMinValue( node_type * node ) {
+                if (this->__root == nullptr)
+                    return nullptr;
                 while (node->left != nullptr)
                     node = node->left;
                 return node;
@@ -150,15 +169,16 @@ namespace ft {
                     node = node->right;
                 return node;
             }
+            
             node_type * find(node_type * node, value_type value ) {
                 if (node == nullptr)
                     return nullptr;
-                if (!__comp(node->data->__first, value.__first) && !__comp(value.__first, node->data->__first))
+                if (!__comp(node->data->first, value.first) && !__comp(value.first, node->data->first))
                     return node;
-                else if (!__comp(node->data->__first, value.__first)) {
+                else if (!__comp(node->data->first, value.first)) {
 					return find(node->left, value);
 				}
-                else if (__comp(node->data->__first, value.__first)) {
+                else if (__comp(node->data->first, value.first)) {
 					return find(node->right, value);
                 }
                 return node;
@@ -167,28 +187,35 @@ namespace ft {
                 return __contains(__root, value);
             }
 
-            void    insert( value_type value ) {
-                if (!__contains(this->__root, value)) {
+            /* ---------------------- Modifiers --------------------- */
+            void clear() {
+                __traverseAndDelete(this->__root);
+                this->__size = 0;
+                return ;
+            }
+            bool insert( value_type value ) {
+                if (!__contains(this->__root, value.first)) {
                     this->__root = __insert(this->__root, value);
                     this->__root->parent = nullptr;
                     this->__size++;
-                    return ;
+                    return true;
                 }
-                return ;
+                return false;
             }
-
-            void    remove( value_type value ) {
-                if (__contains(this->__root, value)) {
-                    this->__root = __remove(this->__root, value);
-                    this->__root->parent = nullptr;
+            bool    remove( const key_type& key ) {
+                if (__contains(this->__root, key)) {
+                    this->__root = __remove(this->__root, key);
+                    if (this->__root)
+                        this->__root->parent = nullptr;
                     this->__size--;
-                    return ;
+                    return true;
                 }
-                return ;
+                return false;
             }
 
-            rebind_allocator    get_allocator() const { return this->__rebindAlloc; }   
-            node_type *         getRoot() const { return this->__root; }
+            /* ---------------------- Getters --------------------- */
+            rebind_allocator get_allocator() const { return this->__rebindAlloc; }   
+            node_type * getRoot() const { return this->__root; }
             
 
         private:
@@ -295,17 +322,17 @@ namespace ft {
                 return node;
             }
 
-            bool    __contains( node_type * node, value_type value ) {
+            bool    __contains( node_type * node, key_type& key ) {
     
                 if (node == nullptr)
                     return false;
-                if (!__comp(node->data->__first, value.__first) && !__comp(value.__first, node->data->__first))
+                if (!__comp(node->data->first, key) && !__comp(key, node->data->first))
                     return true;
-				else if (!__comp(node->data->__first, value.__first)) {
-					return __contains(node->left, value);
+				else if (!__comp(node->data->first, key)) {
+					return __contains(node->left, key);
 				}
-                else if (__comp(node->data->__first, value.__first)) {
-					return __contains(node->right, value);
+                else if (__comp(node->data->first, key)) {
+					return __contains(node->right, key);
                 }
                 return true;
             }
@@ -317,14 +344,14 @@ namespace ft {
 
                 /* Dig into left subtree, the value we're looking
                     for is smaller than teh current value. */
-				if (__comp(value.__first, node->data->__first)) {
+				if (__comp(value.first, node->data->first)) {
 					node->left = __insert(node->left, value);
                     node->left->parent = node;
 				}
 
                /* Dig into right subtree, the value we're looking
                     for is greater than the current value. */
-                else if (__comp(node->data->__first, value.__first)) {
+                else if (__comp(node->data->first, value.first)) {
 					node->right = __insert(node->right, value);
                     node->right->parent = node;
                 }
@@ -337,22 +364,22 @@ namespace ft {
                 
             }
 
-            node_type * __remove( node_type * node, value_type& value ) {
+            node_type * __remove( node_type * node, key_type& key ) {
 
 
                 if (node == nullptr)
                     return nullptr;
                 
-                /* Dig into left subtree, the value we're looking
-                    for is smaller than the current value. */
-                if (__comp(value.__first, node->data->__first)) {
-					node->left = __remove(node->left, value);
+                /* Dig into left subtree, the key we're looking
+                    for is smaller than the current key. */
+                if (__comp(key, node->data->first)) {
+					node->left = __remove(node->left, key);
 				}
 
-                /* Dig into right subtree, the value we're looking
-                    for is greater than the current value. */
-                else if (__comp(node->data->__first, value.__first)) {
-					node->right = __remove(node->right, value);
+                /* Dig into right subtree, the key we're looking
+                    for is greater than the current key. */
+                else if (__comp(node->data->first, key)) {
+					node->right = __remove(node->right, key);
                 }
 
                 /* Found the node we wish to remove */
@@ -381,22 +408,22 @@ namespace ft {
 
                             /* Swap the value of the successor into the node. */
                             node_type * successorValue = findMaxValue(node->left);
-                            node->data = successorValue;
+                            node->data = successorValue->data;
 
                             /* Find the largest node in the left subtree */
-                            node->left = __remove(node->left, successorValue);
+                            node->left = __remove(node->left, successorValue->data->first);
                             
                         }
                         else {
                             
                             /* Swap the value of the successor into the node. */
                             node_type * successorValue = findMinValue(node->right);
-                            node->data = successorValue;
+                            node->data = successorValue->data;
 
                             /* Go into the right subtree and remove the leftmost node we ound
                                 and swapped data with. This prevents us from having two nodes
                                 in our tree with the same value. */
-                            node->right = __remove(node->right, successorValue);
+                            node->right = __remove(node->right, successorValue->data->first);
                         }
                     }   
                 }
@@ -418,7 +445,7 @@ namespace ft {
                 std::cout << std::endl;
                 for (int i = 10; i < space; i++)
                     std::cout << " ";
-                std::cout << root->data->__first << std::endl;
+                std::cout << root->data->first << std::endl;
                 __print(root->left, space);
             }
         

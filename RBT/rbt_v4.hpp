@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 07:56:52 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/01 16:52:22 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 17:15:30 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ namespace ft {
 					return (__search(__root->right, __val));
 				else if (*__root->data > __val)
 					return (__search(__root->left, __val));
-				return (nullptr);
+				return (node);
             }
 
         public:

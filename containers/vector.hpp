@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/11 17:32:19 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 18:09:01 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,7 @@ namespace ft {
 				this->_size = tmp_size;
                 x._capacity = this->_capacity;
                 this->_capacity = tmp_capacity;
+                return ;
             }
             void    clear() { for (size_type i = 0; i < this->_size; i++) _alloc.destroy(&_buffer[i]); this->_size = 0; }
 
@@ -267,24 +268,24 @@ namespace ft {
                 (a <= b) equivalent to !(b < a) */
                 
 	template < class T, class Alloc>
-		bool operator== (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) {
+		bool operator== (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) {
             if (lhs.size() != rhs.size())
                 return (lhs.size() == rhs.size());
             return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
         }
 	template < class T, class Alloc>
-		bool operator!= (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (!operator==(lhs, rhs)); }
+		bool operator!= (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) { return (!operator==(lhs, rhs)); }
 	template < class T, class Alloc>
- 		bool operator<  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
+ 		bool operator<  (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
 	template < class T, class Alloc>
- 		bool operator>  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (operator<(rhs, lhs)); }
+ 		bool operator>  (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) { return (operator<(rhs, lhs)); }
 	template < class T, class Alloc>
- 		bool operator<=  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (!operator<(rhs, lhs)); }
+ 		bool operator<=  (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) { return (!operator<(rhs, lhs)); }
 	template < class T, class Alloc>
- 		bool operator>=  (vector<T,Alloc>& lhs, vector<T,Alloc>& rhs) { return (!operator<(lhs, rhs)); }
+ 		bool operator>=  (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) { return (!operator<(lhs, rhs)); }
 
     /* ------------------------------- Swap --------------------------------- */
 	template <class T, class Alloc>
-  		void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) { x.swap(y); }
+  		void swap (vector<T, Alloc>& x, vector<T, Alloc>& y) { x.swap(y); }
           
 }
