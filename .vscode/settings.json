@@ -74,6 +74,7 @@
         "*.tcc": "cpp",
         "clocale": "cpp",
         "fstream": "cpp",
-        "__memory": "cpp"
+        "__memory": "cpp",
+        "__cxx_version": "cpp"
     }
 }

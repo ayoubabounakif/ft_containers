@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 18:58:19 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 20:40:25 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ namespace ft {
             typedef typename    allocator_type::const_pointer       const_pointer;
             typedef typename    AVL<value_type, Compare, Allocator>::iterator   iterator;
             typedef typename    AVL<value_type, Compare, Allocator>::const_iterator   const_iterator;
+            typedef typename    AVL<value_type, Compare, Allocator>::reverse_iterator   reverse_iterator;
+            typedef typename    AVL<value_type, Compare, Allocator>::const_reverse_iterator   const_reverse_iterator;
             
 
                     /* ------------- Member Class ------------ */ 
@@ -94,6 +96,10 @@ namespace ft {
             const_iterator begin() const { return this->__tree.begin(); }
             iterator end() { return this->__tree.end(); }
             const_iterator end() const { return this->__tree.end(); }
+            reverse_iterator rbegin() { return this->__tree.rbegin(); }
+            const_reverse_iterator rbegin() const { return this->__tree.rbegin(); }
+            reverse_iterator rend() { return this->__tree.rend(); }
+            const_reverse_iterator rend() const { return this->__tree.rend(); }
 
             /* ----------------------- Capacity --------------------- */
             bool empty() const { return this->__tree.empty(); }
@@ -105,8 +111,15 @@ namespace ft {
             
             /* ---------------------- Modifiers --------------------- */
             void clear() { this->__tree.clear(); }
-            /* pair<iterator, bool> insert( const value_type& value ) {} */
-            /* iterator insert( iterator hint, const value_type& value ) {} */
+            pair<iterator, bool> insert( const value_type& value ) {
+                bool second = this->__tree.insert(value);
+                return ft::make_pair(iterator(this->__tree.find(this->__tree.getRoot(), value)), second);
+            }
+            iterator insert( iterator hint, const value_type& value ) {
+                (void)hint;
+                this->__tree.insert(value);
+                return iterator(this->__tree.find(this->__tree.getRoot(), value));
+            }
             template < class InputIt >
                 void insert( InputIt first, InputIt last ) { for (; first != last; ++first) this->__tree.insert(*first); return ; }
             void erase( iterator pos ) { this->__tree.remove(pos->first); return ; }
@@ -120,6 +133,7 @@ namespace ft {
             }
 
             /* ----------------------- Lookup ----------------------- */
+            size_type count( const Key& key ) const
             
             /* ---------------------- Observers --------------------- */
             key_compare key_comp() const { return this->__comp; }

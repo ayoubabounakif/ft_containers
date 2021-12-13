@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 18:43:56 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 20:35:27 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../containers/vector.hpp"
 # include "../iterator/iterator_traits/iterator_traits.hpp"
 # include "../iterator/iterator/iterator.hpp"
+# include "../iterator/iterator/reverse_iterator.hpp"
 # include "../iterator/bidirectional_iterator/bidirectional_iterator.hpp"
 
 # include <errno.h>
@@ -43,6 +44,8 @@ namespace ft {
             typedef typename    allocator_type::template rebind<node_type>::other   rebind_allocator;
             typedef             bidirectional_iterator<value_type, node_type, AVL>             iterator;
             typedef             bidirectional_iterator<const value_type, const node_type, AVL> const_iterator;
+            typedef             reverse_iterator<iterator>  reverse_iterator;
+            typedef             reverse_iterator<const_iterator>  const_reverse_iterator;
 
         private:
             struct Node {
@@ -97,7 +100,6 @@ namespace ft {
                         this->__insert(ft::make_pair(i, *first));
                         ++first;
                     }
-                    
                 }
 
             /* ------------------------ Copy ------------------------ */
@@ -149,6 +151,10 @@ namespace ft {
             const_iterator begin() const { return iterator(findMinValue(this->__root), this); }
             iterator end() { return iterator(nullptr, this); }
             const_iterator end() const { return iterator(nullptr, this); }
+            reverse_iterator rbegin() { return reverse_iterator(iterator(end())); }
+            reverse_iterator rend() { return reverse_iterator(iterator(begin())); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(iterator(end())); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(iterator(begin())); }
 
         public:
             /* ----------------------- Capacity --------------------- */
@@ -183,8 +189,9 @@ namespace ft {
                 }
                 return node;
             }
-            bool    contains( value_type value ) {
-                return __contains(__root, value);
+            
+            bool    contains( const key_type& key ) {
+                return __contains(__root, key);
             }
 
             /* ---------------------- Modifiers --------------------- */
