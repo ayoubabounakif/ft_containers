@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 18:43:59 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/13 18:58:19 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,8 @@ namespace ft {
             
             /* ---------------------- Modifiers --------------------- */
             void clear() { this->__tree.clear(); }
-            /* std::pair<iterator, bool> insert( const value_type& value ); */
-            /* iterator insert( iterator hint, const value_type& value ) {
-            } */
+            /* pair<iterator, bool> insert( const value_type& value ) {} */
+            /* iterator insert( iterator hint, const value_type& value ) {} */
             template < class InputIt >
                 void insert( InputIt first, InputIt last ) { for (; first != last; ++first) this->__tree.insert(*first); return ; }
             void erase( iterator pos ) { this->__tree.remove(pos->first); return ; }
@@ -117,7 +116,7 @@ namespace ft {
                 AVL<value_type, key_compare, allocator_type> tmpTree = other.__tree;
                 other.__tree = this->__tree;
                 this->__tree = tmpTree;
-                return ;        
+                return ;
             }
 
             /* ----------------------- Lookup ----------------------- */
