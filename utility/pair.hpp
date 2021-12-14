@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 11:05:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 17:21:04 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/14 19:01:24 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ namespace ft {
                         /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */  
-            pair() : first(nullptr), second(nullptr) {}
+            pair() : first(), second() {}
             
             /* ------------------------ Copy --------------------------- */
             template<class U, class V>

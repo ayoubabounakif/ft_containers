@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 10:08:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 20:13:36 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/14 19:10:55 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace ft {
 
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
-            reverse_iterator() : _iter(0) {};
+            reverse_iterator() : _iter() {};
             reverse_iterator( iterator_type const &it ) { iterator_type tmp = it; --tmp; _iter = tmp; }
             template< class U >
                 reverse_iterator( const reverse_iterator<U>& other ) : _iter(--other.base()) {}

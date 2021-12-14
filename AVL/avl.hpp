@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 20:35:27 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/14 19:48:18 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ namespace ft {
             typedef typename    allocator_type::template rebind<node_type>::other   rebind_allocator;
             typedef             bidirectional_iterator<value_type, node_type, AVL>             iterator;
             typedef             bidirectional_iterator<const value_type, const node_type, AVL> const_iterator;
-            typedef             reverse_iterator<iterator>  reverse_iterator;
             typedef             reverse_iterator<const_iterator>  const_reverse_iterator;
+            typedef             reverse_iterator<iterator>  reverse_iterator;
 
         private:
             struct Node {
@@ -90,14 +90,16 @@ namespace ft {
 
             /* ----------------------- Range ------------------------ */
             template < class InputIt >
-                AVL( InputIt first, InputIt last, const key_compare& compare = key_compare(), const allocator_type& allocator = allocator_type()) {
+                AVL( InputIt first, InputIt last, const key_compare& compare = key_compare(), const allocator_type& allocator = allocator_type(),
+                    typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type = InputIt()) {
                     difference_type distance = std::distance(first, last);
+                    this->__root = nullptr;
                     this->__size = distance;
                     this->__comp = compare;
                     this->__alloc = allocator;
                     this->__rebindAlloc = allocator;
                     for (difference_type i = 0; i < distance; i++) {
-                        this->__insert(ft::make_pair(i, *first));
+                        this->insert(*first);
                         ++first;
                     }
                 }
@@ -108,7 +110,7 @@ namespace ft {
             /* ------------------ Assignment Operator --------------- */
             AVL& operator= ( const AVL& x ) {
                 __traverseAndDelete(this->__root);
-                // this->__root = nullptr;
+                this->__root = nullptr;
                 if ( this != &x ) {
                     this->__alloc = x.__alloc;
                     this->__rebindAlloc = x.__rebindAlloc;
@@ -151,19 +153,27 @@ namespace ft {
             const_iterator begin() const { return iterator(findMinValue(this->__root), this); }
             iterator end() { return iterator(nullptr, this); }
             const_iterator end() const { return iterator(nullptr, this); }
-            reverse_iterator rbegin() { return reverse_iterator(iterator(end())); }
-            reverse_iterator rend() { return reverse_iterator(iterator(begin())); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(iterator(end())); }
-            const_reverse_iterator rend() const { return const_reverse_iterator(iterator(begin())); }
+            
+            reverse_iterator rbegin() { return reverse_iterator(end()); }
+            reverse_iterator rend() { return reverse_iterator(begin()); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
         public:
             /* ----------------------- Capacity --------------------- */
             size_type size( void ) const { return this->__size; }
             size_type max_size( void ) const { return this->__alloc.max_size(); }
-            bool empty() const { return this->_size == 0 ? true : false; }
+            bool empty() const { return this->__size == 0 ? true : false; }
             
             /* ------------------------ Lookup ---------------------- */
             node_type * findMinValue( node_type * node ) {
+                if (this->__root == nullptr)
+                    return nullptr;
+                while (node->left != nullptr)
+                    node = node->left;
+                return node;
+            }
+            node_type * findMinValue( node_type * node ) const {
                 if (this->__root == nullptr)
                     return nullptr;
                 while (node->left != nullptr)
@@ -175,21 +185,37 @@ namespace ft {
                     node = node->right;
                 return node;
             }
-            
-            node_type * find(node_type * node, value_type value ) {
+            node_type * findMaxValue( node_type * node ) const {
+                while (node->right != nullptr)
+                    node = node->right;
+                return node;
+            }
+            node_type * find(node_type * node, const key_type& key ) {
                 if (node == nullptr)
                     return nullptr;
-                if (!__comp(node->data->first, value.first) && !__comp(value.first, node->data->first))
+                if (!__comp(node->data->first, key) && !__comp(key, node->data->first))
                     return node;
-                else if (!__comp(node->data->first, value.first)) {
-					return find(node->left, value);
+                else if (!__comp(node->data->first, key)) {
+					return find(node->left, key);
 				}
-                else if (__comp(node->data->first, value.first)) {
-					return find(node->right, value);
+                else if (__comp(node->data->first, key)) {
+					return find(node->right, key);
                 }
                 return node;
             }
-            
+            node_type * find(node_type * node, const key_type& key ) const {
+                if (node == nullptr)
+                    return nullptr;
+                if (!__comp(node->data->first, key) && !__comp(key, node->data->first))
+                    return node;
+                else if (!__comp(node->data->first, key)) {
+					return find(node->left, key);
+				}
+                else if (__comp(node->data->first, key)) {
+					return find(node->right, key);
+                }
+                return node;
+            }
             bool    contains( const key_type& key ) {
                 return __contains(__root, key);
             }
@@ -200,7 +226,7 @@ namespace ft {
                 this->__size = 0;
                 return ;
             }
-            bool insert( value_type value ) {
+            bool insert( const value_type& value ) {
                 if (!__contains(this->__root, value.first)) {
                     this->__root = __insert(this->__root, value);
                     this->__root->parent = nullptr;
@@ -344,7 +370,7 @@ namespace ft {
                 return true;
             }
 
-            node_type * __insert( node_type * node, value_type& value ) {
+            node_type * __insert( node_type * node, const value_type& value ) {
                 
                 if (node == nullptr)
                     return __initNode(value);

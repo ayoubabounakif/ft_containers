@@ -8,7 +8,7 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/container",
+            "program": "${workspaceFolder}/ft_containers_tests/map.out",
             "args": [],
             "cwd": "${workspaceFolder}"
         }

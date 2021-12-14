@@ -75,6 +75,7 @@
         "clocale": "cpp",
         "fstream": "cpp",
         "__memory": "cpp",
-        "__cxx_version": "cpp"
+        "__cxx_version": "cpp",
+        "__functional_base_03": "cpp"
     }
 }

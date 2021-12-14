@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:29:05 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 20:10:50 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/14 19:35:41 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,8 @@ namespace ft {
             bidirectional_iterator operator--(int) { bidirectional_iterator saved(*this); --(*this); return (saved); }
 
             Node * base() const { return this->__node; }
+
+            operator bidirectional_iterator<const T, const Node, Tree> () const { return bidirectional_iterator<const T, const Node, Tree>(__node, __avl) ; }
 
         protected:
             Node *  __node;

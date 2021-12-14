@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 20:40:25 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/14 19:34:10 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,19 @@ namespace ft {
             class value_compare : public std::binary_function<value_type, value_type, bool> {
                 protected:
                     Compare __comp;
-                    value_compare( Compare c ) : __comp(c) {}
                 public:
+                    value_compare( Compare c ) : __comp(c) {}
                     bool operator()( const value_type& lhs, const value_type& rhs ) const { return this->__comp(lhs.first, rhs.first); }
             };
 
                     /* ----------- Member Functions ---------- */    
                 /* ---- Constructors & Destructor respectively ---- */
             /* ------------------------ Default ------------------------ */ 
-            explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : __tree(), __alloc(alloc), __comp(comp) {}
+            explicit map( const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : __tree(), __comp(comp), __alloc(alloc) {}
             
             /* ----------------------- Range ------------------------ */
             template< class InputIt >
-                map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()) {
-                    this->__comp = comp;
-                    this->__alloc = alloc;
-                    this->__tree(first, last);
-                }
+                map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : __tree(first, last), __comp(comp), __alloc(alloc) { }
             
             /* ------------------------ Copy ------------------------ */
             map( const map& other ) { *this = other; }
@@ -107,23 +103,23 @@ namespace ft {
             size_type max_size() const { return this->__tree.max_size(); }
 
             /* -------------------- Element access ------------------ */
-            mapped_type& operator[] ( const key_type& k ) { return (*((this->insert(make_pair(k, mapped_type()))).first)).second; }
+            mapped_type& operator[] ( const key_type& k ) { return (*((this->insert(ft::make_pair(k, mapped_type()))).first)).second; }
             
             /* ---------------------- Modifiers --------------------- */
             void clear() { this->__tree.clear(); }
             pair<iterator, bool> insert( const value_type& value ) {
                 bool second = this->__tree.insert(value);
-                return ft::make_pair(iterator(this->__tree.find(this->__tree.getRoot(), value)), second);
+                return ft::make_pair(iterator(this->__tree.find(this->__tree.getRoot(), value.first), &this->__tree), second);
             }
             iterator insert( iterator hint, const value_type& value ) {
                 (void)hint;
                 this->__tree.insert(value);
-                return iterator(this->__tree.find(this->__tree.getRoot(), value));
+                return iterator(this->__tree.find(this->__tree.getRoot(), value.first), &this->__tree);
             }
             template < class InputIt >
                 void insert( InputIt first, InputIt last ) { for (; first != last; ++first) this->__tree.insert(*first); return ; }
             void erase( iterator pos ) { this->__tree.remove(pos->first); return ; }
-            void erase( iterator first, iterator last ) { for (; first != last; ++first) this->__tree.remove(*first->first); return ; }
+            void erase( iterator first, iterator last ) { for (; first != last; ++first) this->__tree.remove(first->first); return ; }
             size_type erase( const key_type& x ) { return (this->__tree.remove(x)); }
             void swap( map& other ) {
                 AVL<value_type, key_compare, allocator_type> tmpTree = other.__tree;
@@ -133,11 +129,19 @@ namespace ft {
             }
 
             /* ----------------------- Lookup ----------------------- */
-            size_type count( const Key& key ) const
+            size_type count( const Key& key ) const {
+                return this->__tree.contains(key) ? 1 : 0;
+            }
+            iterator find( const Key& key ) {
+                return iterator(this->__tree.find(this->__tree.getRoot(), key), &this->__tree);
+            }
+            const_iterator find( const Key& key ) const {
+                return const_iterator(this->__tree.find(this->__tree.getRoot(), key), &this->__tree);
+            }
             
             /* ---------------------- Observers --------------------- */
             key_compare key_comp() const { return this->__comp; }
-            value_compare value_comp() const { return value_compare(); }
+            value_compare value_comp() const { return value_compare(Compare()); }
 
 
             /* ---------------------- Allocator --------------------- */

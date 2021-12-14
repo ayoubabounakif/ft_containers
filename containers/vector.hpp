@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 20:19:03 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/14 19:07:27 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ namespace ft {
             const_iterator  begin() const { return iterator(&this->_buffer[0]); }
             iterator        end() { return iterator(&this->_buffer[this->_size]); }
             const_iterator  end() const { return iterator(&this->_buffer[this->_size]); }
-            reverse_iterator    rbegin() { return reverse_iterator(iterator(end())); }
-            reverse_iterator    rend() { return reverse_iterator(iterator(begin())); }
+            reverse_iterator    rbegin() { return reverse_iterator(end()); }
+            reverse_iterator    rend() { return reverse_iterator(begin()); }
             const_reverse_iterator    rbegin() const { return const_reverse_iterator(end()); }
             const_reverse_iterator    rend() const { return const_reverse_iterator(begin()); }
 
