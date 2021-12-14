@@ -433,150 +433,150 @@ void const_iterator_tests(void)
 
 void testConstructors()
 {
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " empty constructor "
-    //           << "] --------------------]\t\t\033[0m";
-    // {
-    //     /*---------------------------------- time limit test --------------------------------------------*/
-    //     {
-    //         time_t start, end, diff;
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " empty constructor "
+              << "] --------------------]\t\t\033[0m";
+    {
+        /*---------------------------------- time limit test --------------------------------------------*/
+        {
+            time_t start, end, diff;
 
-    //         start = get_time();
-    //         std::map<int, std::string> m;
-    //         for (int i = 0; i < 1e6; ++i)
-    //             m.insert(std::make_pair(i, "fill constructor test"));
-    //         end = get_time();
-    //         diff = end - start;
-    //         diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+            start = get_time();
+            std::map<int, std::string> m;
+            for (int i = 0; i < 1e6; ++i)
+                m.insert(std::make_pair(i, "fill constructor test"));
+            end = get_time();
+            diff = end - start;
+            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-    //         ualarm(diff * 1e3, 0);
+            ualarm(diff * 1e3, 0);
 
-    //         ft::map<int, std::string> my_m;
-    //         for (int i = 0; i < 1e6; ++i)
-    //             my_m.insert(ft::make_pair(i, "fill constructor test"));
-    //         ualarm(0, 0);
-    //     }
-    //     /*----------------------------------------------------------------------------------------------*/
-    //     /*--------------- fill tow vectors with a 10 strings ------*/
-    //     ft::map<int, std::string> my_m;
-    //     std::map<int, std::string> m;
-    //     for (int i = 0; i < 10; i++)
-    //     {
-    //         m.insert(std::make_pair(i, "Hello"));
-    //         my_m.insert(ft::make_pair(i, "Hello"));
-    //     }
+            ft::map<int, std::string> my_m;
+            for (int i = 0; i < 1e6; ++i)
+                my_m.insert(ft::make_pair(i, "fill constructor test"));
+            ualarm(0, 0);
+        }
+        /*----------------------------------------------------------------------------------------------*/
+        /*--------------- fill tow vectors with a 10 strings ------*/
+        ft::map<int, std::string> my_m;
+        std::map<int, std::string> m;
+        for (int i = 0; i < 10; i++)
+        {
+            m.insert(std::make_pair(i, "Hello"));
+            my_m.insert(ft::make_pair(i, "Hello"));
+        }
 
-    //     /*---------------------------------------------------------*/
-    //     /*--------------- declare tow strings to store the results ------*/
-    //     std::string res, my_res;
-    //     /*---------------------------------------------------------*/
-    //     for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it) // fill res from std::map
-    //         res += it->second;
-    //     for (ft::map<int, std::string>::iterator it = my_m.begin(); it != my_m.end(); ++it) // fill res from std::map
-    //         my_res += it->second;
-    //     EQUAL(res == my_res);
-    // }
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " range constructor "
-    //           << "] --------------------]\t\t\033[0m";
-    // {
-    //     /*---------------------------------- time limit test --------------------------------------------*/
-    //     {
-    //         time_t start, end, diff;
-    //         std::map<int, std::string> m;
-    //         ft::map<int, std::string> my_m;
+        /*---------------------------------------------------------*/
+        /*--------------- declare tow strings to store the results ------*/
+        std::string res, my_res;
+        /*---------------------------------------------------------*/
+        for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it) // fill res from std::map
+            res += it->second;
+        for (ft::map<int, std::string>::iterator it = my_m.begin(); it != my_m.end(); ++it) // fill res from std::map
+            my_res += it->second;
+        EQUAL(res == my_res);
+    }
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " range constructor "
+              << "] --------------------]\t\t\033[0m";
+    {
+        /*---------------------------------- time limit test --------------------------------------------*/
+        {
+            time_t start, end, diff;
+            std::map<int, std::string> m;
+            ft::map<int, std::string> my_m;
 
-    //         for (size_t i = 0; i < 1e6; i++)
-    //         {
-    //             m.insert(std::make_pair(i, "range constructor test"));
-    //             my_m.insert(ft::make_pair(i, "range constructor test"));
-    //         }
+            for (size_t i = 0; i < 1e6; i++)
+            {
+                m.insert(std::make_pair(i, "range constructor test"));
+                my_m.insert(ft::make_pair(i, "range constructor test"));
+            }
 
-    //         start = get_time();
-    //         std::map<int, std::string> m1(m.begin(), m.end());
-    //         end = get_time();
-    //         diff = end - start;
-    //         diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+            start = get_time();
+            std::map<int, std::string> m1(m.begin(), m.end());
+            end = get_time();
+            diff = end - start;
+            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-    //         ualarm(diff * 1e3, 0);
-    //         ft::map<int, std::string> my_m1(my_m.begin(), my_m.end());
-    //         ualarm(0, 0);
-    //     }
-    //     /*-----------------------------------------------------------------------------------------------*/
-    //     /*--------------- fill std::map with 10 strings and ft::map with range of iterators ------*/
-    //     std::map<int, std::string> m;
-    //     ft::map<int, std::string> my_m;
-    //     for (size_t i = 0; i < 10; i++)
-    //     {
-    //         m.insert(std::make_pair(i, "range constructor test"));
-    //         my_m.insert(ft::make_pair(i, "range constructor test"));
-    //     }
+            ualarm(diff * 1e3, 0);
+            ft::map<int, std::string> my_m1(my_m.begin(), my_m.end());
+            ualarm(0, 0);
+        }
+        /*-----------------------------------------------------------------------------------------------*/
+        /*--------------- fill std::map with 10 strings and ft::map with range of iterators ------*/
+        std::map<int, std::string> m;
+        ft::map<int, std::string> my_m;
+        for (size_t i = 0; i < 10; i++)
+        {
+            m.insert(std::make_pair(i, "range constructor test"));
+            my_m.insert(ft::make_pair(i, "range constructor test"));
+        }
 
-    //     ft::map<int, std::string> my_m1(my_m.begin(), my_m.end()); // this one is to check if the range works with ft::map
-    //     /*----------------------------------------------------------------------------------------------*/
-    //     /*--------------- declare tow strings to store the results ------*/
-    //     std::string res, my_res, my_res1;
-    //     int sum(0), my_sum(0), my_sum1(0);
-    //     /*--------------------------------------------------------*/
-    //     for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
-    //     { // fill res from std::map
-    //         res += it->second;
-    //         sum += it->first;
-    //     }
+        ft::map<int, std::string> my_m1(my_m.begin(), my_m.end()); // this one is to check if the range works with ft::map
+        /*----------------------------------------------------------------------------------------------*/
+        /*--------------- declare tow strings to store the results ------*/
+        std::string res, my_res, my_res1;
+        int sum(0), my_sum(0), my_sum1(0);
+        /*--------------------------------------------------------*/
+        for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
+        { // fill res from std::map
+            res += it->second;
+            sum += it->first;
+        }
 
-    //     for (ft::map<int, std::string>::iterator it = my_m.begin(); it != my_m.end(); ++it)
-    //     { // fill my_res from ft::map
-    //         my_res += it->second;
-    //         my_sum += it->first;
-    //     }
+        for (ft::map<int, std::string>::iterator it = my_m.begin(); it != my_m.end(); ++it)
+        { // fill my_res from ft::map
+            my_res += it->second;
+            my_sum += it->first;
+        }
 
-    //     for (ft::map<int, std::string>::iterator it = my_m1.begin(); it != my_m1.end(); ++it)
-    //     { // fill my_res1 from ft::map
-    //         my_res1 += it->second;
-    //         my_sum1 += it->first;
-    //     }
-    //     EQUAL(res == my_res && my_res == my_res1);
-    // }
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " copy constructor "
-    //           << "] --------------------]\t\t\033[0m";
-    // {
-    //     /*---------------------------------- time limit test --------------------------------------------*/
-    //     {
-    //         time_t start, end, diff;
-    //         std::map<int, char> m;
-    //         ft::map<int, char> my_m;
+        for (ft::map<int, std::string>::iterator it = my_m1.begin(); it != my_m1.end(); ++it)
+        { // fill my_res1 from ft::map
+            my_res1 += it->second;
+            my_sum1 += it->first;
+        }
+        EQUAL(res == my_res && my_res == my_res1);
+    }
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " copy constructor "
+              << "] --------------------]\t\t\033[0m";
+    {
+        /*---------------------------------- time limit test --------------------------------------------*/
+        {
+            time_t start, end, diff;
+            std::map<int, char> m;
+            ft::map<int, char> my_m;
 
-    //         for (size_t i = 0; i < 1e3; i++)
-    //         {
-    //             m.insert(std::make_pair(i, 'X'));
-    //             my_m.insert(ft::make_pair(i, 'X'));
-    //         }
+            for (size_t i = 0; i < 1e3; i++)
+            {
+                m.insert(std::make_pair(i, 'X'));
+                my_m.insert(ft::make_pair(i, 'X'));
+            }
 
-    //         start = get_time();
-    //         std::map<int, char> copy_m(m);
-    //         end = get_time();
-    //         diff = end - start;
-    //         diff = (diff) ? (diff * 20) : 20;
+            start = get_time();
+            std::map<int, char> copy_m(m);
+            end = get_time();
+            diff = end - start;
+            diff = (diff) ? (diff * 20) : 20;
 
-    //         alarm(diff);
-    //         ft::map<int, char> my_copy_m(my_m);
-    //         alarm(0);
-    //     }
-    //     /*---------------------------------------------------------------------------------------------*/
-    //     /*---------------------------- declare a vector and fill with 'a', and create a copy of it ------------------*/
-    //     ft::map<int, char> m1;
-    //     for (int i = 0; i < 10; i++)
-    //         m1.insert(ft::make_pair(i, 'a'));
-    //     ft::map<int, char> copy_m(m1);
-    //     /*-----------------------------------------------------------------------------------------------------------*/
-    //     /*--------------- declare tow strings to store the results ------*/
-    //     std::string res, res1;
-    //     /*--------------------------------------------------------*/
-    //     for (ft::map<int, char>::iterator it = m1.begin(); it != m1.end(); ++it) // fill res from m1
-    //         res += it->second;
+            alarm(diff);
+            ft::map<int, char> my_copy_m(my_m);
+            alarm(0);
+        }
+        /*---------------------------------------------------------------------------------------------*/
+        /*---------------------------- declare a vector and fill with 'a', and create a copy of it ------------------*/
+        ft::map<int, char> m1;
+        for (int i = 0; i < 10; i++)
+            m1.insert(ft::make_pair(i, 'a'));
+        ft::map<int, char> copy_m(m1);
+        /*-----------------------------------------------------------------------------------------------------------*/
+        /*--------------- declare tow strings to store the results ------*/
+        std::string res, res1;
+        /*--------------------------------------------------------*/
+        for (ft::map<int, char>::iterator it = m1.begin(); it != m1.end(); ++it) // fill res from m1
+            res += it->second;
 
-    //     for (ft::map<int, char>::iterator it = copy_m.begin(); it != copy_m.end(); ++it) // fill res from copy_m
-    //         res1 += it->second;
-    //     EQUAL(res == res1);
-    // }
+        for (ft::map<int, char>::iterator it = copy_m.begin(); it != copy_m.end(); ++it) // fill res from copy_m
+            res1 += it->second;
+        EQUAL(res == res1);
+    }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " Constructors with costum compare "
               << "] --------------------]\t\t\033[0m";
     EQUAL(testMapConstructors());
