@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:33:38 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/14 21:24:09 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/15 20:24:41 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ namespace ft {
                 int             balanceFactor;
             };
         
-
         private:
             node_type   *       __root;
             key_compare         __comp;
@@ -94,7 +93,7 @@ namespace ft {
                     typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type = InputIt()) {
                     difference_type distance = std::distance(first, last);
                     this->__root = nullptr;
-                    this->__size = distance;
+                    this->__size = 0;
                     this->__comp = compare;
                     this->__alloc = allocator;
                     this->__rebindAlloc = allocator;
@@ -132,7 +131,6 @@ namespace ft {
                 }
                 __traverseAndDelete(x->left);
                 __traverseAndDelete(x->right);
-                // this->__alloc.destroy(x->data);
                 this->__alloc.deallocate(x->data, 1);
                 this->__rebindAlloc.deallocate(x, 1);
                 return ;
@@ -190,6 +188,32 @@ namespace ft {
                     node = node->right;
                 return node;
             }
+            node_type * successor( const key_type& key ) {
+                node_type * successor = nullptr;
+				node_type * root = this->__root;
+				while (root != nullptr) {
+					if (__comp(key, root->data->first)) {
+						successor = root;
+						root = root->left;
+					}
+					else if (!__comp(key, root->data->first))
+						root = root->right;
+				}
+				return (successor);
+            }
+            node_type * successor( const key_type& key ) const {
+                node_type * successor = nullptr;
+				node_type * root = this->__root;
+				while (root != nullptr) {
+					if (__comp(key, root->data->first)) {
+						successor = root;
+						root = root->left;
+					}
+					else if (!__comp(key, root->data->first))
+						root = root->right;
+				}
+				return (successor);
+            }
             node_type * find(node_type * node, const key_type& key ) {
                 if (node == nullptr)
                     return nullptr;
@@ -219,6 +243,9 @@ namespace ft {
             bool    contains( const key_type& key ) {
                 return __contains(__root, key);
             }
+            bool    contains( const key_type& key ) const {
+                return __contains(__root, key);
+            }
 
             /* ---------------------- Modifiers --------------------- */
             void clear() {
@@ -245,7 +272,13 @@ namespace ft {
                 }
                 return false;
             }
-
+            void    swap( AVL &x ) {
+                std::swap(this->__root, x.__root);
+                std::swap(this->__alloc, x.__alloc);
+                std::swap(this->__rebindAlloc, x.__rebindAlloc);
+                std::swap(this->__comp, x.__comp);
+                std::swap(this->__size, x.__size);
+            }
             /* ---------------------- Getters --------------------- */
             rebind_allocator get_allocator() const { return this->__rebindAlloc; }   
             node_type * getRoot() const { return this->__root; }
@@ -257,11 +290,7 @@ namespace ft {
                 
                 int leftNodeHeight = (node->left == nullptr) ? -1 : node->left->height;
                 int rightNodeHeight = (node->right == nullptr) ? -1 : node->right->height;
-
-                // Update this node's height
                 node->height = std::max(leftNodeHeight, rightNodeHeight) + 1;
-
-                // Update the balance factor.
                 node->balanceFactor = rightNodeHeight - leftNodeHeight;   
             }
             
@@ -323,35 +352,11 @@ namespace ft {
                 return __rightRightCase(node);
             }
 
-            // Re-balance a node if its balance factor is +2 or -2
             node_type * __balance( node_type * node ) {
-                
-                // Left heavy subtree.
-                if (node->balanceFactor == -2) {
-                    
-                    // Left-Left case
-                    if (node->left->balanceFactor <= 0)
-                        return __leftLeftCase(node);
-
-                    // Left-Right case
-                    else {
-                        return __leftRightCase(node);
-                    }
-                }
-
-                // Right heavy subtree needs balancing.
-                else if (node->balanceFactor == 2) {
-                    
-                    // Right-Right case
-                    if (node->right->balanceFactor >= 0)
-                        return __rightRightCase(node);
-
-                    // Right-Left case
-                    else
-                        return __rightLeftCase(node);
-                }
-
-                // Node either has a balance factor of 0, +1 or -1 which is fine.
+                if (node->balanceFactor == -2) // Left heavy subtree.
+                    return node->left->balanceFactor <= 0 ? __leftLeftCase(node) : __leftRightCase(node);
+                else if (node->balanceFactor == 2) // Right heavy subtree needs balancing.
+                    return node->right->balanceFactor >= 0 ? __rightRightCase(node) : __rightLeftCase(node);
                 return node;
             }
 
@@ -369,104 +374,56 @@ namespace ft {
                 }
                 return true;
             }
+            bool    __contains( node_type * node, key_type& key ) const {
+    
+                if (node == nullptr)
+                    return false;
+                if (!__comp(node->data->first, key) && !__comp(key, node->data->first))
+                    return true;
+				else if (!__comp(node->data->first, key)) {
+					return __contains(node->left, key);
+				}
+                else if (__comp(node->data->first, key)) {
+					return __contains(node->right, key);
+                }
+                return true;
+            }
 
             node_type * __insert( node_type * node, const value_type& value ) {
-                
                 if (node == nullptr)
                     return __initNode(value);
-
-                /* Dig into left subtree, the value we're looking
-                    for is smaller than teh current value. */
 				if (__comp(value.first, node->data->first)) {
 					node->left = __insert(node->left, value);
                     node->left->parent = node;
 				}
-
-               /* Dig into right subtree, the value we're looking
-                    for is greater than the current value. */
                 else if (__comp(node->data->first, value.first)) {
 					node->right = __insert(node->right, value);
                     node->right->parent = node;
                 }
-
-                // Update balance factor and height values.
                 __update(node);
-                
-                // Re-balance the tree
                 return (__balance(node));
-                
             }
 
             node_type * __remove( node_type * node, key_type& key ) {
-
-
                 if (node == nullptr)
                     return nullptr;
-                
-                /* Dig into left subtree, the key we're looking
-                    for is smaller than the current key. */
-                if (__comp(key, node->data->first)) {
+                if (__comp(key, node->data->first))
 					node->left = __remove(node->left, key);
-				}
-
-                /* Dig into right subtree, the key we're looking
-                    for is greater than the current key. */
-                else if (__comp(node->data->first, key)) {
+                else if (__comp(node->data->first, key))
 					node->right = __remove(node->right, key);
-                }
-
-                /* Found the node we wish to remove */
                 else {
-                    
-                    
-                    /* This is the case with only a right subtree or no subtree at all.
-                        In this situation just swap the node we wish to remove with it's right child. */
                     if (node->left == nullptr)
                         return node->right;
-
-                    /* This is the case with only a left subtree or no subtree at all.
-                        In this situation just swap the node we wish to remove with it's left child. */
                     else if (node->right == nullptr)
                         return node->left;
-
-                    /* When removing a node from a binary tree with two links the
-                        successor of the node being removed can either be the largest value
-                        in the left subtree or the smallest value in the right subtree.
-                        As a heuristic, I will remove from the subtree with the most nodes
-                        in hopes that this may help with balancing. */
                     else {
-                        
-                        /* Choose to remove from the left subtree */
-                        if (node->left->height > node->right->height) {
-
-                            /* Swap the value of the successor into the node. */
-                            node_type * successorValue = findMaxValue(node->left);
-                            node->data = successorValue->data;
-
-                            /* Find the largest node in the left subtree */
-                            node->left = __remove(node->left, successorValue->data->first);
-                            
-                        }
-                        else {
-                            
-                            /* Swap the value of the successor into the node. */
-                            node_type * successorValue = findMinValue(node->right);
-                            node->data = successorValue->data;
-
-                            /* Go into the right subtree and remove the leftmost node we ound
-                                and swapped data with. This prevents us from having two nodes
-                                in our tree with the same value. */
-                            node->right = __remove(node->right, successorValue->data->first);
-                        }
-                    }   
+                        node_type * successorValue = findMaxValue(node->left);
+                        node->data = successorValue->data;
+                        node->left = __remove(node->left, successorValue->data->first);
+                    }
                 }
-                
-                // Update balance factor and height values.
                 __update(node);
-
-                // Re-balance the tree
                 return __balance(node);
-                
             }
 
 

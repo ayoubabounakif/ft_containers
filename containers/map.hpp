@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 10:18:31 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/14 21:24:07 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/15 20:39:22 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,13 +119,15 @@ namespace ft {
             template < class InputIt >
                 void insert( InputIt first, InputIt last ) { for (; first != last; ++first) this->__tree.insert(*first); return ; }
             void erase( iterator pos ) { this->__tree.remove(pos->first); return ; }
-            void erase( iterator first, iterator last ) { for (; first != last; ++first) this->__tree.remove(first->first); return ; }
+            void erase( iterator first, iterator last ) {
+                std::vector<key_type> vec;
+                for (; first != last; ++first) vec.push_back(first->first);
+                for (size_type i = 0; i < vec.size(); i++) { this->__tree.remove(vec[i]); }
+                return ;
+            }
             size_type erase( const key_type& x ) { return (this->__tree.remove(x)); }
             void swap( map& other ) {
-                AVL<value_type, key_compare, allocator_type> tmpTree = other.__tree;
-                other.__tree = this->__tree;
-                this->__tree = tmpTree;
-                return ;
+                this->__tree.swap(other.__tree);
             }
 
             /* ----------------------- Lookup ----------------------- */
@@ -138,6 +140,26 @@ namespace ft {
             const_iterator find( const Key& key ) const {
                 return const_iterator(this->__tree.find(this->__tree.getRoot(), key), &this->__tree);
             }
+            iterator lower_bound( const Key& key ) {
+                iterator tmp = this->find(key);
+                if (tmp != end())
+                    return tmp;
+                return iterator(this->__tree.successor(key), &this->__tree);
+            }
+            iterator upper_bound( const Key& key ) {
+                return iterator(this->__tree.successor(key), &this->__tree);
+            }
+            const_iterator lower_bound( const Key& key ) const {
+                const_iterator tmp = this->find(key);
+                if (tmp != end())
+                    return tmp;
+                return iterator(this->__tree.successor(key), &this->__tree);
+            }
+            const_iterator upper_bound( const Key& key ) const {
+                return iterator(this->__tree.successor(key), &this->__tree);
+            }
+            pair<iterator, iterator> equal_range ( const key_type& k ) { return ft::make_pair(lower_bound(k), upper_bound(k)); }
+            pair<const_iterator, const_iterator> equal_range ( const key_type& k ) const { return ft::make_pair(lower_bound(k), upper_bound(k)); }
             
             /* ---------------------- Observers --------------------- */
             key_compare key_comp() const { return this->__comp; }

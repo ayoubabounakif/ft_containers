@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 10:08:58 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/14 19:10:55 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/15 18:30:49 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ namespace ft {
             reverse_iterator( iterator_type const &it ) { iterator_type tmp = it; --tmp; _iter = tmp; }
             template< class U >
                 reverse_iterator( const reverse_iterator<U>& other ) : _iter(--other.base()) {}
-            // reverse_iterator( const reverse_iterator& rhs ) : _iter(--rhs.base()) {}
-            // reverse_iterator& operator= ( const reverse_iterator& rhs ) { _iter = rhs._iter; return (*this); }
             virtual ~reverse_iterator() {};
 
                 /* Misc Operators */
@@ -56,12 +54,10 @@ namespace ft {
             reverse_iterator  operator++( int ) { reverse_iterator tmp = *this; ++(*this); return tmp; }
             reverse_iterator  operator--( int ) { reverse_iterator tmp = *this; --(*this); return tmp; }
 
-            // difference_type operator+( const reverse_iterator& rhs ) const { return _iter + rhs._iter; }
-            // difference_type operator-( const reverse_iterator& rhs ) const { return _iter - rhs._iter; }
             reverse_iterator operator+( difference_type rhs ) const { return reverse_iterator(_iter - (rhs - 1)); }
             reverse_iterator operator-( difference_type rhs ) const { return reverse_iterator(_iter + (rhs + 1)); }
 
-            // operator reverse_iterator<const iterator_type> () const { return reverse_iterator<const iterator_type>(_iter) ; }
+            operator reverse_iterator<const iterator_type> () const { return reverse_iterator<const iterator_type>(_iter) ; }
 
             iterator_type base() const { iterator_type tmp = _iter; ++tmp; return tmp; }
 

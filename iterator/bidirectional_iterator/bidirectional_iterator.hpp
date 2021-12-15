@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:29:05 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/14 19:35:41 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/15 17:34:02 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,9 @@ namespace ft {
             bidirectional_iterator& operator++() {
                 Node * p;
                 if (this->__node == nullptr) {
-                    // ++ from end(). get the root of the tree
                     this->__node = this->__avl->getRoot();
-
-                    // error! ++ requested for an empty tree
                     if (this->__node == nullptr)
                         return *this;
-
-                    // move to the smallest value in the tree,
-                    // which is the first node inorder
                     while (this->__node->left != nullptr)
                         this->__node = this->__node->left;
                 }
@@ -66,21 +60,11 @@ namespace ft {
                             this->__node = this->__node->left;
                     }
                     else {
-                        // have already processed the left subtree, and
-                        // there is no right subtree. move up the tree,
-                        // looking for a parent for which nodePtr is a left child,
-                        // stopping if the parent becomes NULL. a non-NULL parent
-                        // is the successor. if parent is NULL, the original node
-                        // was the last node inorder, and its successor
-                        // is the end of the list
                         p = this->__node->parent;
                         while (p != nullptr && this->__node == p->right) {
                             this->__node = p;
                             p = p->parent;
                         }
-                        // if we were previously at the right-most node in
-                        // the tree, this->__node = nullptr, and the iterator specifies
-                        // the end of the list
                         this->__node = p;
                     }
                 }
@@ -89,42 +73,23 @@ namespace ft {
             bidirectional_iterator& operator--() {
                 Node * p;
                 if (this->__node == nullptr) {
-                    // -- from end(). get the root of the tree
                     this->__node = this->__avl->getRoot();
-
-                    // error! -- requested for an empty tree
                     if (this->__node == nullptr)
                         return *this;
-
-                    // move to the largest value in the tree,
-                    // which is the last node inorder
                     while (this->__node->right != nullptr)
                         this->__node = this->__node->right;
                 }
                 else if (this->__node->left != nullptr) {
-                        // must have gotten here by processing all the nodes
-                        // on the left branch. predecessor is the farthest
-                        // right node of the left subtree
                         this->__node = this->__node->left;
                         while (this->__node->right != nullptr)
                             this->__node = this->__node->right;
                 }
                 else {
-                    // must have gotten here by going right and then
-                    // far left. move up the tree, looking for a parent
-                    // for which nodePtr is a right child, stopping if the
-                    // parent becomes NULL. a non-NULL parent is the
-                    // predecessor. if parent is NULL, the original node
-                    // was the first node inorder, and its predecessor
-                    // is the end of the list
                     p = this->__node->parent;
                     while (p != nullptr && this->__node == p->left) {
                         this->__node = p;
                         p = p->parent;
                     }
-                    // if we were previously at the left-most node in
-                    // the tree, nodePtr = NULL, and the iterator specifies
-                    // the end of the list
                     this->__node = p;
                 }
                 return *this;

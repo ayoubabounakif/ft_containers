@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/14 19:07:27 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/15 21:07:14 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ namespace ft {
                         size_type distance = std::distance(first, last);
                         this->_size = distance;
                         this->_capacity = distance;
-                        _buffer = _alloc.allocate(_capacity);
+                        this->_buffer = _alloc.allocate(_capacity);
                         for (size_type i = 0; i < distance; i++) { _alloc.construct(&_buffer[i], *first); first++; }
                 }
             
@@ -94,7 +94,8 @@ namespace ft {
             
             /* ------------------ Assignment Operator --------------- */
             vector& operator= (const vector<T, Alloc>& x) {
-                _alloc.deallocate(this->_buffer, this->_capacity);
+                if (this->_buffer)
+                    _alloc.deallocate(this->_buffer, this->_capacity);
                 if ( this != &x ) {
                     this->_capacity = x._capacity;
                     this->_size = x._size;
@@ -216,7 +217,6 @@ namespace ft {
                     for (size_type i = 0; i < n; i++) { _alloc.construct(&_buffer[idx++], *first); first++; }
                     this->_size += n;
                 }
-
             iterator erase(iterator position)
             {
                 difference_type idx = std::distance(begin(), position);
@@ -266,7 +266,6 @@ namespace ft {
                 (a != b) is equivalent to !(a == b)
                 (a > b) equivalent to (b < a)
                 (a <= b) equivalent to !(b < a) */
-                
 	template < class T, class Alloc>
 		bool operator== (vector<T, Alloc>& lhs, vector<T, Alloc>& rhs) {
             if (lhs.size() != rhs.size())

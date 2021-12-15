@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 12:23:28 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/13 18:25:21 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/15 20:25:53 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,93 @@
 # include "containers/map.hpp"
 # include "AVL/avl.hpp"
 
-int main( void ) 
+#include <iostream>
+#include <map>
+
+int main ()
 {
-    ft::AVL<ft::pair<const int, int> >	avl;
+  ft::map<char,int> mymap;
+  ft::map<char,int>::iterator itlow,itup;
+
+  mymap['a']=20;
+  mymap['b']=40;
+  mymap['c']=60;
+  mymap['d']=80;
+  mymap['e']=100;
+
+  itlow=mymap.lower_bound ('x');  // itlow points to b
+  itup=mymap.upper_bound ('d');   // itup points to e (not d!)
+
+  mymap.erase(itlow,itup);        // erases [itlow,itup)
+
+  // print content:
+  for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
+
+  return 0;
+}
+
+
+// int main ()
+// {
+//   ft::map<char,int> mymap;
+//   ft::map<char,int>::iterator it;
+
+//   // insert some values:
+//   mymap['a']=10;
+//   mymap['b']=20;
+//   mymap['c']=30;
+//   mymap['d']=40;
+//   mymap['e']=50;
+//   mymap['f']=60;
+
+// //   it=mymap.find('b');
+// //   mymap.erase (it);                   // erasing by iterator
+
+// //   mymap.erase ('c');                  // erasing by key
+
+
+//   it=mymap.find ('e');
+//   mymap.erase ( it, mymap.end() );    // erasing by range
+
+//   // show content:
+//   for (it = mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+
+//   return 0;
+// }
+
+// int main( void ) 
+// {
+//     ft::AVL<ft::pair<const int, int> >	avl;
 	
-	std::vector<int> vec;
-	std::vector<int>::iterator	it;
+// 	std::vector<int> vec;
+// 	std::vector<int>::iterator	it;
 	
-	srand(time(nullptr));
-	for (int i = 0; i < 20; i++) {
-		vec.push_back(rand() % 100);
-		// std::cout << vec[i] << std::endl;
-		avl.insert(ft::make_pair(i, vec[i]));
-	}
+// 	srand(time(nullptr));
+// 	for (int i = 0; i < 20; i++) {
+// 		vec.push_back(rand() % 100);
+// 		// std::cout << vec[i] << std::endl;
+// 		avl.insert(ft::make_pair(i, vec[i]));
+// 	}
 	
-	ft::AVL<ft::pair<const int, int> >::iterator	avlit = avl.begin();
-	for (; avlit != avl.end(); ++avlit)
-		std::cout << avlit->first << std::endl;
+// 	ft::AVL<ft::pair<const int, int> >::iterator	avlit = avl.begin();
+// 	for (; avlit != avl.end(); ++avlit)
+// 		std::cout << avlit->first << std::endl;
 	
-	// avl.print();
-	// ft::map<int, std::string> mymap;
-	// mymap[1] = "Hi";
-    // mymap[2] = "This";
-    // mymap[3] = "is";
-    // mymap[4] = "GeeksForGeeks";
+// 	// avl.print();
+// 	// ft::map<int, std::string> mymap;
+// 	// mymap[1] = "Hi";
+//     // mymap[2] = "This";
+//     // mymap[3] = "is";
+//     // mymap[4] = "GeeksForGeeks";
      
-    // using operator[] to print string
-    // mapped to integer 4
-    // std::cout << mymap[4];
+//     // using operator[] to print string
+//     // mapped to integer 4
+//     // std::cout << mymap[4];
 
 	
-}
+// }
 
 /* #if 1 //CREATE A REAL STL EXAMPLE
 	#include <map>
