@@ -6,7 +6,7 @@
 /*   By: aabounak <aabounak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/08 14:25:24 by aabounak          #+#    #+#             */
-/*   Updated: 2021/12/15 21:07:14 by aabounak         ###   ########.fr       */
+/*   Updated: 2021/12/15 21:12:11 by aabounak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ namespace ft {
                         size_type distance = std::distance(first, last);
                         this->_size = distance;
                         this->_capacity = distance;
-                        this->_buffer = _alloc.allocate(_capacity);
+                        _buffer = _alloc.allocate(_capacity);
                         for (size_type i = 0; i < distance; i++) { _alloc.construct(&_buffer[i], *first); first++; }
                 }
             
@@ -94,8 +94,7 @@ namespace ft {
             
             /* ------------------ Assignment Operator --------------- */
             vector& operator= (const vector<T, Alloc>& x) {
-                if (this->_buffer)
-                    _alloc.deallocate(this->_buffer, this->_capacity);
+                // _alloc.deallocate(this->_buffer, this->_capacity);
                 if ( this != &x ) {
                     this->_capacity = x._capacity;
                     this->_size = x._size;
